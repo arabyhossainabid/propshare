@@ -1,80 +1,70 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-    TrendingUp,
-    ShieldCheck,
+    LayoutDashboard,
     Users,
-    XCircle,
-    Menu,
-    Tag,
-    Lock
+    Building2,
+    FolderTree,
+    Wallet,
+    Star,
+    LogOut,
+    ChevronRight,
+    ShieldCheck,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-interface SidebarProps {
-    activeTab: string;
-    setActiveTab: (tab: any) => void;
-    pendingCount: number;
-}
+const adminLinks = [
+    { name: "Overview", href: "/admin", icon: LayoutDashboard },
+    { name: "Users", href: "/admin/users", icon: Users },
+    { name: "Properties", href: "/admin/properties", icon: Building2 },
+    { name: "Categories", href: "/admin/categories", icon: FolderTree },
+    { name: "Investments", href: "/admin/investments", icon: Wallet },
+    { name: "Featured", href: "/admin/featured", icon: Star },
+];
 
-export default function AdminSidebar({ activeTab, setActiveTab, pendingCount }: SidebarProps) {
+export default function AdminSidebar() {
+    const pathname = usePathname();
+
     return (
-        <aside className="w-80 bg-[#0a0f1d] min-h-screen pt-32 pb-12 hidden lg:flex flex-col border-r border-white/5 relative z-50">
-            <div className="px-8 mb-14">
-                <div className="flex items-center gap-4 bg-white/2 p-6 rounded-[28px] border border-white/5 shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/5 rounded-full blur-2xl pointer-events-none" />
-                    <div className="w-12 h-12 bg-blue-600 rounded-[18px] flex items-center justify-center text-white font-bold text-xl shadow-2xl shadow-blue-500/30 transform rotate-3 group-hover:rotate-0 transition-transform">
-                        A
-                    </div>
-                    <div>
-                        <p className="text-white font-bold text-lg tracking-tight">Main Terminal</p>
-                        <p className="text-[9px] text-blue-500 font-bold uppercase tracking-[0.25em]">Access: Level 4</p>
+        <aside className="w-64 shrink-0 hidden lg:block">
+            <div className="sticky top-28 space-y-2">
+                {/* Admin Badge */}
+                <div className="bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-4 mb-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-500 flex items-center justify-center">
+                            <ShieldCheck className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold text-white">Admin Panel</p>
+                            <p className="text-xs text-white/30">Super Admin</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <nav className="grow px-4 space-y-2">
-                {[
-                    { id: "stats", label: "Master Metrics", icon: TrendingUp, badge: 0 },
-                    { id: "review", label: "Asset Validation", icon: ShieldCheck, badge: pendingCount },
-                    { id: "users", label: "Registry Control", icon: Users, badge: 0 },
-                    { id: "categories", label: "Sector Mapping", icon: Tag, badge: 0 }
-                ].map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => setActiveTab(item.id as any)}
-                        className={cn(
-                            "w-full flex items-center justify-between px-6 py-4.5 rounded-[22px] font-bold text-[10px] uppercase tracking-[0.2em] transition-all group relative overflow-hidden",
-                            activeTab === item.id
-                                ? "bg-blue-600 text-white shadow-2xl shadow-blue-500/20"
-                                : "text-slate-500 hover:bg-white/5 hover:text-white"
-                        )}
-                    >
-                        {activeTab === item.id && (
-                            <div className="absolute inset-x-0 bottom-0 h-1 bg-white/20" />
-                        )}
-                        <div className="flex items-center gap-4 relative z-10">
-                            <item.icon size={20} className={activeTab === item.id ? "text-white" : "text-slate-600 group-hover:text-blue-500 transition-colors"} />
-                            {item.label}
-                        </div>
-                        {item.badge > 0 && (
-                            <span className={cn(
-                                "px-3 py-1 rounded-lg text-[9px] font-bold shadow-lg relative z-10",
-                                activeTab === item.id ? "bg-white text-blue-600" : "bg-blue-600 text-white"
-                            )}>
-                                {item.badge}
-                            </span>
-                        )}
+                <nav className="space-y-1">
+                    {adminLinks.map((link) => {
+                        const Icon = link.icon;
+                        const isActive = pathname === link.href || (link.href !== "/admin" && pathname.startsWith(link.href));
+                        return (
+                            <Link key={link.name} href={link.href} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive ? "bg-blue-600/10 text-blue-400 border border-blue-500/20" : "text-white/50 hover:text-white hover:bg-white/5"}`}>
+                                <Icon className={`w-4 h-4 ${isActive ? "text-blue-400" : "text-white/30 group-hover:text-white/60"}`} />
+                                <span className="flex-1">{link.name}</span>
+                                {isActive && <ChevronRight className="w-3 h-3 text-blue-400/50" />}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                <div className="border-t border-white/5 pt-4 mt-4">
+                    <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-white/40 hover:text-white hover:bg-white/5 transition-all w-full">
+                        <LayoutDashboard className="w-4 h-4" /> Member Dashboard
+                    </Link>
+                    <button className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-400/60 hover:text-red-400 hover:bg-red-500/5 transition-all w-full">
+                        <LogOut className="w-4 h-4" /> Sign Out
                     </button>
-                ))}
-            </nav>
-
-            <div className="px-8 pt-8 border-t border-white/5">
-                <button className="flex items-center gap-4 text-slate-600 hover:text-red-500 font-bold px-6 py-4.5 uppercase text-[10px] tracking-[0.2em] transition-all w-full bg-white/2 hover:bg-red-500/5 rounded-2xl border border-white/5 hover:border-red-500/20 group">
-                    <Lock size={18} className="group-hover:scale-110 transition-transform" />
-                    Lock Protocol
-                </button>
+                </div>
             </div>
         </aside>
     );
