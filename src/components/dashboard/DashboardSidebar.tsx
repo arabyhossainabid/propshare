@@ -29,6 +29,27 @@ const sidebarLinks = [
 export default function DashboardSidebar() {
   const pathname = usePathname();
 
+  const isLinkActive = (href: string) => {
+    if (href === '/dashboard') {
+      return pathname === href;
+    }
+
+    if (href === '/dashboard/properties') {
+      // Keep list route active for properties pages, but not for create flow.
+      return (
+        pathname === href ||
+        (pathname.startsWith('/dashboard/properties/') &&
+          !pathname.startsWith('/dashboard/properties/create'))
+      );
+    }
+
+    if (href === '/dashboard/properties/create') {
+      return pathname === href;
+    }
+
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <aside className='w-64 shrink-0 hidden lg:block'>
       <div className='sticky top-28 space-y-2'>
@@ -49,9 +70,7 @@ export default function DashboardSidebar() {
         <nav className='space-y-1'>
           {sidebarLinks.map((link) => {
             const Icon = link.icon;
-            const isActive =
-              pathname === link.href ||
-              (link.href !== '/dashboard' && pathname.startsWith(link.href));
+            const isActive = isLinkActive(link.href);
             return (
               <Link
                 key={link.name}
