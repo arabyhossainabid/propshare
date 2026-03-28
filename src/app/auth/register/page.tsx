@@ -1,7 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+
+import { AuthInputField } from '@/components/auth/AuthInputField';
+import { AuthSidebar } from '@/components/auth/AuthSidebar';
 import { useAuth } from '@/contexts/AuthContext';
 import { getApiErrorMessage } from '@/lib/api';
 import gsap from 'gsap';
@@ -9,8 +11,6 @@ import {
   ArrowRight,
   Building2,
   Check,
-  Eye,
-  EyeOff,
   Lock,
   Mail,
   Phone,
@@ -42,7 +42,6 @@ export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
   const pageRef = useRef<HTMLDivElement>(null);
-  const [showPassword, setShowPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormState>({
@@ -200,52 +199,16 @@ export default function RegisterPage() {
       <div className='absolute inset-0 grid-pattern opacity-20' />
 
       <div className='relative z-10 w-full max-w-5xl grid lg:grid-cols-2 gap-0'>
-        {/* Left Side */}
-        <div className='auth-left hidden lg:flex flex-col justify-center pr-16 space-y-8'>
-          <Link href='/' className='flex items-center gap-3'>
-            <div className='w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/20'>
-              <Building2 className='w-6 h-6 text-white' />
-            </div>
-            <div className='flex flex-col'>
-              <span className='text-xl font-bold tracking-tight font-heading'>
-                Prop<span className='text-blue-500'>Share</span>
-              </span>
-              <span className='text-[9px] uppercase tracking-[0.3em] text-white/30 -mt-0.5'>
-                Protocol
-              </span>
-            </div>
-          </Link>
-
-          <div className='space-y-4'>
-            <h1 className='text-4xl lg:text-5xl font-bold font-heading leading-tight'>
-              Start Your{' '}
-              <span className='gradient-text'>Investment Journey</span>
-            </h1>
-            <p className='text-white/40 text-lg leading-relaxed max-w-md'>
-              Create your account in just 2 minutes and unlock access to premium
-              real estate investment opportunities.
-            </p>
-          </div>
-
-          {/* Benefits */}
-          <div className='space-y-4 pt-4'>
-            {[
-              { icon: Shield, text: 'Verified & RERA-compliant properties' },
-              { icon: TrendingUp, text: '15-25% average annual returns' },
-              { icon: Users, text: 'Join 2,500+ smart investors' },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.text} className='flex items-center gap-3'>
-                  <div className='w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0'>
-                    <Icon className='w-4 h-4 text-emerald-400' />
-                  </div>
-                  <span className='text-sm text-white/50'>{item.text}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <AuthSidebar
+          titleStart='Start Your'
+          titleHighlight='Investment Journey'
+          subtitle='Create your account in just 2 minutes and unlock access to premium real estate investment opportunities.'
+          benefits={[
+            { icon: Shield, text: 'Verified & RERA-compliant properties' },
+            { icon: TrendingUp, text: '15-25% average annual returns' },
+            { icon: Users, text: 'Join 2,500+ smart investors' },
+          ]}
+        />
 
         {/* Right Side - Register Card */}
         <div className='auth-card'>
@@ -319,118 +282,58 @@ export default function RegisterPage() {
                 {currentStep === 1 ? (
                   <>
                     <div className='grid grid-cols-2 gap-3 mb-4'>
-                      <div className='auth-field space-y-2'>
-                        <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                          First Name
-                        </label>
-                        <div className='relative'>
-                          <User className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
-                          <Input
-                            placeholder='John'
-                            value={formData.firstName}
-                            onChange={(e) =>
-                              setField('firstName', e.target.value)
-                            }
-                            className={`bg-white/5 rounded-xl pl-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${errors.firstName ? 'border-red-500/50 focus-visible:border-red-500/50' : 'border-white/10 focus-visible:border-blue-500/30'}`}
-                          />
-                        </div>
-                        {errors.firstName && (
-                          <p className='text-[10px] text-red-400 pl-1'>
-                            {errors.firstName}
-                          </p>
-                        )}
-                      </div>
-                      <div className='auth-field space-y-2'>
-                        <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                          Last Name
-                        </label>
-                        <Input
-                          placeholder='Doe'
-                          value={formData.lastName}
-                          onChange={(e) => setField('lastName', e.target.value)}
-                          className={`bg-white/5 rounded-xl py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${errors.lastName ? 'border-red-500/50 focus-visible:border-red-500/50' : 'border-white/10 focus-visible:border-blue-500/30'}`}
-                        />
-                        {errors.lastName && (
-                          <p className='text-[10px] text-red-400 pl-1'>
-                            {errors.lastName}
-                          </p>
-                        )}
-                      </div>
+                      <AuthInputField
+                        label='First Name'
+                        icon={User}
+                        placeholder='John'
+                        value={formData.firstName}
+                        onChange={(e) => setField('firstName', e.target.value)}
+                        error={errors.firstName}
+                      />
+                      <AuthInputField
+                        label='Last Name'
+                        icon={User}
+                        placeholder='Doe'
+                        value={formData.lastName}
+                        onChange={(e) => setField('lastName', e.target.value)}
+                        error={errors.lastName}
+                      />
                     </div>
 
-                    <div className='auth-field space-y-2 mb-4'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                        Email Address
-                      </label>
-                      <div className='relative'>
-                        <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
-                        <Input
-                          type='email'
-                          placeholder='you@example.com'
-                          value={formData.email}
-                          onChange={(e) => setField('email', e.target.value)}
-                          className={`bg-white/5 rounded-xl pl-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${errors.email ? 'border-red-500/50 focus-visible:border-red-500/50' : 'border-white/10 focus-visible:border-blue-500/30'}`}
-                        />
-                      </div>
-                      {errors.email && (
-                        <p className='text-[10px] text-red-400 pl-1'>
-                          {errors.email}
-                        </p>
-                      )}
+                    <div className='mb-4'>
+                      <AuthInputField
+                        label='Email Address'
+                        icon={Mail}
+                        type='email'
+                        placeholder='you@example.com'
+                        value={formData.email}
+                        onChange={(e) => setField('email', e.target.value)}
+                        error={errors.email}
+                      />
                     </div>
 
-                    <div className='auth-field space-y-2'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                        Phone Number
-                      </label>
-                      <div className='relative'>
-                        <Phone className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
-                        <Input
-                          placeholder='+880 1XXXXXXXXX'
-                          value={formData.phone}
-                          onChange={(e) => setField('phone', e.target.value)}
-                          className={`bg-white/5 rounded-xl pl-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${errors.phone ? 'border-red-500/50 focus-visible:border-red-500/50' : 'border-white/10 focus-visible:border-blue-500/30'}`}
-                        />
-                      </div>
-                      {errors.phone && (
-                        <p className='text-[10px] text-red-400 pl-1'>
-                          {errors.phone}
-                        </p>
-                      )}
-                    </div>
+                    <AuthInputField
+                      label='Phone Number'
+                      icon={Phone}
+                      placeholder='+880 1XXXXXXXXX'
+                      value={formData.phone}
+                      onChange={(e) => setField('phone', e.target.value)}
+                      error={errors.phone}
+                    />
                   </>
                 ) : (
                   <>
-                    <div className='space-y-2 mb-4'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                        Password
-                      </label>
-                      <div className='relative'>
-                        <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
-                        <Input
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder='Min. 8 characters'
-                          value={formData.password}
-                          onChange={(e) => setField('password', e.target.value)}
-                          className={`bg-white/5 rounded-xl pl-10 pr-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${errors.password ? 'border-red-500/50 focus-visible:border-red-500/50' : 'border-white/10 focus-visible:border-blue-500/30'}`}
-                        />
-                        <button
-                          type='button'
-                          onClick={() => setShowPassword(!showPassword)}
-                          className='absolute right-3 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/40 transition-colors'
-                        >
-                          {showPassword ? (
-                            <EyeOff className='w-4 h-4' />
-                          ) : (
-                            <Eye className='w-4 h-4' />
-                          )}
-                        </button>
-                      </div>
-                      {errors.password && (
-                        <p className='text-[10px] text-red-400 pl-1'>
-                          {errors.password}
-                        </p>
-                      )}
+                    <div className='mb-4'>
+                      <AuthInputField
+                        label='Password'
+                        icon={Lock}
+                        type='password'
+                        placeholder='Min. 8 characters'
+                        value={formData.password}
+                        onChange={(e) => setField('password', e.target.value)}
+                        error={errors.password}
+                        containerClassName=''
+                      />
 
                       {/* Password Strength */}
                       {formData.password && !errors.password && (
@@ -454,31 +357,25 @@ export default function RegisterPage() {
                       )}
                     </div>
 
-                    <div className='space-y-2 mb-4'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                        Confirm Password
-                      </label>
-                      <div className='relative'>
-                        <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
-                        <Input
-                          type='password'
-                          placeholder='Re-enter your password'
-                          value={formData.confirmPassword}
-                          onChange={(e) =>
-                            setField('confirmPassword', e.target.value)
-                          }
-                          className={`bg-white/5 rounded-xl pl-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${errors.confirmPassword ? 'border-red-500/50 focus-visible:border-red-500/50' : 'border-white/10 focus-visible:border-blue-500/30'}`}
-                        />
-                        {formData.confirmPassword &&
-                          formData.password === formData.confirmPassword && (
-                            <Check className='absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400' />
-                          )}
-                      </div>
-                      {errors.confirmPassword && (
-                        <p className='text-[10px] text-red-400 pl-1'>
-                          {errors.confirmPassword}
-                        </p>
-                      )}
+                    <div className='mb-4'>
+                      <AuthInputField
+                        label='Confirm Password'
+                        icon={Lock}
+                        type='password'
+                        placeholder='Re-enter your password'
+                        value={formData.confirmPassword}
+                        onChange={(e) =>
+                          setField('confirmPassword', e.target.value)
+                        }
+                        error={errors.confirmPassword}
+                        containerClassName=''
+                        rightElement={
+                          formData.confirmPassword &&
+                          formData.password === formData.confirmPassword ? (
+                            <Check className='w-4 h-4 text-emerald-400' />
+                          ) : undefined
+                        }
+                      />
                     </div>
 
                     {/* Terms */}
@@ -500,14 +397,14 @@ export default function RegisterPage() {
                           I agree to the{' '}
                           <Link
                             href='/terms'
-                            className='text-blue-400 hover:text-blue-300'
+                            className='text-white hover:text-blue-300'
                           >
                             Terms of Service
                           </Link>{' '}
                           and{' '}
                           <Link
                             href='/privacy'
-                            className='text-blue-400 hover:text-blue-300'
+                            className='text-white hover:text-blue-300'
                           >
                             Privacy Policy
                           </Link>
@@ -538,7 +435,7 @@ export default function RegisterPage() {
                 <Button
                   type='submit'
                   disabled={isLoading}
-                  className='flex-1 bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-5 text-sm font-semibold shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 group disabled:opacity-50'
+                  className='flex-1 bg-white/10 hover:bg-white/15 text-white rounded-xl py-5 text-sm font-semibold shadow-2xl shadow-black/20 hover:shadow-black/20 transition-all duration-300 group disabled:opacity-50'
                 >
                   {isLoading ? (
                     <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin' />
@@ -563,7 +460,7 @@ export default function RegisterPage() {
                 Already have an account?{' '}
                 <Link
                   href='/auth/login'
-                  className='text-blue-400 hover:text-blue-300 font-medium transition-colors'
+                  className='text-white hover:text-blue-300 font-medium transition-colors'
                 >
                   Sign In
                 </Link>

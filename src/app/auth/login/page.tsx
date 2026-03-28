@@ -1,15 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+
 import { useAuth } from '@/contexts/AuthContext';
 import { getApiErrorMessage } from '@/lib/api';
 import gsap from 'gsap';
 import {
   ArrowRight,
   Building2,
-  Eye,
-  EyeOff,
   Lock,
   Mail,
   Shield,
@@ -19,6 +17,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { AuthInputField } from '@/components/auth/AuthInputField';
+import { AuthSidebar } from '@/components/auth/AuthSidebar';
 
 export default function LoginPage() {
   type FormErrors = { email?: string; password?: string; submit?: string };
@@ -26,7 +26,6 @@ export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
   const pageRef = useRef<HTMLDivElement>(null);
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -119,50 +118,25 @@ export default function LoginPage() {
       <div className='absolute inset-0 grid-pattern opacity-20' />
 
       <div className='relative z-10 w-full max-w-5xl grid lg:grid-cols-2 gap-0 lg:gap-0'>
-        {/* Left Side - Branding */}
-        <div className='auth-left hidden lg:flex flex-col justify-center pr-16 space-y-8'>
-          <Link href='/' className='flex items-center gap-3'>
-            <div className='w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/20'>
-              <Building2 className='w-6 h-6 text-white' />
-            </div>
-            <div className='flex flex-col'>
-              <span className='text-xl font-bold tracking-tight font-heading'>
-                Prop<span className='text-blue-500'>Share</span>
-              </span>
-              <span className='text-[9px] uppercase tracking-[0.3em] text-white/30 -mt-0.5'>
-                Protocol
-              </span>
-            </div>
-          </Link>
-
-          <div className='space-y-4'>
-            <h1 className='text-4xl lg:text-5xl font-bold font-heading leading-tight'>
-              Welcome <span className='gradient-text'>Back</span>
-            </h1>
-            <p className='text-white/40 text-lg leading-relaxed max-w-md'>
-              Sign in to your account to manage your investments, track returns,
-              and discover new property opportunities.
-            </p>
-          </div>
-
-          {/* Trust badges */}
-          <div className='space-y-4 pt-4'>
-            {[
-              { icon: Shield, text: 'Bank-grade encryption & security' },
-              { icon: Sparkles, text: '2,500+ active investors trust us' },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.text} className='flex items-center gap-3'>
-                  <div className='w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0'>
-                    <Icon className='w-4 h-4 text-blue-400' />
-                  </div>
-                  <span className='text-sm text-white/50'>{item.text}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <AuthSidebar
+          titleStart="Welcome"
+          titleHighlight="Back"
+          subtitle="Sign in to your account to manage your investments, track returns, and discover new property opportunities."
+          benefits={[
+            {
+              icon: Shield,
+              text: 'Bank-grade encryption & security',
+              iconBgClass: 'bg-blue-500/10 border border-blue-500/20',
+              iconColorClass: 'text-blue-400',
+            },
+            {
+              icon: Sparkles,
+              text: '2,500+ active investors trust us',
+              iconBgClass: 'bg-blue-500/10 border border-blue-500/20',
+              iconColorClass: 'text-blue-400',
+            },
+          ]}
+        />
 
         {/* Right Side - Login Card */}
         <div className='auth-card'>
@@ -197,65 +171,34 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <div className='auth-field space-y-2'>
-                <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                  Email Address
-                </label>
-                <div className='relative'>
-                  <Mail className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
-                  <Input
-                    type='email'
-                    placeholder='you@example.com'
-                    value={formData.email}
-                    onChange={(e) => updateField('email', e.target.value)}
-                    className={`bg-white/5 rounded-xl pl-11 py-6 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${
-                      errors.email
-                        ? 'border-red-500/50 focus-visible:border-red-500/50'
-                        : 'border-white/10 focus-visible:border-blue-500/30'
-                    }`}
-                  />
-                </div>
-                {errors.email && (
-                  <p className='text-xs text-red-400 pl-1'>{errors.email}</p>
-                )}
-              </div>
+              <AuthInputField
+                label="Email Address"
+                icon={Mail}
+                type="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={(e) => updateField('email', e.target.value)}
+                error={errors.email}
+                inputClassName="pl-11 py-6"
+                iconClassName="left-4"
+                errorClassName="text-xs"
+              />
 
-              <div className='auth-field space-y-2'>
-                <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-                  Password
-                </label>
-                <div className='relative'>
-                  <Lock className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder='Enter your password'
-                    value={formData.password}
-                    onChange={(e) => updateField('password', e.target.value)}
-                    className={`bg-white/5 rounded-xl pl-11 pr-11 py-6 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${
-                      errors.password
-                        ? 'border-red-500/50 focus-visible:border-red-500/50'
-                        : 'border-white/10 focus-visible:border-blue-500/30'
-                    }`}
-                  />
-                  <button
-                    type='button'
-                    onClick={() => setShowPassword(!showPassword)}
-                    className='absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/40 transition-colors'
-                  >
-                    {showPassword ? (
-                      <EyeOff className='w-4 h-4' />
-                    ) : (
-                      <Eye className='w-4 h-4' />
-                    )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className='text-xs text-red-400 pl-1'>{errors.password}</p>
-                )}
-              </div>
+              <AuthInputField
+                label="Password"
+                icon={Lock}
+                type="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) => updateField('password', e.target.value)}
+                error={errors.password}
+                inputClassName="pl-11 pr-11 py-6"
+                iconClassName="left-4"
+                errorClassName="text-xs"
+              />
 
               {/* Remember me */}
-              <div className='auth-field flex items-center justify-between'>
+              <div className='auth-field flex items-center'>
                 <div className='flex items-center gap-3'>
                   <input
                     type='checkbox'
@@ -266,19 +209,12 @@ export default function LoginPage() {
                     Remember me
                   </label>
                 </div>
-                <Link
-                  prefetch={false}
-                  href='/auth/forgot-password'
-                  className='text-xs text-blue-400 hover:text-blue-300 transition-colors'
-                >
-                  Forgot password?
-                </Link>
               </div>
 
               <Button
                 type='submit'
                 disabled={isLoading}
-                className='auth-field w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 group disabled:opacity-50'
+                className='auth-field w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-black/20 hover:shadow-black/20 transition-all duration-300 group disabled:opacity-50'
               >
                 {isLoading ? (
                   <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin' />

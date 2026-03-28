@@ -1,6 +1,5 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,29 +15,23 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   ArrowLeft,
-  ArrowRight,
   BarChart3,
   Building2,
   Calendar,
   ChevronRight,
   Clock,
-  Eye,
-  Heart,
-  Lock,
   MapPin,
   Send,
-  Share2,
-  Shield,
   ThumbsUp,
   TrendingUp,
-  Unlock,
   Users,
 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { PropertyGallery } from '@/components/properties/PropertyGallery';
+import { PropertySidebar } from '@/components/properties/PropertySidebar';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -311,7 +304,7 @@ export default function PropertyDetailPage() {
               list to continue.
             </p>
             <Link href='/properties'>
-              <Button className='bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6'>
+              <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-6'>
                 Browse Properties
               </Button>
             </Link>
@@ -348,7 +341,7 @@ export default function PropertyDetailPage() {
               Could not load this property right now. Please try again later.
             </p>
             <Link href='/properties'>
-              <Button className='bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6'>
+              <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-6'>
                 Back to Properties
               </Button>
             </Link>
@@ -377,72 +370,14 @@ export default function PropertyDetailPage() {
           {/* Main Content */}
           <div className='lg:col-span-2 space-y-8'>
             {/* Gallery */}
-            <div className='detail-gallery space-y-3'>
-              <div className='relative aspect-[16/9] rounded-3xl overflow-hidden'>
-                <Image
-                  src={property.images[activeImage]}
-                  alt={property.title}
-                  fill
-                  className='object-cover'
-                />
-                <div className='absolute inset-0 bg-gradient-to-t from-[#0a0f1d]/60 via-transparent to-transparent' />
-                {/* Actions */}
-                <div className='absolute top-4 right-4 flex gap-2'>
-                  <button
-                    onClick={() => setIsLiked(!isLiked)}
-                    className={`w-10 h-10 rounded-xl backdrop-blur-xl flex items-center justify-center transition-all ${isLiked ? 'bg-red-500/20 border border-red-500/30' : 'bg-black/30 border border-white/10'}`}
-                  >
-                    <Heart
-                      className={`w-4 h-4 ${isLiked ? 'text-red-400 fill-red-400' : 'text-white'}`}
-                    />
-                  </button>
-                  <button className='w-10 h-10 rounded-xl bg-black/30 backdrop-blur-xl border border-white/10 flex items-center justify-center'>
-                    <Share2 className='w-4 h-4 text-white' />
-                  </button>
-                </div>
-                {/* Status Badges */}
-                <div className='absolute top-4 left-4 flex gap-2'>
-                  <Badge className='bg-blue-500/20 text-blue-400 border-blue-500/30 backdrop-blur-xl'>
-                    {property.category}
-                  </Badge>
-                  <Badge
-                    className={`backdrop-blur-xl ${property.isPaid ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'}`}
-                  >
-                    {property.isPaid ? (
-                      <>
-                        <Lock className='w-3 h-3 mr-1' /> Premium
-                      </>
-                    ) : (
-                      <>
-                        <Unlock className='w-3 h-3 mr-1' /> Free
-                      </>
-                    )}
-                  </Badge>
-                </div>
-                {/* View count */}
-                <div className='absolute bottom-4 left-4 flex items-center gap-2 text-sm text-white/60'>
-                  <Eye className='w-4 h-4' />{' '}
-                  {(propertyData?.viewCount || 0).toLocaleString()} views
-                </div>
-              </div>
-              {/* Thumbnails */}
-              <div className='flex gap-3'>
-                {property.images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImage(i)}
-                    className={`relative w-24 h-16 rounded-xl overflow-hidden transition-all ${activeImage === i ? 'ring-2 ring-blue-500 opacity-100' : 'opacity-50 hover:opacity-75'}`}
-                  >
-                    <Image
-                      src={img}
-                      alt={`View ${i + 1}`}
-                      fill
-                      className='object-cover'
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+            <PropertyGallery
+              property={property}
+              viewCount={voteCount}
+              isLiked={isLiked}
+              setIsLiked={setIsLiked}
+              activeImage={activeImage}
+              setActiveImage={setActiveImage}
+            />
 
             <div className='detail-content space-y-8'>
               {/* Title + Meta */}
@@ -542,7 +477,7 @@ export default function PropertyDetailPage() {
                     }}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                       hasVoted || myVote?.voteType === 'UPVOTE'
-                        ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
+                        ? 'bg-white/5 text-white border border-white/10'
                         : 'bg-white/5 text-white/50 border border-white/10 hover:bg-white/10'
                     }`}
                   >
@@ -555,7 +490,7 @@ export default function PropertyDetailPage() {
 
                 {/* Comment Input */}
                 <div className='flex gap-3 mb-6'>
-                  <div className='w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0 text-sm font-bold text-blue-400'>
+                  <div className='w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0 text-sm font-bold text-white'>
                     {(user?.name || 'U').slice(0, 1).toUpperCase()}
                   </div>
                   <div className='flex-1 flex gap-2'>
@@ -570,7 +505,7 @@ export default function PropertyDetailPage() {
                         if (!commentText.trim()) return;
                         commentMutation.mutate(commentText.trim());
                       }}
-                      className='bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 shrink-0'
+                      className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-4 shrink-0'
                     >
                       <Send className='w-4 h-4' />
                     </Button>
@@ -602,95 +537,15 @@ export default function PropertyDetailPage() {
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div className='detail-sidebar'>
-            <div className='sticky top-28 space-y-6'>
-              {/* Investment Card */}
-              <div className='bg-white/[0.02] border border-white/5 rounded-3xl p-6 space-y-6'>
-                <div className='space-y-2'>
-                  <p className='text-xs text-white/30 uppercase tracking-wider'>
-                    Share Price
-                  </p>
-                  <p className='text-3xl font-bold gradient-text'>
-                    ৳{property.price.toLocaleString()}
-                  </p>
-                </div>
-
-                {/* Funding Progress */}
-                <div className='space-y-2'>
-                  <div className='flex justify-between text-sm'>
-                    <span className='text-white/40'>Funding Progress</span>
-                    <span className='text-white font-medium'>
-                      {fundingProgress}%
-                    </span>
-                  </div>
-                  <div className='w-full h-2 rounded-full bg-white/5'>
-                    <div
-                      className='h-full rounded-full bg-gradient-to-r from-blue-600 to-emerald-500 transition-all duration-700'
-                      style={{ width: `${fundingProgress}%` }}
-                    />
-                  </div>
-                  <div className='flex justify-between text-xs text-white/30'>
-                    <span>
-                      ৳
-                      {(
-                        ((property.totalShares - property.availableShares) *
-                          property.price) /
-                        100000
-                      ).toFixed(1)}
-                      L raised
-                    </span>
-                    <span>
-                      ৳
-                      {(
-                        (property.totalShares * property.price) /
-                        100000
-                      ).toFixed(1)}
-                      L target
-                    </span>
-                  </div>
-                </div>
-
-                {/* Quick Stats */}
-                <div className='grid grid-cols-2 gap-3'>
-                  <div className='bg-white/[0.03] rounded-xl p-3'>
-                    <p className='text-[10px] text-white/30 uppercase tracking-wider mb-1'>
-                      Return
-                    </p>
-                    <p className='text-sm font-bold text-emerald-400'>
-                      {property.expectedReturn}
-                    </p>
-                  </div>
-                  <div className='bg-white/[0.03] rounded-xl p-3'>
-                    <p className='text-[10px] text-white/30 uppercase tracking-wider mb-1'>
-                      Min. Invest
-                    </p>
-                    <p className='text-sm font-bold text-white'>
-                      ৳{property.price.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-
-                <Link
-                  href={
-                    hasInvested
-                      ? '/dashboard/investments'
-                      : `/payment?propertyId=${propertyId}`
-                  }
-                >
-                  <Button className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-blue-500/20 group mt-2'>
-                    {hasInvested ? 'View Investment' : 'Invest Now'}
-                    <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
-                  </Button>
-                </Link>
-
-                <div className='flex items-center gap-2 justify-center text-xs text-white/20'>
-                  <Shield className='w-3 h-3 text-emerald-400' />
-                  <span>Secured & Verified Property</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PropertySidebar
+            propertyId={propertyId}
+            hasInvested={hasInvested}
+            price={property.price}
+            expectedReturn={property.expectedReturn}
+            totalShares={property.totalShares}
+            availableShares={property.availableShares}
+            fundingProgress={fundingProgress}
+          />
         </div>
       </div>
     </div>
