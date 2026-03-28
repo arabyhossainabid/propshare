@@ -234,7 +234,7 @@ function PaymentPageContent() {
               </Button>
             </Link>
             <Link href='/' className='flex-1'>
-              <Button className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-5 group'>
+              <Button className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-5 group'>
                 Go to Dashboard
                 <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
               </Button>
@@ -357,7 +357,7 @@ function PaymentPageContent() {
             <div className='bg-white/[0.02] border border-white/5 rounded-3xl p-8'>
               <h3 className='text-lg font-bold mb-6 flex items-center gap-2'>
                 <div className='w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center'>
-                  <span className='text-sm font-bold text-blue-400'>2</span>
+                  <span className='text-sm font-bold text-white'>2</span>
                 </div>
                 Payment Method
               </h3>
@@ -383,21 +383,21 @@ function PaymentPageContent() {
                       onClick={() => setPaymentMethod(method.id)}
                       className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all duration-300 ${
                         paymentMethod === method.id
-                          ? 'bg-blue-600/10 border-blue-500/30 shadow-lg shadow-blue-500/5'
+                          ? 'bg-white/5 border-white/10 shadow-lg shadow-black/20'
                           : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.04] hover:border-white/10'
                       }`}
                     >
                       <Icon
                         className={`w-6 h-6 ${
                           paymentMethod === method.id
-                            ? 'text-blue-400'
+                            ? 'text-white'
                             : 'text-white/40'
                         }`}
                       />
                       <span
                         className={`text-xs font-medium ${
                           paymentMethod === method.id
-                            ? 'text-blue-400'
+                            ? 'text-white'
                             : 'text-white/40'
                         }`}
                       >
@@ -549,10 +549,10 @@ function PaymentPageContent() {
 
                 {paymentMethod === 'bank' && (
                   <div className='space-y-4'>
-                    <div className='bg-blue-500/5 border border-blue-500/10 rounded-2xl p-5 space-y-3'>
+                    <div className='bg-blue-500/5 border border-white/10 rounded-2xl p-5 space-y-3'>
                       <div className='flex items-center gap-3 mb-2'>
                         <div className='w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center'>
-                          <Landmark className='w-5 h-5 text-blue-400' />
+                          <Landmark className='w-5 h-5 text-white' />
                         </div>
                         <div>
                           <h4 className='text-sm font-bold text-white'>
@@ -605,7 +605,7 @@ function PaymentPageContent() {
                 <Button
                   type='submit'
                   disabled={isProcessing}
-                  className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 group disabled:opacity-70'
+                  className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-black/20 hover:shadow-black/20 transition-all duration-300 group disabled:opacity-70'
                 >
                   {isProcessing ? (
                     <div className='flex items-center gap-3'>
@@ -640,7 +640,7 @@ function PaymentPageContent() {
                   />
                 </div>
                 <div className='flex-1 min-w-0'>
-                  <Badge className='bg-blue-500/10 text-blue-400 border-blue-500/20 text-[10px] mb-1'>
+                  <Badge className='bg-blue-500/10 text-white border-white/10 text-[10px] mb-1'>
                     {property.category}
                   </Badge>
                   <h4 className='text-sm font-bold text-white truncate'>

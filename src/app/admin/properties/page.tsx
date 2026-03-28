@@ -129,8 +129,8 @@ export default function AdminPropertiesPage() {
           >
             <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
               <div className='flex items-center gap-4 min-w-0'>
-                <div className='w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0'>
-                  <Building2 className='w-5 h-5 text-blue-400' />
+                <div className='w-12 h-12 rounded-xl bg-blue-500/10 border border-white/10 flex items-center justify-center shrink-0'>
+                  <Building2 className='w-5 h-5 text-white' />
                 </div>
                 <div className='min-w-0'>
                   <div className='flex items-center gap-2 flex-wrap'>
@@ -168,7 +168,7 @@ export default function AdminPropertiesPage() {
               <div className='flex items-center gap-2 shrink-0 self-end md:self-center'>
                 {p.status === 'UNDER_REVIEW' ? (
                   <Link href={`/admin/properties/${p.id}/review`}>
-                    <Button className='bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs h-9 px-4'>
+                    <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl text-xs h-9 px-4'>
                       Review Now
                       <ArrowRight className='w-3.5 h-3.5 ml-2' />
                     </Button>

@@ -182,7 +182,7 @@ export default function Hero({ heroStats }: HeroProps) {
             {/* CTA Buttons */}
             <div className='flex flex-wrap gap-4'>
               <Link href='/properties'>
-                <Button className='hero-cta bg-blue-600 hover:bg-blue-500 text-white rounded-2xl px-8 py-6 text-sm font-semibold shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 group'>
+                <Button className='hero-cta bg-white/10 hover:bg-white/15 text-white rounded-2xl px-8 py-6 text-sm font-semibold shadow-2xl shadow-black/20 hover:shadow-black/20 transition-all duration-300 group'>
                   Explore Properties
                   <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
                 </Button>

@@ -108,7 +108,7 @@ export default function AdminFeaturedPage() {
                   </p>
                 </div>
                 <Button
-                  className='bg-white/5 hover:bg-blue-600 text-white border border-white/10 rounded-xl text-[10px] h-8 px-3'
+                  className='bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl text-[10px] h-8 px-3'
                   onClick={() => toggleFeaturedMutation.mutate(p.id)}
                   disabled={toggleFeaturedMutation.isPending}
                 >

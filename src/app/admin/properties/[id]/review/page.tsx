@@ -223,7 +223,7 @@ export default function AdminPropertyReviewPage() {
                 </Button>
                 <Button
                   onClick={() => handleDecision('approve')}
-                  className='flex-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl h-14 shadow-lg shadow-emerald-600/20'
+                  className='flex-1 bg-white/10 hover:bg-white/15 text-white rounded-xl h-14 shadow-lg shadow-black/20'
                   disabled={reviewMutation.isPending}
                 >
                   {submittingType === 'approve' ? (
@@ -432,7 +432,7 @@ export default function AdminPropertyReviewPage() {
               </div>
               <Button
                 onClick={() => setReviewStage('decision')}
-                className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-6 text-sm font-semibold shadow-xl shadow-blue-600/20 group'
+                className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-6 text-sm font-semibold shadow-xl shadow-black/20 group'
               >
                 Make a Decision
                 <Send className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />

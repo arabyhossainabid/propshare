@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
 import { getApiErrorMessage } from '@/lib/api';
-import { ArrowRight, Building2, Menu, Sparkles } from 'lucide-react';
+import { ArrowRight, Building2, Menu, Sparkles, User } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -100,8 +100,11 @@ export default function Navbar() {
                 <Link href={user?.role === 'ADMIN' ? '/admin' : '/dashboard'}>
                   <Button
                     variant='ghost'
-                    className='text-white/60 hover:text-white hover:bg-white/5 rounded-xl text-sm'
+                    className='text-white/60 hover:text-white dark:hover:text-white hover:bg-white/5 dark:hover:bg-white/5 rounded-xl text-sm gap-2'
                   >
+                    <div className='w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0'>
+                      <User className='w-3.5 h-3.5 text-blue-400' />
+                    </div>
                     {user?.role === 'ADMIN'
                       ? user?.name || 'Admin Panel'
                       : user?.name || 'Dashboard'}
@@ -125,7 +128,7 @@ export default function Navbar() {
                   </Button>
                 </Link>
                 <Link href='/auth/register'>
-                  <Button className='bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 text-sm group'>
+                  <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-6 shadow-lg shadow-black/20 hover:shadow-black/20 transition-all duration-300 text-sm group'>
                     Get Started
                     <ArrowRight className='w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform' />
                   </Button>
@@ -192,9 +195,14 @@ export default function Navbar() {
                       >
                         <Button
                           variant='outline'
-                          className='w-full rounded-xl border-white/10 text-white hover:bg-white/5 h-12'
+                          className='w-full rounded-xl border-white/10 text-white hover:bg-white/5 dark:hover:bg-white/5 h-12 gap-2'
                         >
-                          {user?.role === 'ADMIN' ? 'Admin Panel' : 'Dashboard'}
+                          <div className='w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0'>
+                            <User className='w-3.5 h-3.5 text-blue-400' />
+                          </div>
+                          {user?.role === 'ADMIN'
+                            ? user?.name || 'Admin Panel'
+                            : user?.name || 'Dashboard'}
                         </Button>
                       </Link>
                       <Button
@@ -221,7 +229,7 @@ export default function Navbar() {
                         href='/auth/register'
                         onClick={() => setIsOpen(false)}
                       >
-                        <Button className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl h-12 shadow-lg shadow-blue-500/20'>
+                        <Button className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl h-12 shadow-lg shadow-black/20'>
                           <Sparkles className='w-4 h-4 mr-2' />
                           Get Started
                         </Button>

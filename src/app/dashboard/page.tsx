@@ -177,7 +177,7 @@ export default function DashboardPage() {
           </p>
         </div>
         <Link href='/dashboard/properties/create'>
-          <Button className='bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm group'>
+          <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl text-sm group'>
             <PlusCircle className='w-4 h-4 mr-2' /> Create Property
           </Button>
         </Link>

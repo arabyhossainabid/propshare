@@ -126,8 +126,8 @@ export default function CTA() {
                   disabled={isSubscribed}
                   className={`rounded-2xl px-8 py-6 text-sm font-semibold transition-all duration-300 ${
                     isSubscribed
-                      ? 'bg-emerald-600 hover:bg-emerald-500'
-                      : 'bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-500/20'
+                      ? 'bg-white/10 hover:bg-white/15 shadow-lg shadow-black/20'
+                      : 'bg-white/10 hover:bg-white/15 shadow-lg shadow-black/20'
                   }`}
                 >
                   {isSubscribed ? (

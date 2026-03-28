@@ -102,7 +102,7 @@ export default function PaymentCancelPage() {
             </Button>
           </Link>
           <Link href='/contact' className='flex-1'>
-            <Button className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-5 group'>
+            <Button className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-5 group'>
               <MessageSquare className='w-4 h-4 mr-2' /> Contact Support
             </Button>
           </Link>

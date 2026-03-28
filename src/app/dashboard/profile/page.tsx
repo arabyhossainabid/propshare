@@ -103,7 +103,7 @@ export default function ProfilePage() {
             )}
             <button
               onClick={() => setShowAvatarUpload(true)}
-              className='absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center border-2 border-[#0a0f1d] hover:bg-blue-700'
+              className='absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center border-2 border-[#0a0f1d] hover:bg-white/15'
             >
               <Camera className='w-3 h-3 text-white' />
             </button>
@@ -183,7 +183,7 @@ export default function ProfilePage() {
         <Button
           onClick={handleSave}
           disabled={updateMutation.isPending}
-          className='bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-8 text-sm'
+          className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-8 text-sm'
         >
           {updateMutation.isPending && (
             <Loader2 className='w-4 h-4 mr-2 animate-spin' />

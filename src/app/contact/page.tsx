@@ -477,7 +477,7 @@ export default function ContactPage() {
                   <Button
                     type='submit'
                     disabled={contactMutation.isPending}
-                    className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-2xl py-6 text-sm font-semibold shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 group'
+                    className='w-full bg-white/10 hover:bg-white/15 text-white rounded-2xl py-6 text-sm font-semibold shadow-2xl shadow-black/20 hover:shadow-black/20 transition-all duration-300 group'
                   >
                     {contactMutation.isPending ? 'Sending...' : 'Send Message'}
                     <Send className='w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform' />

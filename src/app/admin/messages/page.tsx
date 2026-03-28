@@ -163,7 +163,7 @@ export default function AdminMessagesPage() {
                   onClick={() => setSelectedMessageId(message.id)}
                   className={`w-full text-left px-4 py-3 border-b border-white/[0.04] transition-colors ${
                     isActive
-                      ? 'bg-blue-600/10 border-blue-500/20'
+                      ? 'bg-white/5 border-white/10'
                       : 'hover:bg-white/[0.03]'
                   }`}
                 >
@@ -204,7 +204,7 @@ export default function AdminMessagesPage() {
                     <p className='text-xs text-white/40 mt-1'>User Message</p>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Badge className='bg-blue-500/10 text-blue-300 border-blue-400/20'>
+                    <Badge className='bg-blue-500/10 text-blue-300 border-white/10'>
                       User Message
                     </Badge>
                     <Button
@@ -239,7 +239,7 @@ export default function AdminMessagesPage() {
                     key={reply.id}
                     className={`rounded-xl p-3 border ${
                       reply.senderRole === 'ADMIN'
-                        ? 'bg-blue-500/10 border-blue-400/20'
+                        ? 'bg-blue-500/10 border-white/10'
                         : 'bg-white/[0.03] border-white/10'
                     }`}
                   >

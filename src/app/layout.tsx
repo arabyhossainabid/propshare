@@ -50,7 +50,7 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${inter.className} font-sans bg-[#0a0f1d] text-white selection:bg-blue-600/30 selection:text-white antialiased`}
+        className={`${inter.className} font-sans bg-[#0a0f1d] text-white selection:bg-white/5 selection:text-white antialiased`}
       >
         <QueryProvider>
           <AuthProvider>
