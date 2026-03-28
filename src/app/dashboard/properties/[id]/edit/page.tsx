@@ -299,22 +299,26 @@ export default function EditPropertyPage() {
       </div>
 
       {/* Images */}
-      <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-5'>
-        <h3 className='text-base font-bold flex items-center gap-2'>
-          <div className='w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center'>
-            <ImagePlus className='w-3.5 h-3.5 text-purple-400' />
+      <div className='bg-white/[0.03] border border-white/10 rounded-2xl p-5 space-y-4'>
+        <h3 className='text-sm font-semibold flex items-center gap-2'>
+          <div className='w-6 h-6 rounded-md bg-purple-500/15 flex items-center justify-center'>
+            <ImagePlus className='w-3 h-3 text-purple-300' />
           </div>
           Property Images
         </h3>
+        <p className='text-xs text-white/45'>
+          Keep a clear cover photo to improve property visibility.
+        </p>
         <ImageUploader
           label='Update Property Image'
           placeholder='Drag and drop or click to upload new property image'
           onImageUpload={(url) => updateForm('imageUrl', url)}
-          previewHeight={300}
-          previewWidth={400}
+          previewHeight={220}
+          previewWidth={320}
+          compact
         />
         {form.imageUrl && (
-          <p className='text-xs text-green-400'>
+          <p className='text-xs text-emerald-300'>
             ✓ Current image: {form.imageUrl.split('/').pop()}
           </p>
         )}

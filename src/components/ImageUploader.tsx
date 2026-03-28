@@ -13,6 +13,7 @@ interface ImageUploaderProps {
   className?: string;
   previewHeight?: number;
   previewWidth?: number;
+  compact?: boolean;
 }
 
 export function ImageUploader({
@@ -22,6 +23,7 @@ export function ImageUploader({
   className = '',
   previewHeight = 200,
   previewWidth = 300,
+  compact = false,
 }: ImageUploaderProps) {
   const {
     isLoading,
@@ -80,7 +82,13 @@ export function ImageUploader({
   return (
     <div className={`space-y-4 ${className}`}>
       {label && (
-        <label className='block text-sm font-medium text-gray-700'>
+        <label
+          className={`block font-medium text-gray-700 ${
+            compact
+              ? 'text-xs tracking-wide uppercase text-gray-500'
+              : 'text-sm'
+          }`}
+        >
           {label}
         </label>
       )}
@@ -89,7 +97,9 @@ export function ImageUploader({
         <div
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          className='relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors bg-gray-50 hover:bg-blue-50'
+          className={`relative border-2 border-dashed border-gray-300 text-center cursor-pointer hover:border-blue-500 transition-colors bg-gray-50 hover:bg-blue-50 ${
+            compact ? 'rounded-xl p-5' : 'rounded-lg p-8'
+          }`}
         >
           <input
             key={inputKey}
@@ -99,10 +109,18 @@ export function ImageUploader({
             className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
             disabled={isLoading}
           />
-          <div className='flex flex-col items-center gap-2'>
-            <Upload className='w-8 h-8 text-gray-400' />
-            <p className='text-sm text-gray-600'>{placeholder}</p>
-            <p className='text-xs text-gray-500'>
+          <div
+            className={`flex flex-col items-center ${compact ? 'gap-1.5' : 'gap-2'}`}
+          >
+            <Upload
+              className={`${compact ? 'w-6 h-6' : 'w-8 h-8'} text-gray-400`}
+            />
+            <p className={`${compact ? 'text-xs' : 'text-sm'} text-gray-600`}>
+              {placeholder}
+            </p>
+            <p
+              className={`${compact ? 'text-[11px]' : 'text-xs'} text-gray-500`}
+            >
               Max 5MB • JPG, PNG, WebP, GIF
             </p>
           </div>
