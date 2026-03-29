@@ -121,12 +121,29 @@ export default function PropertyDetailPage() {
   } = useQuery({
     queryKey: ['property', propertyId],
     queryFn: async () => {
-      const res = await api.get<{
-        success: true;
-        message: string;
-        data: Property | { data?: Property };
-      }>(`/properties/${propertyId}`);
-      return normalizeItem<Property>(res.data.data);
+      try {
+        const res = await api.get<{
+          success: true;
+          message: string;
+          data: Property | { data?: Property };
+        }>(`/properties/${propertyId}`);
+        return normalizeItem<Property>(res.data.data);
+      } catch (primaryError) {
+        // fallback: if direct property fetch fails (auth/404), try load from list
+        try {
+          const listRes = await api.get<{
+            success: true;
+            message: string;
+            data: Property[] | { data?: Property[] };
+          }>('/properties', { params: { limit: 500 } });
+          const allProperties = normalizeList<Property>(listRes.data.data);
+          const fallback = allProperties.find((p) => String(p.id) === propertyId);
+          if (fallback) return fallback;
+        } catch {
+          // ignore fallback error, rethrow primary below
+        }
+        throw primaryError;
+      }
     },
     enabled: Boolean(propertyId) && !isLegacyNumericPropertyId,
   });
@@ -338,7 +355,8 @@ export default function PropertyDetailPage() {
               Property Unavailable
             </h1>
             <p className='text-white/50'>
-              Could not load this property right now. Please try again later.
+              This property is either not published yet or not accessible to your account.
+              Please check in Properties list or contact support.
             </p>
             <Link href='/properties'>
               <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-6'>
@@ -545,6 +563,9 @@ export default function PropertyDetailPage() {
             totalShares={property.totalShares}
             availableShares={property.availableShares}
             fundingProgress={fundingProgress}
+            isPropertyOwner={Boolean(
+              user && propertyData?.author?.id && user.id === propertyData.author.id
+            )}
           />
         </div>
       </div>

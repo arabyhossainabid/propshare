@@ -11,6 +11,7 @@ interface PropertySidebarProps {
   totalShares: number;
   availableShares: number;
   fundingProgress: number;
+  isPropertyOwner?: boolean;
 }
 
 export function PropertySidebar({
@@ -21,6 +22,7 @@ export function PropertySidebar({
   totalShares,
   availableShares,
   fundingProgress,
+  isPropertyOwner = false,
 }: PropertySidebarProps) {
   return (
     <div className='detail-sidebar'>
@@ -85,18 +87,27 @@ export function PropertySidebar({
             </div>
           </div>
 
-          <Link
-            href={
-              hasInvested
-                ? '/dashboard/investments'
-                : `/payment?propertyId=${propertyId}`
-            }
-          >
-            <Button className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-black/20 group mt-2'>
-              {hasInvested ? 'View Investment' : 'Invest Now'}
-              <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
+          {isPropertyOwner ? (
+            <Button
+              disabled
+              className='w-full bg-white/5 text-white/40 rounded-xl py-6 text-sm font-semibold shadow-none mt-2 cursor-not-allowed'
+            >
+              Owner cannot invest
             </Button>
-          </Link>
+          ) : (
+            <Link
+              href={
+                hasInvested
+                  ? '/dashboard/investments'
+                  : `/payment?propertyId=${propertyId}`
+              }
+            >
+              <Button className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-black/20 group mt-2'>
+                {hasInvested ? 'View Investment' : 'Invest Now'}
+                <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
+              </Button>
+            </Link>
+          )}
 
           <div className='flex items-center gap-2 justify-center text-xs text-white/20'>
             <Shield className='w-3 h-3 text-emerald-400' />

@@ -37,15 +37,36 @@ export default function DashboardMessagesPage() {
   };
 
   const deleteThreadWithFallback = async (contactId: string) => {
-    const endpoints = [`/contacts/${contactId}`, `/contact/${contactId}`];
+    const endpoints = [
+      `/contacts/my-messages/${contactId}`,
+      `/contacts/my-messages/delete/${contactId}`,
+      `/contacts/${contactId}`,
+      `/contacts/${contactId}/delete`,
+      `/contact/${contactId}`,
+      `/contact/${contactId}/delete`,
+    ];
 
     let lastError: unknown = null;
+
     for (const endpoint of endpoints) {
       try {
-        await api.delete(endpoint);
+        const response = await api.delete(endpoint);
+        console.debug('[deleteThreadWithFallback] deleted', { endpoint, response });
         return;
       } catch (error) {
+        const status = (error as { response?: { status?: number } })?.response
+          ?.status;
+
+        // For 403, stop fallback and surfacing permission issue.
+        if (status === 403) {
+          throw new Error(
+            `Forbidden access during delete at ${endpoint}. You may not have permission to delete this message.`
+          );
+        }
+
         lastError = error;
+
+        // Only fallback on 404
         if (!shouldTryFallback(error)) {
           throw error;
         }
@@ -103,21 +124,34 @@ export default function DashboardMessagesPage() {
       if (!selectedMessageId) throw new Error('Select a message first');
       await deleteThreadWithFallback(selectedMessageId);
     },
+    onMutate: async () => {
+      if (!selectedMessageId) return;
+      await queryClient.cancelQueries({ queryKey: ['dashboard-contact-messages'] });
+      const previousMessages = queryClient.getQueryData<ContactMessage[]>(['dashboard-contact-messages']);
+      if (previousMessages) {
+        queryClient.setQueryData<ContactMessage[]>(['dashboard-contact-messages'],
+          previousMessages.filter((m) => m.id !== selectedMessageId)
+        );
+      }
+      return { previousMessages };
+    },
     onSuccess: async () => {
       toast.success('Message deleted');
       setSelectedMessageId(null);
-      await queryClient.invalidateQueries({
-        queryKey: ['dashboard-contact-messages'],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['dashboard-contact-replies'],
-      });
+      await queryClient.invalidateQueries({ queryKey: ['dashboard-contact-messages'] });
+      await queryClient.invalidateQueries({ queryKey: ['dashboard-contact-replies'] });
     },
-    onError: (error) => {
-      const status = (error as { response?: { status?: number } })?.response
-        ?.status;
+    onError: (error, _variables, context) => {
+      const status = (error as { response?: { status?: number } })?.response?.status;
       const message = getApiErrorMessage(error);
       toast.error(status ? `Delete failed (${status}): ${message}` : message);
+      if (context?.previousMessages) {
+        queryClient.setQueryData(['dashboard-contact-messages'], context.previousMessages);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['dashboard-contact-messages'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-contact-replies'] });
     },
   });
 
@@ -207,19 +241,7 @@ export default function DashboardMessagesPage() {
                     <Badge className='bg-white/10 text-white/80 border-white/20'>
                       Your Message
                     </Badge>
-                    <Button
-                      type='button'
-                      variant='outline'
-                      onClick={() => deleteThreadMutation.mutate()}
-                      disabled={deleteThreadMutation.isPending}
-                      className='h-8 border-red-400/30 text-red-300 hover:bg-red-500/10'
-                    >
-                      {deleteThreadMutation.isPending ? (
-                        <Loader2 className='w-4 h-4 animate-spin' />
-                      ) : (
-                        <Trash2 className='w-4 h-4' />
-                      )}
-                    </Button>
+                    {/* Delete option removed for user section */}
                   </div>
                 </div>
                 <p className='text-sm text-white/70 mt-3'>

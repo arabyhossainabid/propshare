@@ -6,7 +6,7 @@ import { api, normalizeList } from '@/lib/api';
 import { User } from '@/lib/api-types';
 import { useQuery } from '@tanstack/react-query';
 import { Loader2, Search, User as UserIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export default function AdminUsersPage() {
   const [search, setSearch] = useState('');
@@ -15,6 +15,7 @@ export default function AdminUsersPage() {
   const { data: usersData = [], isLoading } = useQuery({
     queryKey: ['admin-users', search, roleFilter],
     queryFn: async () => {
+      // ask backend to filter, but apply client-side fallback too for robustness
       const res = await api.get('/admin/users', {
         params: {
           search: search || undefined,
@@ -24,6 +25,12 @@ export default function AdminUsersPage() {
       return normalizeList<User>(res?.data?.data);
     },
   });
+
+  const filteredUsers = useMemo(() => {
+    if (roleFilter === 'all') return usersData;
+    const normalizedRole = roleFilter.toUpperCase();
+    return usersData.filter((u) => u.role === normalizedRole);
+  }, [usersData, roleFilter]);
 
   return (
     <div className='space-y-6'>
@@ -92,7 +99,7 @@ export default function AdminUsersPage() {
                   </td>
                 </tr>
               ) : (
-                usersData.map((u) => (
+                filteredUsers.map((u) => (
                   <tr
                     key={u.id}
                     className='border-b border-white/[0.03] hover:bg-white/[0.02] transition-all'

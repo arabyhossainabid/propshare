@@ -37,7 +37,11 @@ export default function AdminMessagesPage() {
   };
 
   const deleteThreadWithFallback = async (contactId: string) => {
-    const endpoints = [`/contacts/${contactId}`, `/contact/${contactId}`];
+    const endpoints = [
+      `/contacts/my-messages/${contactId}`,
+      `/contacts/${contactId}`,
+      `/contact/${contactId}`,
+    ];
 
     let lastError: unknown = null;
     for (const endpoint of endpoints) {

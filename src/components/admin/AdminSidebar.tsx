@@ -13,7 +13,10 @@ import {
   Wallet,
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { getApiErrorMessage } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 const adminLinks = [
   { name: 'Overview', href: '/admin', icon: LayoutDashboard },
@@ -27,6 +30,18 @@ const adminLinks = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      toast.success('Signed out successfully');
+      router.push('/');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error));
+    }
+  };
 
   return (
     <aside className='w-64 shrink-0 hidden lg:block'>
@@ -69,7 +84,10 @@ export default function AdminSidebar() {
         </nav>
 
         <div className='border-t border-white/5 pt-4 mt-4'>
-          <button className='flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-400/60 hover:text-red-400 hover:bg-red-500/5 transition-all w-full'>
+          <button
+            onClick={handleSignOut}
+            className='flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-400/60 hover:text-red-400 hover:bg-red-500/5 transition-all w-full'
+          >
             <LogOut className='w-4 h-4' /> Sign Out
           </button>
         </div>
