@@ -23,10 +23,10 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const statusStyles: Record<string, string> = {
-  approved: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  under_review: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  draft: 'bg-white/5 text-white/40 border-white/10',
-  rejected: 'bg-red-500/10 text-red-400 border-red-500/20',
+  approved: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+  under_review: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+  draft: 'bg-muted text-muted-foreground/60 border-border',
+  rejected: 'bg-red-500/10 text-red-600 border-red-500/20',
 };
 
 export default function MyPropertiesPage() {
@@ -97,13 +97,13 @@ export default function MyPropertiesPage() {
     <div className='space-y-6'>
       <div className='flex flex-col sm:flex-row items-center justify-between gap-4'>
         <div>
-          <h1 className='text-2xl font-bold font-heading'>My Properties</h1>
-          <p className='text-sm text-white/40 mt-1'>
+          <h1 className='text-2xl font-bold font-heading text-foreground'>My Properties</h1>
+          <p className='text-sm text-muted-foreground mt-1'>
             Manage your listed properties and track their performance.
           </p>
         </div>
         <Link href='/dashboard/properties/create'>
-          <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl text-sm'>
+          <Button className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-bold h-11 px-6 shadow-lg shadow-primary/20'>
             <PlusCircle className='w-4 h-4 mr-2' /> Create New
           </Button>
         </Link>
@@ -112,22 +112,22 @@ export default function MyPropertiesPage() {
       {/* Search + Filter */}
       <div className='flex flex-col sm:flex-row gap-3'>
         <div className='relative flex-1'>
-          <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
+          <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60' />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder='Search properties...'
-            className='bg-white/5 border-white/10 rounded-xl pl-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+            className='bg-muted/50 border-border rounded-xl pl-10 h-12 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30 font-medium'
           />
         </div>
-        <div className='flex gap-2'>
+        <div className='flex gap-2 overflow-x-auto no-scrollbar pb-1'>
           {['all', 'approved', 'rejected'].map((s) => (
             <button
               key={s}
               onClick={() => setFilter(s)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium transition-all ${filter === s ? 'bg-blue-600 text-white' : 'bg-white/5 text-white/40 hover:bg-white/10 border border-white/5'}`}
+              className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border whitespace-nowrap ${filter === s ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20' : 'bg-muted/50 text-muted-foreground border-border hover:bg-muted hover:text-foreground'}`}
             >
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+              {s}
             </button>
           ))}
         </div>
@@ -139,25 +139,24 @@ export default function MyPropertiesPage() {
           Array.from({ length: 5 }).map((_, idx) => (
             <div
               key={`skeleton-${idx}`}
-              className='bg-white/[0.02] border border-white/5 rounded-2xl p-5 animate-pulse'
+              className='bg-card border border-border rounded-2xl p-5 animate-pulse'
             >
               <div className='flex items-center justify-between gap-4'>
                 <div className='flex items-center gap-4 flex-1'>
-                  <div className='w-12 h-12 rounded-xl bg-white/[0.06]' />
+                  <div className='w-12 h-12 rounded-xl bg-muted' />
                   <div className='space-y-2 flex-1'>
-                    <div className='h-4 w-1/3 rounded bg-white/[0.07]' />
-                    <div className='h-3 w-1/2 rounded bg-white/[0.05]' />
-                    <div className='h-3 w-1/4 rounded bg-white/[0.05]' />
+                    <div className='h-4 w-1/3 rounded bg-muted' />
+                    <div className='h-3 w-1/2 rounded bg-muted/60' />
                   </div>
                 </div>
-                <div className='h-9 w-28 rounded-xl bg-white/[0.08]' />
+                <div className='h-9 w-28 rounded-xl bg-muted' />
               </div>
             </div>
           ))}
 
         {!isLoading && isError && (
-          <div className='text-center py-20 bg-white/[0.01] border border-dashed border-white/5 rounded-3xl'>
-            <p className='text-white/30 text-sm'>
+          <div className='text-center py-20 bg-muted/30 border border-dashed border-border rounded-3xl'>
+            <p className='text-muted-foreground text-sm font-medium'>
               Could not load properties. Please try again.
             </p>
           </div>
@@ -166,27 +165,27 @@ export default function MyPropertiesPage() {
         {filtered.map((p) => (
           <div
             key={p.id}
-            className='bg-white/[0.02] border border-white/5 rounded-2xl p-5 hover:bg-white/[0.04] transition-all'
+            className='bg-card border border-border rounded-2xl p-5 hover:border-blue-500/30 hover:shadow-xl transition-all group'
           >
             <div className='flex items-center justify-between gap-4'>
               <div className='flex items-center gap-4 min-w-0'>
-                <div className='w-12 h-12 rounded-xl bg-blue-500/10 border border-white/10 flex items-center justify-center shrink-0'>
-                  <Building2 className='w-5 h-5 text-white' />
+                <div className='w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform'>
+                  <Building2 className='w-5 h-5 text-blue-500' />
                 </div>
                 <div className='min-w-0'>
                   <div className='flex items-center gap-2 flex-wrap'>
-                    <h3 className='text-sm font-semibold text-white'>
+                    <h3 className='text-sm font-bold text-foreground group-hover:text-blue-500 transition-colors'>
                       {p.title}
                     </h3>
                     <Badge
-                      className={`text-[10px] ${statusStyles[(p.status || '').toLowerCase()] || statusStyles.draft}`}
+                      className={`text-[9px] uppercase tracking-widest h-5 px-2 border ${statusStyles[(p.status || '').toLowerCase()] || statusStyles.draft}`}
                     >
                       {p.status === 'UNDER_REVIEW'
-                        ? 'Under Review'
+                        ? 'Review'
                         : (p.status || 'DRAFT').replace('_', ' ')}
                     </Badge>
                   </div>
-                  <div className='flex items-center gap-4 mt-1 text-xs text-white/30'>
+                  <div className='flex items-center gap-4 mt-1.5 text-[10px] uppercase tracking-widest font-bold text-muted-foreground'>
                     <span>{p.category?.name || 'Category'}</span>
                     <span>
                       {p.createdAt
@@ -194,11 +193,11 @@ export default function MyPropertiesPage() {
                         : '-'}
                     </span>
                     <span className='flex items-center gap-1'>
-                      <Eye className='w-3 h-3' />
+                      <Eye className='w-3 h-3 text-blue-500' />
                       {0}
                     </span>
                     <span className='flex items-center gap-1'>
-                      <BarChart3 className='w-3 h-3' />
+                      <BarChart3 className='w-3 h-3 text-emerald-500' />
                       {p.votes?.total ?? 0} votes
                     </span>
                   </div>
@@ -210,25 +209,25 @@ export default function MyPropertiesPage() {
                   <Button
                     onClick={() => submitMutation.mutate(p.id)}
                     variant='outline'
-                    className='border-white/10 text-white hover:bg-white/15/10 rounded-xl text-xs h-9 px-3'
+                    className='border-blue-500/30 text-blue-500 hover:bg-blue-500/10 rounded-xl text-[10px] font-bold uppercase tracking-widest h-9 px-4 transition-all'
                   >
-                    <Send className='w-3 h-3 mr-1' /> Submit
+                    <Send className='w-3 h-3 mr-2' /> Submit
                   </Button>
                 )}
                 <Link href={`/dashboard/properties/${p.id}/edit`}>
                   <Button
                     variant='ghost'
-                    className='text-white/40 hover:text-white hover:bg-white/5 rounded-xl h-9 w-9 p-0'
+                    className='text-muted-foreground hover:text-blue-500 hover:bg-blue-500/10 rounded-xl h-10 w-10 p-0 transition-all'
                   >
-                    <Edit className='w-4 h-4' />
+                    <Edit className='w-4 p-0.5' />
                   </Button>
                 </Link>
                 <Button
                   onClick={() => deleteMutation.mutate(p.id)}
                   variant='ghost'
-                  className='text-white/40 hover:text-red-400 hover:bg-red-500/5 rounded-xl h-9 w-9 p-0'
+                  className='text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl h-10 w-10 p-0 transition-all'
                 >
-                  <Trash2 className='w-4 h-4' />
+                  <Trash2 className='w-4 p-0.5' />
                 </Button>
               </div>
             </div>
@@ -236,8 +235,8 @@ export default function MyPropertiesPage() {
         ))}
 
         {!isLoading && !isError && filtered.length === 0 && (
-          <div className='text-center py-20 bg-white/[0.01] border border-dashed border-white/5 rounded-3xl'>
-            <p className='text-white/20 text-sm'>
+          <div className='text-center py-20 bg-muted/30 border border-dashed border-border rounded-3xl'>
+            <p className='text-muted-foreground text-sm font-medium'>
               No properties found matching your criteria.
             </p>
           </div>

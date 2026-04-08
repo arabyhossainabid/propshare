@@ -95,16 +95,16 @@ export default function Testimonials() {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 ${i < test.rating ? 'text-amber-400 fill-amber-400' : 'text-white/10'}`}
+                    className={`w-5 h-5 ${i < test.rating ? 'text-amber-400 fill-amber-400' : 'text-muted'}`}
                   />
                 ))}
               </div>
-              <p className="text-white/60 italic leading-relaxed grow">
+              <p className="text-muted-foreground italic leading-relaxed grow">
                 "{test.content}"
               </p>
               <div>
-                <h4 className="font-bold text-white">{test.name}</h4>
-                <p className="text-xs text-white/40">{test.role}</p>
+                <h4 className="font-bold text-foreground">{test.name}</h4>
+                <p className="text-xs text-muted-foreground">{test.role}</p>
               </div>
             </div>
           ))}

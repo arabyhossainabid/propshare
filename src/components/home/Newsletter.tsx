@@ -44,20 +44,20 @@ export default function Newsletter() {
   return (
     <section ref={sectionRef} className="pb-24 pt-12 relative px-6">
       <div className="container-custom relative">
-        <div className="nl-card bg-linear-to-br from-blue-900/40 to-emerald-900/40 border border-white/10 rounded-[40px] p-10 md:p-16 lg:p-20 overflow-hidden relative shadow-2xl">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
+        <div className="nl-card bg-muted/50 border border-border rounded-[40px] p-10 md:p-16 lg:p-20 overflow-hidden relative shadow-2xl">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 blur-[120px] rounded-full dark:mix-blend-screen pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full dark:mix-blend-screen pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-xl text-center lg:text-left space-y-6">
-              <div className="inline-flex items-center justify-center lg:justify-start gap-3 text-white/60 font-medium">
+              <div className="inline-flex items-center justify-center lg:justify-start gap-3 text-muted-foreground font-medium uppercase tracking-widest text-xs">
                 <Mail className="w-5 h-5 text-blue-400" />
                 Stay Updated
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold font-heading">
-                Never miss a <span className="text-blue-400">prime</span> investment
+              <h2 className="text-4xl md:text-5xl font-bold font-heading text-foreground">
+                Never miss a <span className="text-blue-500">prime</span> investment
               </h2>
-              <p className="text-white/60 text-lg">
+              <p className="text-muted-foreground text-lg">
                 Join our newsletter to receive weekly updates on market trends, new property listings, and expert insights directly to your inbox.
               </p>
             </div>
@@ -69,7 +69,7 @@ export default function Newsletter() {
                     type="email" 
                     placeholder="Enter your email address" 
                     required
-                    className="w-full bg-background/50 border-white/10 h-16 pl-6 pr-[140px] rounded-2xl text-white placeholder:text-white/30 focus:border-blue-500/50"
+                    className="w-full bg-background border-border h-16 pl-6 pr-[140px] rounded-2xl text-foreground placeholder:text-muted-foreground focus:border-blue-500/50"
                   />
                   <Button 
                     type="submit"
@@ -78,7 +78,7 @@ export default function Newsletter() {
                     Subscribe
                   </Button>
                 </div>
-                <p className="text-xs text-white/40 text-center lg:text-left">
+                <p className="text-xs text-muted-foreground/60 text-center lg:text-left">
                   By subscribing, you agree to our Terms of Service and Privacy Policy.
                 </p>
               </form>

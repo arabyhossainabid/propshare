@@ -112,8 +112,6 @@ export default function AdminMessagesPage() {
       const message = getApiErrorMessage(error);
 
       toast.error(status ? `Delete failed (${status}): ${message}` : message);
-
-      // Keep this for quick debugging from browser devtools when API fails.
       console.error('Admin contact delete failed', {
         status,
         selectedMessageId,
@@ -123,39 +121,45 @@ export default function AdminMessagesPage() {
   });
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-8 pb-12'>
       <div>
-        <h1 className='text-2xl font-bold font-heading'>Inbox</h1>
-        <p className='text-sm text-white/40 mt-1'>
-          View user contact messages and reply in real time.
+        <h1 className='text-3xl font-bold font-heading text-foreground'>Institutional Inbox</h1>
+        <p className='text-sm text-muted-foreground mt-1 font-medium'>
+          Monitor and respond to stakeholder inquiries in real-time.
         </p>
       </div>
 
-      <div className='grid lg:grid-cols-3 gap-4'>
-        <div className='lg:col-span-1 rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden'>
-          <div className='px-4 py-3 border-b border-white/5 text-sm text-white/70 flex items-center gap-2'>
-            <Mail className='w-4 h-4 text-blue-400' /> Messages
+      <div className='grid lg:grid-cols-3 gap-6'>
+        {/* Inbox Sidebar */}
+        <div className='lg:col-span-1 rounded-3xl border border-border bg-card overflow-hidden shadow-sm flex flex-col'>
+          <div className='px-6 py-4 border-b border-border bg-muted/30 text-[10px] text-muted-foreground uppercase tracking-widest font-bold flex items-center justify-between'>
+            <div className='flex items-center gap-2'>
+              <Mail className='w-4 h-4 text-blue-500' /> Inbound Queue
+            </div>
+            <Badge variant="outline" className="bg-muted text-foreground border-border text-[10px] font-bold">
+              {messages.length}
+            </Badge>
           </div>
 
-          <div className='max-h-[560px] overflow-auto'>
+          <div className='max-h-[600px] overflow-auto divide-y divide-border'>
             {isLoadingMessages && (
-              <div className='p-6 text-center text-white/40 text-sm'>
-                <Loader2 className='w-5 h-5 animate-spin mx-auto mb-2' />
-                Loading inbox...
+              <div className='p-12 text-center text-muted-foreground text-sm font-medium animate-pulse'>
+                <Loader2 className='w-6 h-6 animate-spin mx-auto mb-3 opacity-40' />
+                Fetching...
               </div>
             )}
 
             {!isLoadingMessages && isErrorMessages && (
-              <div className='p-6 text-center text-white/40 text-sm'>
-                Failed to load inbox. Please try again.
+              <div className='p-8 text-center text-muted-foreground text-sm font-medium'>
+                Synchronization failure.
               </div>
             )}
 
             {!isLoadingMessages &&
               !isErrorMessages &&
               messages.length === 0 && (
-                <div className='p-6 text-center text-white/40 text-sm'>
-                  No contact messages yet.
+                <div className='p-12 text-center text-muted-foreground text-sm font-bold uppercase tracking-widest opacity-40'>
+                  Queue Empty
                 </div>
               )}
 
@@ -165,102 +169,151 @@ export default function AdminMessagesPage() {
                 <button
                   key={message.id}
                   onClick={() => setSelectedMessageId(message.id)}
-                  className={`w-full text-left px-4 py-3 border-b border-white/[0.04] transition-colors ${
+                  className={`w-full text-left px-6 py-5 transition-all duration-300 ${
                     isActive
-                      ? 'bg-white/5 border-white/10'
-                      : 'hover:bg-white/[0.03]'
+                      ? 'bg-blue-500/5 border-l-4 border-l-blue-500 relative'
+                      : 'hover:bg-muted/30 border-l-4 border-l-transparent'
                   }`}
                 >
-                  <p className='text-sm text-white font-medium truncate'>
-                    {message.name}
-                  </p>
-                  <p className='text-xs text-white/40 truncate mt-1'>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <p className='text-sm text-foreground font-bold truncate'>
+                      {message.name}
+                    </p>
+                    <span className='text-[9px] text-muted-foreground/60 font-bold uppercase tracking-tighter'>
+                      {new Date(message.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className='text-xs text-muted-foreground truncate font-medium'>
                     {message.message}
                   </p>
-                  <p className='text-[11px] text-white/30 mt-1'>
-                    {new Date(message.createdAt).toLocaleString()}
-                  </p>
+                  {isActive && (
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                       <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                    </div>
+                  )}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className='lg:col-span-2 rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden'>
-          <div className='px-4 py-3 border-b border-white/5 text-sm text-white/70 flex items-center gap-2'>
-            <MessageSquare className='w-4 h-4 text-emerald-400' /> Conversation
+        {/* Conversation View */}
+        <div className='lg:col-span-2 rounded-3xl border border-border bg-card overflow-hidden shadow-sm flex flex-col min-h-[500px]'>
+          <div className='px-6 py-4 border-b border-border bg-muted/30 text-[10px] text-muted-foreground uppercase tracking-widest font-bold flex items-center gap-2'>
+            <MessageSquare className='w-4 h-4 text-emerald-500' /> Activity Stream
           </div>
 
           {!selectedMessage && (
-            <div className='p-8 text-center text-white/40 text-sm'>
-              Select a message from inbox to open conversation.
+            <div className='flex-1 flex flex-col items-center justify-center p-12 text-center space-y-4 opacity-40'>
+               <div className="w-20 h-20 rounded-3xl bg-muted flex items-center justify-center border-2 border-dashed border-border">
+                  <Mail className="w-8 h-8 text-muted-foreground" />
+               </div>
+               <p className='text-sm text-muted-foreground font-bold uppercase tracking-widest'>
+                Select an inquiry to initiate dialogue
+              </p>
             </div>
           )}
 
           {selectedMessage && (
-            <div className='p-4 space-y-4'>
-              <div className='rounded-xl border border-white/10 bg-white/[0.03] p-4'>
-                <div className='flex items-center justify-between gap-3'>
-                  <div>
-                    <p className='text-sm text-white font-semibold'>
-                      {selectedMessage.name}
-                    </p>
-                    <p className='text-xs text-white/40 mt-1'>User Message</p>
+            <div className='flex flex-col h-full'>
+              {/* Message Header */}
+              <div className='p-8 bg-muted/10 border-b border-border'>
+                <div className='flex items-start justify-between gap-6'>
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-xl font-bold text-blue-600 shadow-sm shrink-0">
+                      {selectedMessage.name.slice(0, 1).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className='text-xl font-bold text-foreground'>
+                        {selectedMessage.name}
+                      </p>
+                      <p className='text-xs text-muted-foreground mt-1 font-bold uppercase tracking-widest flex items-center gap-2'>
+                         Primary Participant · Received <span className="text-foreground">{new Date(selectedMessage.createdAt).toLocaleString()}</span>
+                      </p>
+                    </div>
                   </div>
-                  <div className='flex items-center gap-2'>
-                    <Badge className='bg-blue-500/10 text-blue-300 border-white/10'>
-                      User Message
-                    </Badge>
+                  <div className='flex items-center gap-3'>
                     <Button
                       type='button'
                       variant='outline'
-                      onClick={() => deleteThreadMutation.mutate()}
+                      onClick={() => {
+                        if (confirm('Terminate this conversation thread?')) {
+                          deleteThreadMutation.mutate();
+                        }
+                      }}
                       disabled={deleteThreadMutation.isPending}
-                      className='h-8 border-red-400/30 text-red-300 hover:bg-red-500/10'
+                      className='h-11 px-4 border-red-500/20 text-red-500 hover:bg-red-500/10 rounded-xl transition-all font-bold uppercase tracking-widest text-[10px]'
                     >
                       {deleteThreadMutation.isPending ? (
                         <Loader2 className='w-4 h-4 animate-spin' />
                       ) : (
                         <Trash2 className='w-4 h-4' />
                       )}
+                      <span className="ml-2">Purge</span>
                     </Button>
                   </div>
                 </div>
-                <p className='text-sm text-white/70 mt-3'>
-                  {selectedMessage.message}
-                </p>
+                <div className='mt-8 p-6 bg-background border border-border rounded-2xl shadow-sm'>
+                  <p className='text-base text-foreground/80 leading-relaxed font-normal'>
+                    {selectedMessage.message}
+                  </p>
+                </div>
               </div>
 
-              <div className='space-y-2 max-h-[320px] overflow-auto pr-1'>
+              {/* Replies Area */}
+              <div className='flex-1 p-8 space-y-6 overflow-auto max-h-[400px]'>
+                <div className="flex items-center gap-4 mb-2">
+                   <div className="h-px bg-border flex-1" />
+                   <span className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-widest whitespace-nowrap">Correspondence Log</span>
+                   <div className="h-px bg-border flex-1" />
+                </div>
+                
+                {isLoadingReplies && (
+                   <div className="text-center py-8">
+                     <Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500 opacity-40" />
+                   </div>
+                )}
+
                 {!isLoadingReplies && isErrorReplies && (
-                  <p className='text-sm text-white/40'>
-                    Could not load replies. Make sure replies API is enabled.
+                  <p className='text-sm text-muted-foreground/60 font-medium text-center italic'>
+                    Security barrier detected. Synchronization latent.
                   </p>
                 )}
 
-                {replies.map((reply) => (
-                  <div
-                    key={reply.id}
-                    className={`rounded-xl p-3 border ${
-                      reply.senderRole === 'ADMIN'
-                        ? 'bg-blue-500/10 border-white/10'
-                        : 'bg-white/[0.03] border-white/10'
-                    }`}
-                  >
-                    <div className='flex items-center justify-between gap-2'>
-                      <p className='text-xs text-white/60'>
-                        {reply.senderRole === 'ADMIN' ? 'Admin' : 'User'}
-                        {reply.senderName ? ` • ${reply.senderName}` : ''}
-                      </p>
-                      <p className='text-[11px] text-white/30'>
-                        {new Date(reply.createdAt).toLocaleString()}
-                      </p>
+                {replies.map((reply) => {
+                  const isAdmin = reply.senderRole === 'ADMIN';
+                  return (
+                    <div
+                      key={reply.id}
+                      className={`flex flex-col ${isAdmin ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
+                    >
+                      <div className={`max-w-[85%] rounded-2xl p-5 border shadow-sm ${
+                        isAdmin
+                          ? 'bg-primary text-primary-foreground border-primary rounded-tr-none'
+                          : 'bg-muted/40 border-border rounded-tl-none'
+                      }`}>
+                        <p className='text-sm leading-relaxed font-medium'>
+                          {reply.message}
+                        </p>
+                      </div>
+                      <div className={`flex items-center gap-2 mt-2 px-1 ${isAdmin ? 'flex-row-reverse' : ''}`}>
+                         <span className='text-[9px] text-muted-foreground/60 font-bold uppercase tracking-widest'>
+                          {isAdmin ? 'System Operator' : (reply.senderName || 'Stakeholder')}
+                        </span>
+                        <span className="w-0.5 h-0.5 rounded-full bg-border" />
+                        <span className='text-[9px] text-muted-foreground/40 font-medium'>
+                          {new Date(reply.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
                     </div>
-                    <p className='text-sm text-white/80 mt-1'>
-                      {reply.message}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
+
+                {replies.length === 0 && !isLoadingReplies && (
+                   <div className="text-center py-12 opacity-30">
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em]">End of Transcript</p>
+                   </div>
+                )}
               </div>
             </div>
           )}

@@ -1,4 +1,5 @@
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { Eye, EyeOff, LucideIcon } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -25,10 +26,10 @@ export function AuthInputField({
   value,
   onChange,
   error,
-  inputClassName = 'pl-10 py-5',
+  inputClassName = 'pl-12 py-5',
   containerClassName = 'auth-field',
   errorClassName = 'text-[10px]',
-  iconClassName = 'left-3',
+  iconClassName = 'left-4',
   rightElement,
 }: AuthInputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,27 +38,30 @@ export function AuthInputField({
 
   return (
     <div className={`${containerClassName} space-y-2`}>
-      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+      <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
         {label}
       </label>
       <div className='relative'>
-        <Icon className={`absolute ${iconClassName} top-1/2 -translate-y-1/2 w-4 h-4 text-white/20`} />
+        <Icon className={`absolute ${iconClassName} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40`} />
         <Input
           type={inputType}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`bg-white/5 rounded-xl ${inputClassName} text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 ${
+          className={cn(
+            'bg-muted/30 hover:bg-muted/50 transition-colors rounded-xl text-foreground placeholder:text-muted-foreground/40 focus-visible:ring-blue-500/20',
+            'pl-12',
             error
-              ? 'border-red-500/50 focus-visible:border-red-500/50'
-              : 'border-white/10 focus-visible:border-blue-500/30'
-          }`}
+              ? 'border-destructive/50 focus-visible:border-destructive/50'
+              : 'border-border focus-visible:border-blue-500/30',
+            inputClassName
+          )}
         />
         {isPassword && !rightElement && (
           <button
             type='button'
             onClick={() => setShowPassword(!showPassword)}
-            className={`absolute ${iconClassName.replace('left', 'right')} top-1/2 -translate-y-1/2 text-white/20 hover:text-white/40 transition-colors`}
+            className={`absolute ${iconClassName.replace('left', 'right')} top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-muted-foreground/60 transition-colors`}
           >
             {showPassword ? (
               <EyeOff className='w-4 h-4' />
@@ -67,12 +71,12 @@ export function AuthInputField({
           </button>
         )}
         {rightElement && (
-          <div className='absolute right-3 top-1/2 -translate-y-1/2 text-white/20'>
+          <div className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/40'>
             {rightElement}
           </div>
         )}
       </div>
-      {error && <p className={`${errorClassName} text-red-400 pl-1`}>{error}</p>}
+      {error && <p className={`${errorClassName} text-destructive font-bold pl-1 mt-1`}>{error}</p>}
     </div>
   );
 }

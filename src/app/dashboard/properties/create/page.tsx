@@ -17,8 +17,10 @@ import {
   FileText,
   ImagePlus,
   Layers,
+  Loader2,
   MapPin,
   Save,
+  TrendingUp,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -141,35 +143,35 @@ export default function CreatePropertyPage() {
   });
 
   return (
-    <div className='space-y-8 max-w-3xl'>
+    <div className='space-y-8 max-w-3xl pb-12'>
       <div>
-        <h1 className='text-2xl font-bold font-heading'>Create Property</h1>
-        <p className='text-sm text-white/40 mt-1'>
-          List a new property for investment on PropShare.
+        <h1 className='text-3xl font-bold font-heading text-foreground'>Create Property</h1>
+        <p className='text-sm text-muted-foreground mt-1'>
+          List a new institutional-grade property for investment on PropShare.
         </p>
       </div>
 
       {/* Basic Info */}
-      <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-5'>
-        <h3 className='text-base font-bold flex items-center gap-2'>
-          <div className='w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center'>
-            <FileText className='w-3.5 h-3.5 text-blue-400' />
+      <div className='bg-card border border-border rounded-2xl p-8 space-y-6 shadow-sm'>
+        <h3 className='text-lg font-bold flex items-center gap-3 text-foreground mb-2'>
+          <div className='w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center'>
+            <FileText className='w-4 h-4 text-blue-500' />
           </div>
           Basic Information
         </h3>
         <div className='space-y-2'>
-          <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+          <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
             Property Title *
           </label>
           <Input
             value={form.title}
             onChange={(e) => updateForm('title', e.target.value)}
             placeholder='e.g. Aurora Waterfront Residences'
-            className='bg-white/5 border-white/10 rounded-xl py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+            className='bg-muted/30 border-border rounded-xl h-12 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30 font-medium'
           />
         </div>
         <div className='space-y-2'>
-          <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+          <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
             Description *
           </label>
           <textarea
@@ -177,70 +179,79 @@ export default function CreatePropertyPage() {
             onChange={(e) => updateForm('description', e.target.value)}
             rows={5}
             placeholder='Describe the property, its features, and investment opportunity...'
-            className='w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white text-sm placeholder:text-white/20 focus:ring-2 focus:ring-blue-500/30 outline-none resize-none'
+            className='w-full bg-muted/30 border border-border rounded-xl p-4 text-foreground text-sm placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-blue-500/30 outline-none resize-none font-medium'
           />
         </div>
-        <div className='grid md:grid-cols-2 gap-4'>
+        <div className='grid md:grid-cols-2 gap-6'>
           <div className='space-y-2'>
-            <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+            <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
               Location *
             </label>
             <div className='relative'>
-              <MapPin className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
+               <div className='absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-muted flex items-center justify-center overflow-hidden'>
+                <MapPin className='w-4 h-4 text-blue-500/60' />
+               </div>
               <Input
                 value={form.location}
                 onChange={(e) => updateForm('location', e.target.value)}
                 placeholder='Gulshan, Dhaka'
-                className='bg-white/5 border-white/10 rounded-xl pl-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+                className='bg-muted/30 border-border rounded-xl pl-12 h-12 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30 font-medium'
               />
             </div>
           </div>
           <div className='space-y-2'>
-            <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+            <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
               Category *
             </label>
-            <select
-              value={form.categoryId}
-              onChange={(e) => updateForm('categoryId', e.target.value)}
-              className='w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white text-sm focus:ring-2 focus:ring-blue-500/30 outline-none appearance-none cursor-pointer'
-            >
-              <option value='' className='bg-[#151c2e]'>
-                Select category
-              </option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id} className='bg-[#151c2e]'>
-                  {cat.name}
+            <div className="relative">
+               <Layers className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-500/60 z-10" />
+              <select
+                value={form.categoryId}
+                onChange={(e) => updateForm('categoryId', e.target.value)}
+                className='w-full bg-muted/30 border border-border rounded-xl pl-10 h-12 text-foreground text-sm focus:ring-2 focus:ring-blue-500/30 outline-none appearance-none cursor-pointer font-medium'
+              >
+                <option value='' className='bg-card'>
+                  Select category
                 </option>
-              ))}
-            </select>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id} className='bg-card'>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Financial Details */}
-      <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-5'>
-        <h3 className='text-base font-bold flex items-center gap-2'>
-          <div className='w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center'>
-            <DollarSign className='w-3.5 h-3.5 text-emerald-400' />
+      <div className='bg-card border border-border rounded-2xl p-8 space-y-6 shadow-sm'>
+        <h3 className='text-lg font-bold flex items-center gap-3 text-foreground mb-2'>
+          <div className='w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center'>
+            <DollarSign className='w-4 h-4 text-emerald-500' />
           </div>
           Financial Details
         </h3>
-        <div className='grid md:grid-cols-2 gap-4'>
+        <div className='grid md:grid-cols-3 gap-6'>
           {[
             {
               label: 'Price Per Share (৳)',
               key: 'pricePerShare',
               placeholder: '50000',
+              icon: DollarSign,
+              color: 'text-blue-500'
             },
-            { label: 'Total Shares', key: 'totalShares', placeholder: '300' },
+            { label: 'Total Shares', key: 'totalShares', placeholder: '300', icon: Layers, color: 'text-purple-500' },
             {
-              label: 'Expected Return (%)',
+              label: 'Return (%)',
               key: 'expectedReturn',
               placeholder: '22',
+              icon: TrendingUp,
+              color: 'text-emerald-500'
             },
           ].map((f) => (
             <div key={f.key} className='space-y-2'>
-              <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+              <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
                 {f.label} *
               </label>
               <Input
@@ -248,7 +259,7 @@ export default function CreatePropertyPage() {
                 value={form[f.key as keyof typeof form]}
                 onChange={(e) => updateForm(f.key, e.target.value)}
                 placeholder={f.placeholder}
-                className='bg-white/5 border-white/10 rounded-xl py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+                className='bg-muted/30 border-border rounded-xl h-12 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30 font-bold'
               />
             </div>
           ))}
@@ -256,16 +267,18 @@ export default function CreatePropertyPage() {
       </div>
 
       {/* Media Upload */}
-      <div className='bg-white/[0.03] border border-white/10 rounded-2xl p-5 space-y-4'>
-        <h3 className='text-sm font-semibold flex items-center gap-2'>
-          <div className='w-6 h-6 rounded-md bg-purple-500/15 flex items-center justify-center'>
-            <ImagePlus className='w-3 h-3 text-purple-300' />
+      <div className='bg-muted/30 border border-dashed border-border rounded-3xl p-8 space-y-6'>
+        <div className="flex items-center gap-3">
+          <div className='w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center'>
+            <ImagePlus className='w-5 h-5 text-purple-500' />
           </div>
-          Property Images
-        </h3>
-        <p className='text-xs text-white/45'>
-          Add one high-quality cover image to make your listing more attractive.
-        </p>
+          <div>
+             <h3 className='text-base font-bold text-foreground'>Property Visuals</h3>
+             <p className='text-xs text-muted-foreground font-medium'>
+              High-quality imagery increases investor confidence.
+            </p>
+          </div>
+        </div>
         <ImageUploader
           label='Upload Property Image'
           placeholder='Drag and drop or click to upload property image'
@@ -275,57 +288,76 @@ export default function CreatePropertyPage() {
           compact
         />
         {form.imageUrl && (
-          <p className='text-xs text-emerald-300'>
-            ✓ Image uploaded: {form.imageUrl.split('/').pop()}
-          </p>
+          <div className='flex items-center gap-2 p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl'>
+            <p className='text-xs text-emerald-600 font-bold uppercase tracking-widest'>
+              ✓ Image Ready
+            </p>
+          </div>
         )}
       </div>
 
       {/* Features & Proposal */}
-      <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-5'>
-        <h3 className='text-base font-bold flex items-center gap-2'>
-          <div className='w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center'>
-            <Layers className='w-3.5 h-3.5 text-amber-400' />
+      <div className='bg-card border border-border rounded-2xl p-8 space-y-6 shadow-sm'>
+        <h3 className='text-lg font-bold flex items-center gap-3 text-foreground mb-2'>
+          <div className='w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center'>
+            <Layers className='w-4 h-4 text-amber-500' />
           </div>
           Detailed Proposal
         </h3>
         <div className='space-y-2'>
-          <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+          <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
             Problem Statement (Optional)
           </label>
           <textarea
             value={form.problemStatement}
             onChange={(e) => updateForm('problemStatement', e.target.value)}
             rows={3}
-            placeholder='What problem does this property solve or what gap does it fill?'
-            className='w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white text-sm placeholder:text-white/20 focus:ring-2 focus:ring-blue-500/30 outline-none resize-none'
+            placeholder='What market need does this property address?'
+            className='w-full bg-muted/30 border border-border rounded-xl p-4 text-foreground text-sm placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-blue-500/30 outline-none resize-none font-medium'
           />
         </div>
         <div className='space-y-2'>
-          <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
-            Proposed Solution (Optional)
+          <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
+            Value Proposition (Optional)
           </label>
           <textarea
             value={form.proposedSolution}
             onChange={(e) => updateForm('proposedSolution', e.target.value)}
             rows={3}
-            placeholder='How will this property investment yield returns or solve the stated problem?'
-            className='w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white text-sm placeholder:text-white/20 focus:ring-2 focus:ring-blue-500/30 outline-none resize-none'
+            placeholder='Explain the projected return mechanism...'
+            className='w-full bg-muted/30 border border-border rounded-xl p-4 text-foreground text-sm placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-blue-500/30 outline-none resize-none font-medium'
           />
         </div>
       </div>
 
       {/* Actions */}
-      <div className='flex gap-3'>
+      <div className='flex flex-col sm:flex-row gap-4'>
+         <Button
+          onClick={() => createMutation.mutate()}
+          variant="outline"
+          disabled={
+            createMutation.isPending || submitForReviewMutation.isPending
+          }
+          className='flex-1 border-border text-foreground hover:bg-muted rounded-xl h-14 text-sm font-bold uppercase tracking-widest transition-all'
+        >
+          <Save className="w-4 h-4 mr-2" />
+          Save as Draft
+        </Button>
         <Button
           onClick={() => submitForReviewMutation.mutate()}
           disabled={
             createMutation.isPending || submitForReviewMutation.isPending
           }
-          className='flex-1 bg-white/10 hover:bg-white/15 text-white rounded-xl py-5 text-sm font-semibold group'
+          className='flex-1 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl h-14 text-sm font-bold uppercase tracking-widest shadow-xl shadow-primary/20 group transition-all'
         >
-          Submit for Review{' '}
-          <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
+          {(createMutation.isPending || submitForReviewMutation.isPending) ? (
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+          ) : (
+            <>
+               Submit for Verification
+               <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
+            </>
+          )}
         </Button>
       </div>
     </div>

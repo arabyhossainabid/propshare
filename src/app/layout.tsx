@@ -5,6 +5,7 @@ import { Inter, Outfit } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import AIChatbot from '@/components/AIChatbot';
 import { LayoutContent } from '@/components/LayoutContent';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import './globals.css';
 
 const inter = Inter({
@@ -54,7 +55,14 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-            <LayoutContent>{children}</LayoutContent>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <LayoutContent>{children}</LayoutContent>
+            </ThemeProvider>
             <Toaster
               position='bottom-right'
               toastOptions={{

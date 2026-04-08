@@ -329,16 +329,16 @@ export default function PropertyDetailPage() {
     return (
       <div className='min-h-screen bg-background pt-24 pb-20'>
         <div className='container-custom'>
-          <div className='max-w-xl mx-auto bg-white/2 border border-white/10 rounded-2xl p-6 text-center space-y-4'>
-            <h1 className='text-2xl font-bold font-heading'>
+          <div className='max-w-xl mx-auto bg-card border border-border rounded-2xl p-6 text-center space-y-4'>
+            <h1 className='text-2xl font-bold font-heading text-foreground'>
               Invalid Property Link
             </h1>
-            <p className='text-white/50'>
+            <p className='text-muted-foreground'>
               This property URL is outdated. Please open a property from the
               list to continue.
             </p>
             <Link href='/properties'>
-              <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-6'>
+              <Button className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-6'>
                 Browse Properties
               </Button>
             </Link>
@@ -353,10 +353,10 @@ export default function PropertyDetailPage() {
       <div className='min-h-screen bg-background pt-24 pb-20'>
         <div className='container-custom'>
           <div className='space-y-4 animate-pulse'>
-            <div className='h-8 w-1/3 rounded bg-white/[0.07]' />
-            <div className='h-64 w-full rounded-2xl bg-white/5' />
-            <div className='h-6 w-2/3 rounded bg-white/6' />
-            <div className='h-24 w-full rounded-xl bg-white/5' />
+            <div className='h-8 w-1/3 rounded bg-muted' />
+            <div className='h-64 w-full rounded-2xl bg-muted' />
+            <div className='h-6 w-2/3 rounded bg-muted' />
+            <div className='h-24 w-full rounded-xl bg-muted' />
           </div>
         </div>
       </div>
@@ -367,16 +367,16 @@ export default function PropertyDetailPage() {
     return (
       <div className='min-h-screen bg-background pt-24 pb-20'>
         <div className='container-custom'>
-          <div className='max-w-xl mx-auto bg-white/2 border border-white/10 rounded-2xl p-6 text-center space-y-4'>
-            <h1 className='text-2xl font-bold font-heading'>
+          <div className='max-w-xl mx-auto bg-card border border-border rounded-2xl p-6 text-center space-y-4'>
+            <h1 className='text-2xl font-bold font-heading text-foreground'>
               Property Unavailable
             </h1>
-            <p className='text-white/50'>
+            <p className='text-muted-foreground'>
               This property is either not published yet or not accessible to your account.
               Please check in Properties list or contact support.
             </p>
             <Link href='/properties'>
-              <Button className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-6'>
+              <Button className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-6'>
                 Back to Properties
               </Button>
             </Link>
@@ -390,15 +390,15 @@ export default function PropertyDetailPage() {
     <div ref={pageRef} className='min-h-screen bg-background pt-24 pb-20'>
       <div className='container-custom'>
         {/* Back + Breadcrumb */}
-        <div className='detail-header flex items-center gap-2 text-sm text-white/40 mb-8'>
+        <div className='detail-header flex items-center gap-2 text-sm text-muted-foreground mb-8'>
           <Link
             href='/properties'
-            className='hover:text-white/60 transition-colors flex items-center gap-1'
+            className='hover:text-foreground transition-colors flex items-center gap-1'
           >
             <ArrowLeft className='w-4 h-4' /> Properties
           </Link>
           <ChevronRight className='w-3 h-3' />
-          <span className='text-white/60'>{renderText(property.title)}</span>
+          <span className='text-foreground'>{renderText(property.title)}</span>
         </div>
 
         <div className='grid lg:grid-cols-3 gap-8'>
@@ -417,24 +417,24 @@ export default function PropertyDetailPage() {
             <div className='detail-content space-y-8'>
               {/* Title + Meta */}
               <div className='detail-section space-y-4'>
-                <h1 className='text-3xl md:text-4xl font-bold font-heading'>
+                <h1 className='text-3xl md:text-4xl font-bold font-heading text-foreground'>
                   {renderText(property.title)}
                 </h1>
-                <div className='flex flex-wrap items-center gap-4 text-sm text-white/40'>
-                  <span className='flex items-center gap-1'>
-                    <MapPin className='w-4 h-4' />
+                <div className='flex flex-wrap items-center gap-4 text-sm text-muted-foreground font-medium'>
+                  <span className='flex items-center gap-1.5'>
+                    <MapPin className='w-4 h-4 text-blue-500' />
                     {renderText(property.location)}
                   </span>
-                  <span className='flex items-center gap-1'>
-                    <Calendar className='w-4 h-4' />
+                  <span className='flex items-center gap-1.5'>
+                    <Calendar className='w-4 h-4 text-blue-500' />
                     {property.duration}
                   </span>
-                  <span className='flex items-center gap-1'>
-                    <Users className='w-4 h-4' />
+                  <span className='flex items-center gap-1.5'>
+                    <Users className='w-4 h-4 text-blue-500' />
                     {property.totalShares - property.availableShares} investors
                   </span>
                 </div>
-                <p className='text-white/50 leading-relaxed'>
+                <p className='text-muted-foreground leading-relaxed text-lg'>
                   {renderText(property.description)}
                 </p>
               </div>
@@ -469,28 +469,28 @@ export default function PropertyDetailPage() {
                 ].map((m) => {
                   const Icon = m.icon;
                   const colors: Record<string, string> = {
-                    emerald: 'text-emerald-400 bg-emerald-500/10',
-                    blue: 'text-blue-400 bg-blue-500/10',
-                    purple: 'text-purple-400 bg-purple-500/10',
-                    amber: 'text-amber-400 bg-amber-500/10',
+                    emerald: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
+                    blue: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
+                    purple: 'text-purple-500 bg-purple-500/10 border-purple-500/20',
+                    amber: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
                   };
                   const c = colors[m.color] || colors.blue;
                   return (
                     <div
                       key={m.label}
-                      className='bg-white/2 border border-white/5 rounded-2xl p-4 space-y-2'
+                      className='bg-card border border-border rounded-2xl p-5 space-y-3'
                     >
                       <div className='flex items-center gap-2'>
                         <div
-                          className={`w-8 h-8 rounded-lg ${c.split(' ')[1]} flex items-center justify-center`}
+                          className={`w-9 h-9 rounded-xl ${c.split(' ')[1]} ${c.split(' ')[2]} border flex items-center justify-center`}
                         >
                           <Icon className={`w-4 h-4 ${c.split(' ')[0]}`} />
                         </div>
                       </div>
-                      <p className='text-xs text-white/30 uppercase tracking-wider'>
+                      <p className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
                         {m.label}
                       </p>
-                      <p className={`text-lg font-bold ${c.split(' ')[0]}`}>
+                      <p className={`text-xl font-bold ${c.split(' ')[0]}`}>
                         {m.value}
                       </p>
                     </div>
@@ -499,10 +499,10 @@ export default function PropertyDetailPage() {
               </div>
 
               {/* Vote + Comments */}
-              <div className='detail-section bg-white/2 border border-white/5 rounded-3xl p-8'>
-                <div className='flex items-center justify-between mb-6'>
-                  <h3 className='text-lg font-bold'>
-                    Community ({property.comments.length})
+              <div className='detail-section bg-card border border-border rounded-3xl p-8 shadow-sm'>
+                <div className='flex items-center justify-between mb-8'>
+                  <h3 className='text-xl font-bold text-foreground'>
+                    Community Discussion ({property.comments.length})
                   </h3>
                   <button
                     onClick={() => {
@@ -510,65 +510,70 @@ export default function PropertyDetailPage() {
                         voteMutation.mutate();
                       }
                     }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
                       hasVoted || myVote?.voteType === 'UPVOTE'
-                        ? 'bg-white/5 text-white border border-white/10'
-                        : 'bg-white/5 text-white/50 border border-white/10 hover:bg-white/10'
+                        ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
+                        : 'bg-muted text-muted-foreground border border-border hover:bg-muted/80'
                     }`}
                   >
                     <ThumbsUp
-                      className={`w-4 h-4 ${hasVoted || myVote?.voteType === 'UPVOTE' ? 'fill-blue-400' : ''}`}
+                      className={`w-4 h-4 ${hasVoted || myVote?.voteType === 'UPVOTE' ? 'fill-blue-500' : ''}`}
                     />
                     {voteCount}
                   </button>
                 </div>
 
                 {/* Comment Input */}
-                <div className='flex gap-3 mb-6'>
-                  <div className='w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0 text-sm font-bold text-white'>
+                <div className='flex gap-4 mb-8'>
+                  <div className='w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 text-sm font-bold text-blue-500'>
                     {(user?.name || 'U').slice(0, 1).toUpperCase()}
                   </div>
-                  <div className='flex-1 flex gap-2'>
+                  <div className='flex-1 flex gap-3'>
                     <Input
                       placeholder='Share your thoughts on this property...'
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
-                      className='bg-white/5 border-white/10 rounded-xl py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+                      className='bg-background border-border rounded-xl h-14 pl-5 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30'
                     />
                     <Button
                       onClick={() => {
                         if (!commentText.trim()) return;
                         commentMutation.mutate(commentText.trim());
                       }}
-                      className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-4 shrink-0'
+                      className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-5 h-14 shrink-0 shadow-lg shadow-primary/20'
                     >
-                      <Send className='w-4 h-4' />
+                      <Send className='w-5 h-5' />
                     </Button>
                   </div>
                 </div>
 
                 {/* Comments List */}
-                <div className='space-y-4'>
+                <div className='space-y-6'>
                   {property.comments.map((c, index) => (
-                    <div key={`${c.id}-${index}`} className='flex gap-3'>
-                      <div className='w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0 text-sm font-bold text-purple-400'>
+                    <div key={`${c.id}-${index}`} className='flex gap-4'>
+                      <div className='w-11 h-11 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 text-sm font-bold text-purple-500'>
                         {c.avatar}
                       </div>
-                      <div className='flex-1 space-y-1'>
+                      <div className='flex-1 space-y-1.5'>
                         <div className='flex items-center gap-2'>
-                          <span className='text-sm font-semibold text-white'>
+                          <span className='text-sm font-bold text-foreground'>
                             {renderText(c.user)}
                           </span>
-                          <span className='text-xs text-white/30'>
+                          <span className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
                             {c.date}
                           </span>
                         </div>
-                        <p className='text-sm text-white/50'>
+                        <p className='text-sm text-muted-foreground leading-relaxed'>
                          {renderText(c.text)}
                         </p>
                       </div>
                     </div>
                   ))}
+                  {property.comments.length === 0 && (
+                    <div className='text-center py-8 border-2 border-dashed border-border rounded-2xl'>
+                      <p className='text-sm text-muted-foreground'>Be the first to share your thoughts!</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -590,21 +595,21 @@ export default function PropertyDetailPage() {
 
         {/* Related Properties */}
         {relatedProperties.length > 0 && (
-          <div className='detail-section mt-24 border-t border-white/5 pt-16'>
-            <div className='flex items-center justify-between mb-8'>
+          <div className='detail-section mt-24 border-t border-border pt-16'>
+            <div className='flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10'>
               <div>
-                <h2 className='text-3xl font-bold font-heading'>
+                <h2 className='text-3xl font-bold font-heading text-foreground'>
                   Similar <span className='gradient-text'>Opportunities</span>
                 </h2>
-                <p className='text-white/40 mt-2'>Explore other investments in the {renderText(property.category)} category.</p>
+                <p className='text-muted-foreground mt-2'>Explore other investments in the {renderText(property.category)} category.</p>
               </div>
               <Link href={`/properties?categoryId=${propertyData?.categoryId || ''}`}>
-                <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 rounded-xl">
-                  View All
+                <Button variant="outline" className="border-border text-foreground hover:bg-accent rounded-xl px-6 py-6 h-auto">
+                  View All Properties
                 </Button>
               </Link>
             </div>
-            <div className='grid md:grid-cols-3 gap-6'>
+            <div className='grid md:grid-cols-3 gap-8'>
               {relatedProperties.map(p => (
                 <PropertyCard key={p.id} property={p} viewMode="grid" />
               ))}

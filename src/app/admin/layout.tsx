@@ -20,16 +20,16 @@ export default function AdminLayout({
         <div className='max-w-7xl mx-auto px-4 md:px-8 lg:px-12 flex flex-col lg:flex-row'>
           
           {/* Mobile Drawer Trigger (Only visible on small screens) */}
-          <div className='lg:hidden py-4 border-b border-white/5 mb-6 flex items-center justify-start'>
+          <div className='lg:hidden py-4 border-b border-border mb-6 flex items-center justify-start'>
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant='outline' className='bg-white/5 hover:bg-white/10 border-white/10 text-white rounded-xl gap-2 font-medium'>
+                <Button variant='outline' className='bg-background hover:bg-accent border-border text-foreground rounded-xl gap-2 font-bold uppercase tracking-widest text-[10px]'>
                   <Menu className='w-4 h-4' />
-                  <span>Admin Menu</span>
+                  <span>Administrative Console</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side='left' className='w-72 bg-[#050b14] border-r border-white/5 p-5 pt-12 overflow-y-auto no-scrollbar'>
-                 <SheetTitle className="sr-only">Admin Dashboard Menu</SheetTitle>
+              <SheetContent side='left' className='w-80 bg-background border-r border-border p-6 pt-12 overflow-y-auto no-scrollbar'>
+                 <SheetTitle className="sr-only">Admin Dashboard Navigation</SheetTitle>
                  <AdminSidebar 
                   className='w-full' 
                   onLinkClick={() => setIsMobileMenuOpen(false)} 

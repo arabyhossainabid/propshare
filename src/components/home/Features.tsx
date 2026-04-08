@@ -49,31 +49,31 @@ export default function Features() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.features-header',
-        { opacity: 0, y: 50 },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: 'power3.out',
+          duration: 0.5,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top 90%',
           },
         }
       );
 
       gsap.fromTo(
         '.feature-card',
-        { opacity: 0, y: 50 },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out',
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: '.features-grid',
-            start: 'top 85%',
+            start: 'top 90%',
           },
         }
       );
@@ -94,7 +94,7 @@ export default function Features() {
           <h2 className="text-4xl md:text-5xl font-bold font-heading">
             Platform <span className="gradient-text">Features</span>
           </h2>
-          <p className="text-white/40 text-lg">
+          <p className="text-muted-foreground text-lg">
             Experience the next generation of real estate investment with our cutting-edge features.
           </p>
         </div>
@@ -105,8 +105,8 @@ export default function Features() {
               <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-300">
                 <feature.icon className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-              <p className="text-white/50 text-sm leading-relaxed">
+              <h3 className="text-xl font-bold mb-3 text-foreground">{feature.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {feature.description}
               </p>
             </div>

@@ -98,16 +98,16 @@ export default function StatsBar() {
       // Animate stat items
       gsap.fromTo(
         '.stat-item',
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 15 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: 'power3.out',
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: containerRef.current,
-            start: 'top 85%',
+            start: 'top 90%',
           },
         }
       );
@@ -122,11 +122,11 @@ export default function StatsBar() {
         const obj = { value: 0 };
         gsap.to(obj, {
           value: stat.value,
-          duration: 2,
+          duration: 1,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: containerRef.current,
-            start: 'top 85%',
+            start: 'top 90%',
           },
           onUpdate: () => {
             el.textContent = `${Math.floor(obj.value).toLocaleString()}${stat.suffix}`;
@@ -164,10 +164,10 @@ export default function StatsBar() {
                     <Icon className={`w-6 h-6 ${colors.text}`} />
                   </div>
                   <div>
-                    <p className='stat-value text-3xl md:text-4xl font-bold font-heading text-white'>
+                    <p className='stat-value text-3xl md:text-4xl font-bold font-heading text-foreground'>
                       0
                     </p>
-                    <p className='text-xs text-white/40 uppercase tracking-wider mt-1'>
+                    <p className='text-xs text-muted-foreground uppercase tracking-wider mt-1'>
                       {stat.label}
                     </p>
                   </div>

@@ -26,14 +26,15 @@ export function PropertyGallery({
 }: PropertyGalleryProps) {
   return (
     <div className='detail-gallery space-y-3'>
-      <div className='relative aspect-[16/9] rounded-3xl overflow-hidden'>
+      <div className='relative aspect-video rounded-3xl overflow-hidden shadow-2xl'>
         <Image
           src={property.images[activeImage]}
           alt={property.title}
           fill
           className='object-cover'
+          priority
         />
-        <div className='absolute inset-0 bg-gradient-to-t from-[#0a0f1d]/60 via-transparent to-transparent' />
+        <div className='absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent' />
         {/* Actions */}
         <div className='absolute top-4 right-4 flex gap-2'>
           <button
@@ -41,7 +42,7 @@ export function PropertyGallery({
             className={`w-10 h-10 rounded-xl backdrop-blur-xl flex items-center justify-center transition-all ${
               isLiked
                 ? 'bg-red-500/20 border border-red-500/30'
-                : 'bg-black/30 border border-white/10'
+                : 'bg-black/20 border border-white/10 hover:bg-black/40'
             }`}
           >
             <Heart
@@ -50,36 +51,36 @@ export function PropertyGallery({
               }`}
             />
           </button>
-          <button className='w-10 h-10 rounded-xl bg-black/30 backdrop-blur-xl border border-white/10 flex items-center justify-center'>
+          <button className='w-10 h-10 rounded-xl bg-black/20 backdrop-blur-xl border border-white/10 flex items-center justify-center hover:bg-black/40 transition-all'>
             <Share2 className='w-4 h-4 text-white' />
           </button>
         </div>
         {/* Status Badges */}
         <div className='absolute top-4 left-4 flex gap-2'>
-          <Badge className='bg-blue-500/20 text-blue-400 border-blue-500/30 backdrop-blur-xl'>
+          <Badge className='bg-blue-500/20 text-blue-400 border border-blue-500/30 backdrop-blur-md uppercase tracking-widest text-[10px] h-7 px-3'>
             {property.category}
           </Badge>
           <Badge
-            className={`backdrop-blur-xl ${
+            className={`backdrop-blur-md uppercase tracking-widest text-[10px] h-7 px-3 border ${
               property.isPaid
                 ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
-                : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                : 'bg-emerald-500/20 text-emerald-500 border-emerald-500/30'
             }`}
           >
             {property.isPaid ? (
               <>
-                <Lock className='w-3 h-3 mr-1' /> Premium
+                <Lock className='w-3 h-3 mr-1.5' /> Premium
               </>
             ) : (
               <>
-                <Unlock className='w-3 h-3 mr-1' /> Free
+                <Unlock className='w-3 h-3 mr-1.5' /> Public
               </>
             )}
           </Badge>
         </div>
         {/* View count */}
-        <div className='absolute bottom-4 left-4 flex items-center gap-2 text-sm text-white/60'>
-          <Eye className='w-4 h-4' /> {viewCount.toLocaleString()} views
+        <div className='absolute bottom-4 left-6 flex items-center gap-2 text-sm text-white font-medium'>
+          <Eye className='w-4 h-4' /> {viewCount.toLocaleString()} <span className="opacity-80">views</span>
         </div>
       </div>
       {/* Thumbnails */}

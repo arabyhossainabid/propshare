@@ -85,9 +85,9 @@ export default function DashboardSidebar({
     <aside className={className}>
       <div className='sticky top-8 space-y-2 lg:h-[calc(100vh-7rem)] lg:overflow-y-auto no-scrollbar pb-6'>
         {/* User Card */}
-        <div className='bg-white/2 border border-white/5 rounded-2xl p-4 mb-4'>
+        <div className='bg-muted/30 border border-border rounded-2xl p-4 mb-4'>
           <div className='flex items-center gap-3'>
-            <div className='w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center text-sm font-bold text-white uppercase overflow-hidden'>
+            <div className='w-11 h-11 rounded-xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center text-sm font-bold text-white uppercase overflow-hidden shadow-lg shadow-blue-500/20'>
               {user?.avatar ? (
                 <img src={user.avatar} alt={user.name || 'User'} className="w-full h-full object-cover" />
               ) : (
@@ -95,14 +95,14 @@ export default function DashboardSidebar({
               )}
             </div>
             <div className='overflow-hidden'>
-              <p className='text-sm font-semibold text-white truncate'>{user?.name || 'Investor'}</p>
-              <p className='text-xs text-white/30 capitalize truncate'>{user?.role?.toLowerCase() || 'Member'}</p>
+              <p className='text-sm font-bold text-foreground truncate'>{user?.name || 'Investor'}</p>
+              <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 truncate'>{user?.role?.toLowerCase() || 'Member'}</p>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className='space-y-1'>
+        <nav className='space-y-1.5'>
           {links.map((link) => {
             const Icon = link.icon;
             const isActive = isLinkActive(link.href);
@@ -111,17 +111,18 @@ export default function DashboardSidebar({
                 key={link.name}
                 href={link.href}
                 onClick={onLinkClick}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
-                  ? 'bg-white/5 text-white border border-white/10'
-                  : 'text-white/50 hover:text-white hover:bg-white/5 shadow-none'
-                  }`}
+                className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 group border ${
+                  isActive
+                    ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent border-transparent'
+                }`}
               >
                 <Icon
-                  className={`w-4 h-4 ${isActive ? 'text-white' : 'text-white/30 group-hover:text-white/60'}`}
+                  className={`w-4 h-4 transition-colors ${isActive ? 'text-primary-foreground' : 'text-muted-foreground/60 group-hover:text-foreground'}`}
                 />
                 <span className='flex-1'>{link.name}</span>
                 {isActive && (
-                  <ChevronRight className='w-3 h-3 text-white/50' />
+                  <ChevronRight className='w-3.5 h-3.5 text-primary-foreground/70' />
                 )}
               </Link>
             );
@@ -129,12 +130,12 @@ export default function DashboardSidebar({
         </nav>
 
         {/* Bottom Actions */}
-        <div className='border-t border-white/5 pt-4 mt-4 space-y-1'>
+        <div className='border-t border-border pt-4 mt-4 space-y-1'>
           <button
             onClick={handleSignOut}
-            className='flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-400/60 hover:text-red-400 hover:bg-red-500/5 transition-all w-full'
+            className='flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10 transition-all w-full group'
           >
-            <LogOut className='w-4 h-4' /> Sign Out
+            <LogOut className='w-4 h-4 group-hover:-translate-x-1 transition-transform' /> Sign Out
           </button>
         </div>
       </div>

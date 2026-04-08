@@ -40,82 +40,100 @@ export default function AdminFeaturedPage() {
   const available = properties.filter((p) => !p.isFeatured);
 
   return (
-    <div className='space-y-8'>
-      <div className='flex flex-col sm:flex-row items-center justify-between gap-4'>
+    <div className='space-y-10 pb-12'>
+      <div className='flex flex-col sm:flex-row items-center justify-between gap-6'>
         <div>
-          <h1 className='text-2xl font-bold font-heading'>Featured Properties</h1>
-          <p className='text-sm text-white/40 mt-1'>
-            API-backed featured properties management.
+          <h1 className='text-3xl font-bold font-heading text-foreground'>Curation Matrix</h1>
+          <p className='text-sm text-muted-foreground mt-1 font-medium'>
+            Select high-performance assets for priority placement.
           </p>
         </div>
-        <Badge className='bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] py-1'>
-          {featured.length} Featured
+        <Badge className='bg-amber-500/10 text-amber-600 border border-amber-500/20 text-[11px] font-bold px-4 py-1.5 shadow-sm'>
+          {featured.length} ACTIVE SHOWCASE
         </Badge>
       </div>
 
-      {isLoading && <p className='text-sm text-white/40'>Loading...</p>}
+      {isLoading && (
+        <div className="grid lg:grid-cols-2 gap-8 animate-pulse">
+           <div className="h-48 bg-muted rounded-3xl" />
+           <div className="h-48 bg-muted rounded-3xl" />
+        </div>
+      )}
 
-      <div className='grid lg:grid-cols-2 gap-8'>
-        <div className='space-y-4'>
-          <h3 className='text-sm font-bold uppercase tracking-widest text-white/30 flex items-center gap-2'>
-            <Star className='w-4 h-4 text-amber-400 fill-amber-400' />
-            Active Featured
+      <div className='grid lg:grid-cols-2 gap-10'>
+        {/* Featured Section */}
+        <div className='space-y-6'>
+          <h3 className='text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 flex items-center gap-3'>
+            <Star className='w-4 h-4 text-amber-500 fill-amber-500' />
+            Current Showcase
           </h3>
-          <div className='space-y-3'>
+          <div className='space-y-4'>
             {featured.map((p) => (
               <div
                 key={p.id}
-                className='bg-white/[0.03] border border-blue-500/20 rounded-2xl p-4 flex items-center gap-4'
+                className='bg-card border border-amber-500/10 hover:border-amber-500/20 rounded-2xl p-6 flex items-center gap-6 shadow-sm group transition-all duration-300'
               >
+                <div className="w-12 h-12 rounded-xl bg-amber-500/5 flex items-center justify-center border border-amber-500/10 shadow-inner">
+                   <Star className="w-6 h-6 text-amber-500" />
+                </div>
                 <div className='flex-1 min-w-0'>
-                  <p className='text-sm font-bold text-white truncate'>{p.title}</p>
-                  <p className='text-[10px] text-white/30 mt-0.5'>
-                    {p.category?.name || 'Uncategorized'}
+                  <p className='text-base font-bold text-foreground truncate'>{p.title}</p>
+                  <p className='text-[10px] text-muted-foreground mt-1.5 font-bold uppercase tracking-widest'>
+                    {p.category?.name || 'INSTITUTIONAL ASSET'}
                   </p>
                 </div>
                 <Button
                   variant='ghost'
-                  className='h-9 w-9 p-0 text-white/20 hover:text-red-400 rounded-xl hover:bg-red-500/5'
+                  className='h-12 w-12 p-0 text-muted-foreground/20 hover:text-red-500 hover:bg-red-500/10 rounded-2xl transition-all'
                   onClick={() => toggleFeaturedMutation.mutate(p.id)}
                   disabled={toggleFeaturedMutation.isPending}
                 >
-                  <Trash2 className='w-4 h-4' />
+                  <Trash2 className='w-5 h-5' />
                 </Button>
               </div>
             ))}
-            {featured.length === 0 && (
-              <div className='bg-white/[0.01] border border-dashed border-white/5 rounded-2xl p-8 text-center'>
-                <p className='text-xs text-white/20'>No properties featured.</p>
+            {featured.length === 0 && !isLoading && (
+              <div className='bg-muted/10 border border-dashed border-border rounded-3xl p-12 text-center'>
+                <p className='text-xs text-muted-foreground font-bold uppercase tracking-widest opacity-40'>No assets currently featured</p>
               </div>
             )}
           </div>
         </div>
 
-        <div className='space-y-4'>
-          <h3 className='text-sm font-bold uppercase tracking-widest text-white/30'>
-            Available Listings
+        {/* Available Section */}
+        <div className='space-y-6'>
+          <h3 className='text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60'>
+            Inventory Source
           </h3>
-          <div className='space-y-3'>
+          <div className='space-y-4 max-h-[600px] overflow-auto pr-2 no-scrollbar'>
             {available.map((p) => (
               <div
                 key={p.id}
-                className='bg-white/[0.02] border border-white/5 rounded-2xl p-4 flex items-center gap-4'
+                className='bg-card border border-border rounded-2xl p-6 flex items-center gap-6 hover:shadow-md transition-all group'
               >
+                <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border shadow-inner">
+                   <PlusCircle className="w-6 h-6 text-muted-foreground/40" />
+                </div>
                 <div className='flex-1 min-w-0'>
-                  <p className='text-sm font-bold text-white truncate'>{p.title}</p>
-                  <p className='text-[10px] text-white/30 mt-1'>
-                    {p.category?.name || 'Uncategorized'}
+                  <p className='text-base font-bold text-foreground truncate'>{p.title}</p>
+                  <p className='text-[10px] text-muted-foreground mt-1.5 font-bold uppercase tracking-widest'>
+                    {p.category?.name || 'UNCLASSIFIED ASSET'}
                   </p>
                 </div>
                 <Button
-                  className='bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl text-[10px] h-8 px-3'
                   onClick={() => toggleFeaturedMutation.mutate(p.id)}
                   disabled={toggleFeaturedMutation.isPending}
+                  className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] h-10 px-5 font-bold uppercase tracking-widest shadow-xl shadow-primary/10'
                 >
-                  Add <PlusCircle className='w-3 h-3 ml-2' />
+                  Promote
                 </Button>
               </div>
             ))}
+            {available.length === 0 && !isLoading && (
+               <div className='bg-muted/10 border border-dashed border-border rounded-3xl p-12 text-center'>
+                 <p className='text-xs text-muted-foreground font-bold uppercase tracking-widest opacity-40'>All assets are featured</p>
+               </div>
+            )}
           </div>
         </div>
       </div>

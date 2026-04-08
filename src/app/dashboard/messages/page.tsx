@@ -158,37 +158,41 @@ export default function DashboardMessagesPage() {
   return (
     <div className='space-y-6'>
       <div>
-        <h1 className='text-2xl font-bold font-heading'>Messages</h1>
-        <p className='text-sm text-white/40 mt-1'>
-          See admin replies to your contact messages.
+        <h1 className='text-2xl font-bold font-heading text-foreground'>Messages</h1>
+        <p className='text-sm text-muted-foreground mt-1'>
+          See administrative responses to your inquiries.
         </p>
       </div>
 
-      <div className='grid lg:grid-cols-3 gap-4'>
-        <div className='lg:col-span-1 rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden'>
-          <div className='px-4 py-3 border-b border-white/5 text-sm text-white/70'>
-            My Contact Messages
+      <div className='grid lg:grid-cols-3 gap-6'>
+        {/* Left Sidebar: Message List */}
+        <div className='lg:col-span-1 border border-border bg-card rounded-2xl overflow-hidden shadow-sm'>
+          <div className='px-5 py-4 border-b border-border bg-muted/30'>
+             <h3 className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2'>
+              <MessageCircle className='w-4 h-4 text-blue-500' />
+              My Conversations ({myMessages.length})
+            </h3>
           </div>
 
-          <div className='max-h-[560px] overflow-auto'>
+          <div className='max-h-[560px] overflow-auto divide-y divide-border/50'>
             {isLoadingMessages && (
-              <div className='p-6 text-center text-white/40 text-sm'>
-                <Loader2 className='w-5 h-5 animate-spin mx-auto mb-2' />
-                Loading messages...
+              <div className='p-12 text-center text-muted-foreground text-xs font-bold uppercase tracking-widest'>
+                <Loader2 className='w-6 h-6 animate-spin mx-auto mb-3 text-blue-500' />
+                Synchronizing...
               </div>
             )}
 
             {!isLoadingMessages && isErrorMessages && (
-              <div className='p-6 text-center text-white/40 text-sm'>
-                Could not load your messages.
+              <div className='p-8 text-center text-red-400 text-xs font-bold uppercase tracking-widest'>
+                Network Error
               </div>
             )}
 
             {!isLoadingMessages &&
               !isErrorMessages &&
               myMessages.length === 0 && (
-                <div className='p-6 text-center text-white/40 text-sm'>
-                  You have no contact messages yet.
+                <div className='p-12 text-center text-muted-foreground text-xs border-dashed border-2 border-border m-4 rounded-xl'>
+                   <p className='font-bold uppercase tracking-widest opacity-40'>No History</p>
                 </div>
               )}
 
@@ -198,20 +202,26 @@ export default function DashboardMessagesPage() {
                 <button
                   key={message.id}
                   onClick={() => setSelectedMessageId(message.id)}
-                  className={`w-full text-left px-4 py-3 border-b border-white/[0.04] transition-colors ${
+                  className={`w-full text-left px-5 py-4 transition-all group relative ${
                     isActive
-                      ? 'bg-white/5 border-white/10'
-                      : 'hover:bg-white/[0.03]'
+                      ? 'bg-blue-600/5'
+                      : 'hover:bg-muted/50'
                   }`}
                 >
-                  <p className='text-sm text-white font-medium truncate'>
-                    Message
-                  </p>
-                  <p className='text-xs text-white/40 truncate mt-1'>
+                  {isActive && <div className='absolute left-0 top-0 bottom-0 w-1 bg-blue-600' />}
+                  <div className='flex justify-between items-start mb-1'>
+                     <p className={`text-sm font-bold transition-colors ${isActive ? 'text-blue-600' : 'text-foreground'}`}>
+                      Inquiry
+                    </p>
+                    <span className='text-[10px] text-muted-foreground font-bold'>
+                      {new Date(message.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className='text-xs text-muted-foreground truncate leading-relaxed'>
                     {message.message}
                   </p>
-                  <p className='text-xs text-white/40 truncate mt-1'>
-                    {new Date(message.createdAt).toLocaleString()}
+                  <p className='text-[9px] text-muted-foreground/40 font-bold uppercase tracking-widest mt-2'>
+                    {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </button>
               );
@@ -219,64 +229,80 @@ export default function DashboardMessagesPage() {
           </div>
         </div>
 
-        <div className='lg:col-span-2 rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden'>
-          <div className='px-4 py-3 border-b border-white/5 text-sm text-white/70 flex items-center gap-2'>
-            <MessageCircle className='w-4 h-4 text-emerald-400' /> Conversation
+        {/* Right Pane: Conversation Details */}
+        <div className='lg:col-span-2 border border-border bg-card rounded-2xl overflow-hidden shadow-sm flex flex-col h-[620px]'>
+          <div className='px-5 py-4 border-b border-border bg-muted/30 flex items-center justify-between'>
+            <div className='flex items-center gap-3'>
+               <div className='w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center'>
+                 <MessageCircle className='w-4 h-4 text-emerald-500' />
+               </div>
+               <h3 className='text-sm font-bold text-foreground'>Conversation Details</h3>
+            </div>
+            {selectedMessage && (
+               <Badge variant="outline" className="border-blue-500/20 text-blue-600 uppercase tracking-widest text-[9px] py-0.5">
+                  Live Support
+               </Badge>
+            )}
           </div>
 
           {!selectedMessage && (
-            <div className='p-8 text-center text-white/40 text-sm'>
-              Select a message to view replies.
+            <div className='flex-1 flex flex-col items-center justify-center p-12 text-center space-y-4'>
+              <div className='w-16 h-16 rounded-2xl bg-muted flex items-center justify-center opacity-40 grayscale'>
+                 <MessageCircle className='w-8 h-8' />
+              </div>
+              <p className='text-xs font-bold uppercase tracking-widest text-muted-foreground/60'>
+                Select an inquiry thread to view replies
+              </p>
             </div>
           )}
 
           {selectedMessage && (
-            <div className='p-4 space-y-4'>
-              <div className='rounded-xl border border-white/10 bg-white/[0.03] p-4'>
-                <div className='flex items-center justify-between gap-3'>
-                  <p className='text-sm text-white font-semibold'>
-                    Your Message
-                  </p>
-                  <div className='flex items-center gap-2'>
-                    <Badge className='bg-white/10 text-white/80 border-white/20'>
-                      Your Message
-                    </Badge>
-                    {/* Delete option removed for user section */}
+            <div className='flex-1 p-6 space-y-6 overflow-auto no-scrollbar'>
+              {/* Original User Message */}
+              <div className='flex justify-end'>
+                <div className='max-w-[85%] space-y-2'>
+                  <div className='bg-primary text-primary-foreground p-4 rounded-2xl rounded-tr-none shadow-lg shadow-primary/10'>
+                    <p className='text-sm leading-relaxed font-medium'>
+                      {selectedMessage.message}
+                    </p>
                   </div>
+                  <p className='text-[9px] text-muted-foreground font-bold uppercase tracking-widest text-right px-1'>
+                    You • {new Date(selectedMessage.createdAt).toLocaleString()}
+                  </p>
                 </div>
-                <p className='text-sm text-white/70 mt-3'>
-                  {selectedMessage.message}
-                </p>
               </div>
 
-              <div className='space-y-2 max-h-[320px] overflow-auto pr-1'>
-                {!isLoadingReplies && isErrorReplies && (
-                  <p className='text-sm text-white/40'>
-                    Could not load replies. Please try again.
-                  </p>
+              {/* Replies */}
+              <div className='space-y-6'>
+                {isLoadingReplies && (
+                  <div className='flex justify-center py-4'>
+                    <Loader2 className='w-5 h-5 animate-spin text-blue-500' />
+                  </div>
                 )}
 
                 {replies.map((reply) => (
                   <div
                     key={reply.id}
-                    className={`rounded-xl p-3 border ${
-                      reply.senderRole === 'ADMIN'
-                        ? 'bg-blue-500/10 border-white/10'
-                        : 'bg-white/[0.03] border-white/10'
-                    }`}
+                    className={`flex ${reply.senderRole === 'ADMIN' ? 'justify-start' : 'justify-end'}`}
                   >
-                    <div className='flex items-center justify-between gap-2'>
-                      <p className='text-xs text-white/60'>
+                    <div className='max-w-[85%] space-y-2'>
+                      <div className={`p-4 rounded-2xl shadow-sm border ${
+                        reply.senderRole === 'ADMIN'
+                          ? 'bg-muted border-border rounded-tl-none'
+                          : 'bg-primary text-primary-foreground border-primary rounded-tr-none'
+                      }`}>
+                        <p className='text-sm leading-relaxed'>
+                          {reply.message}
+                        </p>
+                      </div>
+                      <p className={`text-[9px] text-muted-foreground font-bold uppercase tracking-widest px-1 ${
+                        reply.senderRole === 'ADMIN' ? 'text-left' : 'text-right'
+                      }`}>
                         {reply.senderRole === 'ADMIN' ? 'Admin' : 'You'}
                         {reply.senderName ? ` • ${reply.senderName}` : ''}
-                      </p>
-                      <p className='text-[11px] text-white/30'>
-                        {new Date(reply.createdAt).toLocaleString()}
+                        {' • '}{new Date(reply.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
-                    <p className='text-sm text-white/80 mt-1'>
-                      {reply.message}
-                    </p>
                   </div>
                 ))}
               </div>

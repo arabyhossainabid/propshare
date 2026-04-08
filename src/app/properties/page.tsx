@@ -138,24 +138,24 @@ export default function PropertiesPage() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.page-header',
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: 'power3.out',
+          duration: 0.4,
+          ease: 'power2.out',
         }
       );
 
       gsap.fromTo(
         '.filter-bar',
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 15 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          delay: 0.2,
+          duration: 0.4,
+          ease: 'power2.out',
+          delay: 0.1,
         }
       );
     }, sectionRef);
@@ -169,13 +169,13 @@ export default function PropertiesPage() {
 
     gsap.fromTo(
       '.prop-card',
-      { opacity: 0, y: 40 },
+      { opacity: 0, y: 30 },
       {
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: 'power3.out',
+        duration: 0.4,
+        stagger: 0.04,
+        ease: 'power2.out',
       }
     );
   }, [activeFilter, searchQuery, priceFilter, sortOption]);
@@ -200,7 +200,7 @@ export default function PropertiesPage() {
             <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold font-heading mt-4'>
               All <span className='gradient-text'>Properties</span>
             </h1>
-            <p className='text-white/40 text-lg max-w-2xl mt-4'>
+            <p className='text-muted-foreground text-lg max-w-2xl mt-4'>
               Browse our complete collection of verified, high-yield investment
               properties. Filter by category, search by name or location.
             </p>
@@ -212,46 +212,46 @@ export default function PropertiesPage() {
           {/* Search & Controls */}
           <div className='flex flex-col md:flex-row gap-4'>
             <div className='flex-1 relative group z-20'>
-              <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20' />
+              <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60' />
               <Input
                 placeholder='Search properties...'
                 value={searchQuery}
                 onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className='bg-white/5 border-white/10 rounded-2xl pl-12 pr-12 py-6 text-white placeholder:text-white/30 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/30 w-full'
+                className='bg-muted border-border rounded-2xl h-14 pl-12 pr-12 text-foreground placeholder:text-muted-foreground/70 focus-visible:ring-blue-500/30'
               />
-              <Zap className='absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400 animate-pulse' />
+              <Zap className='absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500/60 animate-pulse' />
 
               {/* AI Search Suggestions Dropdown */}
               {showSuggestions && searchSuggestions.length > 0 && (
-                <div className='absolute top-full left-0 right-0 mt-2 bg-card border border-white/10 rounded-xl overflow-hidden shadow-2xl z-50'>
+                <div className='absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl overflow-hidden shadow-2xl z-50'>
                   {/* Suggestions List */}
                   {searchSuggestions.map((sug: string, i: number) => (
                     <div
                       key={i}
-                      className='px-4 py-3 hover:bg-white/5 cursor-pointer text-sm text-white/80 transition-colors flex items-center gap-2'
+                      className='px-5 py-3 hover:bg-accent cursor-pointer text-sm text-foreground transition-colors flex items-center gap-3'
                       onClick={() => handleSuggestionClick(sug)}
                     >
-                      <Search className='w-3 h-3 text-white/20' /> {renderText(sug)}
+                      <Search className='w-3.5 h-3.5 text-muted-foreground/50' /> {renderText(sug)}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            <div className='flex gap-2 flex-wrap items-center'>
+            <div className='flex gap-2.5 flex-wrap items-center'>
               {/* Secondary Filter: Price */}
               <div className='relative group'>
-                <Button variant='outline' className='h-[52px] border-white/10 text-white/60 hover:text-white hover:bg-white/5 rounded-xl px-4'>
+                <Button variant='outline' className='h-14 border-border text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl px-5 bg-background'>
                   <Filter className='w-4 h-4 mr-2' />
                   {priceFilter ? `Price: $${priceFilter.min}-$${priceFilter.max}` : 'Price Filter'}
                 </Button>
-                <div className='absolute top-full mt-2 w-48 bg-card border border-white/10 rounded-xl shadow-2xl hidden group-hover:block z-30 overflow-hidden'>
-                  <div className='p-2 flex flex-col'>
-                    <button onClick={() => setPriceFilter(null)} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>Any Price</button>
-                    <button onClick={() => setPriceFilter({ min: 0, max: 100 })} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>Under $100 / share</button>
-                    <button onClick={() => setPriceFilter({ min: 100, max: 500 })} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>$100 - $500 / share</button>
-                    <button onClick={() => setPriceFilter({ min: 500, max: 999999 })} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>Over $500 / share</button>
+                <div className='absolute top-full mt-2 w-52 bg-card border border-border rounded-xl shadow-2xl hidden group-hover:block z-30 overflow-hidden'>
+                  <div className='p-1.5 flex flex-col space-y-1'>
+                    <button onClick={() => setPriceFilter(null)} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Any Price</button>
+                    <button onClick={() => setPriceFilter({ min: 0, max: 100 })} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Under $100</button>
+                    <button onClick={() => setPriceFilter({ min: 100, max: 500 })} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>$100 - $500</button>
+                    <button onClick={() => setPriceFilter({ min: 500, max: 999999 })} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Over $500</button>
                   </div>
                 </div>
               </div>
@@ -261,9 +261,9 @@ export default function PropertiesPage() {
                 variant='ghost'
                 size='icon'
                 onClick={() => setViewMode('grid')}
-                className={`rounded-xl h-[52px] w-[52px] transition-all duration-300 border border-white/5 ${viewMode === 'grid'
-                  ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-none'
-                  : 'bg-white/5 text-white/40 hover:bg-white/10'
+                className={`rounded-xl h-14 w-14 transition-all duration-300 border ${viewMode === 'grid'
+                  ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20'
+                  : 'bg-muted border-border text-muted-foreground hover:bg-accent hover:text-foreground hover:border-border/80'
                   }`}
               >
                 <Grid3X3 className='w-5 h-5' />
@@ -272,9 +272,9 @@ export default function PropertiesPage() {
                 variant='ghost'
                 size='icon'
                 onClick={() => setViewMode('list')}
-                className={`rounded-xl h-[52px] w-[52px] transition-all duration-300 border border-white/5 ${viewMode === 'list'
-                  ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-none'
-                  : 'bg-white/5 text-white/40 hover:bg-white/10'
+                className={`rounded-xl h-14 w-14 transition-all duration-300 border ${viewMode === 'list'
+                  ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20'
+                  : 'bg-muted border-border text-muted-foreground hover:bg-accent hover:text-foreground hover:border-border/80'
                   }`}
               >
                 <LayoutList className='w-5 h-5' />
@@ -283,7 +283,7 @@ export default function PropertiesPage() {
           </div>
 
           {/* Category Filters */}
-          <div className='flex flex-wrap gap-2'>
+          <div className='flex flex-wrap gap-2.5'>
             {filterCategories.map((cat) => (
               <button
                 key={cat}
@@ -291,9 +291,9 @@ export default function PropertiesPage() {
                   setActiveFilter(cat);
                   setIsFilterManuallySet(true);
                 }}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-white/5 ${effectiveFilter === cat
-                  ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-none'
-                  : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white'
+                className={`px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${effectiveFilter === cat
+                  ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20'
+                  : 'bg-muted/50 border-border text-muted-foreground hover:bg-accent hover:text-foreground'
                   }`}
               >
                 {cat}
@@ -302,26 +302,25 @@ export default function PropertiesPage() {
           </div>
 
           {/* Results count & Sort */}
-          <div className='flex items-center justify-between'>
-            <p className='text-sm text-white/30'>
-              Showing{' '}
-              <span className='text-white font-medium'>
+          <div className='flex items-center justify-between py-2 border-b border-border/50'>
+            <p className='text-[10px] text-muted-foreground font-bold uppercase tracking-widest'>
+              Active Results:{' '}
+              <span className='text-foreground font-black'>
                 {filteredProperties.length}
-              </span>{' '}
-              properties
+              </span>
             </p>
             <div className='relative group z-10'>
-              <button className='flex items-center gap-2 text-sm text-white/40 hover:text-white/60 transition-colors py-2'>
-                <SlidersHorizontal className='w-4 h-4' />
+              <button className='flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-2'>
+                <SlidersHorizontal className='w-3.5 h-3.5' />
                 Sort by: {sortOption.replace('-', ' ')}
                 <ChevronDown className='w-3 h-3' />
               </button>
-              <div className='absolute right-0 top-full mt-2 w-48 bg-card border border-white/10 rounded-xl shadow-2xl hidden group-hover:block overflow-hidden'>
-                <div className='p-2 flex flex-col'>
-                  <button onClick={() => setSortOption('popularity')} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>Popularity</button>
-                  <button onClick={() => setSortOption('price-asc')} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>Price: Low to High</button>
-                  <button onClick={() => setSortOption('price-desc')} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>Price: High to Low</button>
-                  <button onClick={() => setSortOption('yield-desc')} className='text-sm text-left px-4 py-2 hover:bg-white/5 rounded-md'>Highest Yield</button>
+              <div className='absolute right-0 top-full mt-2 w-52 bg-card border border-border rounded-xl shadow-2xl hidden group-hover:block overflow-hidden'>
+                <div className='p-1.5 flex flex-col space-y-1'>
+                  <button onClick={() => setSortOption('popularity')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Popularity</button>
+                  <button onClick={() => setSortOption('price-asc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Price: Low to High</button>
+                  <button onClick={() => setSortOption('price-desc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Price: High to Low</button>
+                  <button onClick={() => setSortOption('yield-desc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Highest Yield</button>
                 </div>
               </div>
             </div>
@@ -331,8 +330,8 @@ export default function PropertiesPage() {
         {/* Properties Grid */}
         <div
           className={`${viewMode === 'grid'
-            ? 'grid md:grid-cols-2 lg:grid-cols-4 gap-6'
-            : 'flex flex-col gap-4'
+            ? 'grid md:grid-cols-2 lg:grid-cols-4 gap-8'
+            : 'flex flex-col gap-6'
             }`}
         >
           {isLoading &&
@@ -340,34 +339,34 @@ export default function PropertiesPage() {
               ? Array.from({ length: 8 }).map((_, idx) => (
                 <div
                   key={`properties-grid-skeleton-${idx}`}
-                  className='rounded-3xl border border-white/5 bg-card overflow-hidden animate-pulse'
+                  className='rounded-3xl border border-border bg-card overflow-hidden animate-pulse shadow-sm'
                 >
-                  <div className='aspect-16/10 bg-white/5' />
+                  <div className='aspect-16/10 bg-muted/50' />
                   <div className='p-6 space-y-4'>
-                    <div className='space-y-2'>
-                      <div className='h-4 w-2/3 rounded bg-white/6' />
-                      <div className='h-3 w-1/2 rounded bg-white/5' />
+                    <div className='space-y-3'>
+                      <div className='h-4 w-3/4 rounded bg-muted' />
+                      <div className='h-3 w-1/2 rounded bg-muted/60' />
                     </div>
                     <div className='grid grid-cols-2 gap-3'>
-                      <div className='h-14 rounded-xl bg-white/5' />
-                      <div className='h-14 rounded-xl bg-white/5' />
+                      <div className='h-14 rounded-xl bg-muted/50' />
+                      <div className='h-14 rounded-xl bg-muted/50' />
                     </div>
-                    <div className='h-2 rounded bg-white/5' />
-                    <div className='h-11 rounded-xl bg-white/6' />
+                    <div className='h-2 rounded bg-muted/50' />
+                    <div className='h-12 rounded-xl bg-muted' />
                   </div>
                 </div>
               ))
               : Array.from({ length: 4 }).map((_, idx) => (
                 <div
                   key={`properties-list-skeleton-${idx}`}
-                  className='rounded-2xl border border-white/5 bg-card p-5 animate-pulse'
+                  className='rounded-3xl border border-border bg-card p-5 animate-pulse shadow-sm'
                 >
-                  <div className='flex flex-col md:flex-row gap-4'>
-                    <div className='h-40 md:h-28 md:w-72 rounded-xl bg-white/5 shrink-0' />
-                    <div className='flex-1 space-y-3'>
-                      <div className='h-4 w-2/3 rounded bg-white/6' />
-                      <div className='h-3 w-1/3 rounded bg-white/5' />
-                      <div className='h-10 w-full rounded bg-white/5' />
+                  <div className='flex flex-col md:flex-row gap-6'>
+                    <div className='h-48 md:h-32 md:w-80 rounded-2xl bg-muted/50 shrink-0' />
+                    <div className='flex-1 space-y-4 py-2'>
+                      <div className='h-5 w-3/4 rounded bg-muted' />
+                      <div className='h-4 w-1/2 rounded bg-muted/60' />
+                      <div className='h-10 w-full rounded-xl bg-muted/50' />
                     </div>
                   </div>
                 </div>
@@ -384,28 +383,30 @@ export default function PropertiesPage() {
 
         {/* Load More Pagination */}
         {!isLoading && hasMore && (
-          <div className='mt-12 flex justify-center'>
+          <div className='mt-16 flex justify-center'>
             <Button
               onClick={() => setPage((p) => p + 1)}
-              className='bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-8 py-6'
+              className='bg-muted border border-border text-foreground hover:bg-accent rounded-xl px-10 py-7 h-auto font-bold uppercase tracking-widest shadow-lg'
             >
-              Load More Properties
+              Explore More Assets
             </Button>
           </div>
         )}
 
         {/* Empty State */}
         {!isLoading && filteredProperties.length === 0 && (
-          <div className='text-center py-20 space-y-4'>
-            <div className='w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center mx-auto'>
-              <Filter className='w-8 h-8 text-white/20' />
+          <div className='text-center py-24 space-y-6'>
+            <div className='w-24 h-24 rounded-3xl bg-muted flex items-center justify-center mx-auto border-2 border-dashed border-border'>
+              <Filter className='w-10 h-10 text-muted-foreground/30' />
             </div>
-            <h3 className='text-xl font-bold text-white'>
-              No properties found
-            </h3>
-            <p className='text-white/40'>
-              Try adjusting your filters or search query.
-            </p>
+            <div className='space-y-2'>
+              <h3 className='text-2xl font-bold text-foreground'>
+                No matching opportunities found
+              </h3>
+              <p className='text-muted-foreground'>
+                Try adjusting your filters or expanding your search criteria.
+              </p>
+            </div>
             <Button
               onClick={() => {
                 setActiveFilter('All');
@@ -414,9 +415,9 @@ export default function PropertiesPage() {
                 setSortOption('popularity');
               }}
               variant='outline'
-              className='border-white/10 text-white hover:bg-white/5 rounded-xl'
+              className='border-border text-foreground hover:bg-accent rounded-xl px-8 h-12 font-bold uppercase tracking-widest'
             >
-              Clear Filters
+              Reset All Filters
             </Button>
           </div>
         )}

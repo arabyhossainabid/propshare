@@ -15,7 +15,6 @@ export default function AdminUsersPage() {
   const { data: usersData = [], isLoading } = useQuery({
     queryKey: ['admin-users', search, roleFilter],
     queryFn: async () => {
-      // ask backend to filter, but apply client-side fallback too for robustness
       const res = await api.get('/admin/users', {
         params: {
           search: search || undefined,
@@ -33,68 +32,68 @@ export default function AdminUsersPage() {
   }, [usersData, roleFilter]);
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 pb-12'>
       <div>
-        <h1 className='text-2xl font-bold font-heading'>User Management</h1>
-        <p className='text-sm text-white/40 mt-1'>
-          Manage platform users, roles, and access control.
+        <h1 className='text-3xl font-bold font-heading text-foreground'>Account Registry</h1>
+        <p className='text-sm text-muted-foreground mt-1 font-medium'>
+          Manage platform participants, permissions, and status.
         </p>
       </div>
 
       {/* Search + Filter */}
-      <div className='flex flex-col sm:flex-row gap-3'>
+      <div className='flex flex-col sm:flex-row gap-4'>
         <div className='relative flex-1'>
-          <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
+          <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60' />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder='Search users...'
-            className='bg-white/5 border-white/10 rounded-xl pl-10 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+            placeholder='Search registry by name or email...'
+            className='bg-muted/40 border-border rounded-2xl pl-12 h-12 text-foreground placeholder:text-muted-foreground/70 focus-visible:ring-blue-500/30 font-medium'
           />
         </div>
-        <div className='flex gap-2'>
+        <div className='flex gap-2 p-1 bg-muted/60 rounded-xl'>
           {['all', 'user', 'admin'].map((r) => (
             <button
               key={r}
               onClick={() => setRoleFilter(r)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium transition-all ${roleFilter === r ? 'bg-blue-600 text-white' : 'bg-white/5 text-white/40 hover:bg-white/10'}`}
+              className={`px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${roleFilter === r ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
             >
-              {r.charAt(0).toUpperCase() + r.slice(1)}
+              {r}
             </button>
           ))}
         </div>
       </div>
 
       {/* Users Table */}
-      <div className='bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden'>
+      <div className='bg-card border border-border rounded-2xl overflow-hidden shadow-sm'>
         <div className='overflow-x-auto'>
           <table className='w-full'>
             <thead>
-              <tr className='border-b border-white/5'>
-                <th className='text-left text-xs text-white/30 uppercase tracking-wider font-medium px-6 py-4'>
-                  User
+              <tr className='bg-muted/30 border-b border-border'>
+                <th className='text-left text-[10px] text-foreground/70 uppercase tracking-widest font-black px-4 py-4'>
+                  Participant
                 </th>
-                <th className='text-left text-xs text-white/30 uppercase tracking-wider font-medium px-6 py-4'>
-                  Role
+                <th className='text-left text-[10px] text-foreground/70 uppercase tracking-widest font-black px-4 py-4'>
+                  Role Class
                 </th>
-                <th className='text-left text-xs text-white/30 uppercase tracking-wider font-medium px-6 py-4'>
-                  Status
+                <th className='text-left text-[10px] text-foreground/70 uppercase tracking-widest font-black px-4 py-4'>
+                  Verification
                 </th>
-                <th className='text-left text-xs text-white/30 uppercase tracking-wider font-medium px-6 py-4'>
-                  Joined
+                <th className='text-left text-[10px] text-foreground/70 uppercase tracking-widest font-black px-4 py-4'>
+                  Registered
                 </th>
-                <th className='text-left text-xs text-white/30 uppercase tracking-wider font-medium px-6 py-4'>
-                  Investments
+                <th className='text-left text-[10px] text-foreground/70 uppercase tracking-widest font-black px-4 py-4'>
+                  Assets
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border">
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className='px-6 py-12 text-center'>
-                    <Loader2 className='w-6 h-6 animate-spin mx-auto text-blue-500' />
-                    <p className='text-xs text-white/20 mt-2'>
-                      Fetching users...
+                  <td colSpan={5} className='px-8 py-20 text-center'>
+                    <Loader2 className='w-8 h-8 animate-spin mx-auto text-blue-500 opacity-50' />
+                    <p className='text-xs text-muted-foreground mt-4 font-bold uppercase tracking-widest'>
+                      Synchronizing Registry...
                     </p>
                   </td>
                 </tr>
@@ -102,13 +101,12 @@ export default function AdminUsersPage() {
                 filteredUsers.map((u) => (
                   <tr
                     key={u.id}
-                    className='border-b border-white/[0.03] hover:bg-white/[0.02] transition-all'
+                    className='hover:bg-muted/30 transition-all'
                   >
-                    <td className='px-6 py-4'>
-                      <div className='flex items-center gap-3'>
-                        <div className='w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center text-xs font-bold text-white overflow-hidden'>
+                    <td className='px-4 py-5'>
+                      <div className='flex items-center gap-4'>
+                        <div className='w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-xs font-bold text-blue-600 overflow-hidden shadow-sm shrink-0'>
                           {u.avatar ? (
-                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={u.avatar}
                               alt={u.name}
@@ -118,37 +116,44 @@ export default function AdminUsersPage() {
                             <UserIcon className='w-4 h-4' />
                           )}
                         </div>
-                        <div className='min-w-0'>
-                          <p className='text-sm font-medium text-white truncate'>
+                        <div className='min-w-0 flex-1'>
+                          <p className='text-sm font-bold text-foreground truncate'>
                             {u.name}
                           </p>
-                          <p className='text-xs text-white/30 truncate'>
+                          <p className='text-[10px] text-muted-foreground truncate font-medium'>
                             {u.email}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className='px-6 py-4'>
+                    <td className='px-4 py-5'>
                       <Badge
-                        className={`text-[10px] ${u.role === 'ADMIN' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-white/5 text-white/40 border-white/10'}`}
+                        variant="outline"
+                        className={`text-[9px] font-bold px-2 py-0.5 ${u.role === 'ADMIN' ? 'bg-purple-500/10 text-purple-600 border-purple-500/20' : 'bg-muted text-muted-foreground border-border'}`}
                       >
                         {u.role}
                       </Badge>
                     </td>
-                    <td className='px-6 py-4'>
+                    <td className='px-4 py-5'>
                       <Badge
-                        className={`text-[10px] ${u.isActive !== false ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}
+                        variant="outline"
+                        className={`text-[9px] font-bold px-2 py-0.5 border ${u.isActive !== false ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-red-500/10 text-red-600 border-red-500/20'}`}
                       >
-                        {u.isActive !== false ? 'Active' : 'Suspended'}
+                        {u.isActive !== false ? 'VERIFIED' : 'SUSPENDED'}
                       </Badge>
                     </td>
-                    <td className='px-6 py-4 text-xs text-white/40'>
+                    <td className='px-4 py-5 text-[10px] text-muted-foreground font-bold uppercase tracking-tight'>
                       {u.createdAt
-                        ? new Date(u.createdAt).toLocaleDateString()
+                        ? new Date(u.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
                         : '-'}
                     </td>
-                    <td className='px-6 py-4 text-sm text-white font-medium'>
-                      {u._count?.investments ?? 0}
+                    <td className='px-4 py-5'>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-bold text-foreground">
+                          {u._count?.investments ?? 0}
+                        </span>
+                        <span className="text-[9px] text-muted-foreground font-black tracking-tighter">ASSETS</span>
+                      </div>
                     </td>
                   </tr>
                 ))

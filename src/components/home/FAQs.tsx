@@ -58,7 +58,7 @@ export default function FAQs() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="section-padding bg-surface/30 border-y border-white/5">
+    <section ref={sectionRef} className="section-padding bg-muted/30 border-y border-border">
       <div className="container-custom faqs-section">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div className="space-y-6">
@@ -67,10 +67,10 @@ export default function FAQs() {
                 Support & Info
               </span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold font-heading">
+            <h2 className="text-4xl md:text-5xl font-bold font-heading text-foreground">
               Frequently Asked <span className="gradient-text">Questions</span>
             </h2>
-            <p className="text-white/40 text-lg">
+            <p className="text-muted-foreground text-lg">
               Find quick answers to common questions about investing with PropShare. Can't find what you're looking for? Reach out to our support team.
             </p>
           </div>
@@ -79,21 +79,21 @@ export default function FAQs() {
             {faqs.map((faq, index) => (
               <div 
                 key={index} 
-                className="border border-white/10 rounded-2xl bg-card overflow-hidden transition-all duration-300 hover:border-white/20"
+                className="border border-border rounded-2xl bg-card overflow-hidden transition-all duration-300 hover:border-border/60"
               >
                 <button
                   className="w-full flex items-center justify-between p-6 text-left"
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 >
-                  <span className="font-bold">{faq.q}</span>
+                  <span className="font-bold text-foreground">{faq.q}</span>
                   <ChevronDown 
-                    className={`w-5 h-5 text-white/50 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 text-muted-foreground transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}
                   />
                 </button>
                 <div 
                   className={`overflow-hidden transition-all duration-500 ${openIndex === index ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
                 >
-                  <div className="p-6 pt-0 text-white/50 text-sm leading-relaxed">
+                  <div className="p-6 pt-0 text-muted-foreground text-sm leading-relaxed">
                     {faq.a}
                   </div>
                 </div>

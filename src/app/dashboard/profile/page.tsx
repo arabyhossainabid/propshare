@@ -79,14 +79,14 @@ export default function ProfilePage() {
   return (
     <div className='space-y-8'>
       <div>
-        <h1 className='text-2xl font-bold font-heading'>Profile Settings</h1>
-        <p className='text-sm text-white/40 mt-1'>
+        <h1 className='text-2xl font-bold font-heading text-foreground'>Profile Settings</h1>
+        <p className='text-sm text-muted-foreground mt-1'>
           Manage your personal information and preferences.
         </p>
       </div>
 
       {/* Avatar Section */}
-      <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6'>
+      <div className='bg-card border border-border rounded-2xl p-6 shadow-sm'>
         <div className='flex items-center gap-6'>
           <div className='relative'>
             {profile.avatar ? (
@@ -94,26 +94,26 @@ export default function ProfilePage() {
               <img
                 src={profile.avatar}
                 alt='Avatar'
-                className='w-20 h-20 rounded-2xl object-cover'
+                className='w-20 h-20 rounded-2xl object-cover ring-2 ring-blue-500/20 shadow-lg'
               />
             ) : (
-              <div className='w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-2xl font-bold text-white'>
+              <div className='w-20 h-20 rounded-2xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center text-2xl font-bold text-white shadow-lg'>
                 {profile.name.slice(0, 1).toUpperCase() || 'U'}
               </div>
             )}
             <button
               onClick={() => setShowAvatarUpload(true)}
-              className='absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center border-2 border-[#0a0f1d] hover:bg-white/15'
+              className='absolute -bottom-2 -right-2 w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center border-4 border-card hover:scale-110 transition-transform shadow-lg'
             >
-              <Camera className='w-3 h-3 text-white' />
+              <Camera className='w-4 h-4' />
             </button>
           </div>
           <div>
-            <h3 className='text-lg font-bold'>{profile.name || 'User'}</h3>
-            <p className='text-sm text-white/40'>Verified Member</p>
-            <div className='flex items-center gap-1 mt-1'>
-              <Shield className='w-3 h-3 text-emerald-400' />
-              <span className='text-xs text-emerald-400'>
+            <h3 className='text-lg font-bold text-foreground'>{profile.name || 'User'}</h3>
+            <p className='text-sm text-muted-foreground font-medium'>Verified Member</p>
+            <div className='flex items-center gap-1.5 mt-1.5'>
+              <Shield className='w-3.5 h-3.5 text-emerald-500' />
+              <span className='text-[10px] text-emerald-600 font-bold uppercase tracking-widest'>
                 Verified Investor
               </span>
             </div>
@@ -123,14 +123,14 @@ export default function ProfilePage() {
 
       {/* Avatar Upload Modal */}
       {showAvatarUpload && (
-        <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-4'>
+        <div className='bg-card border border-border rounded-2xl p-6 space-y-4 shadow-2xl relative z-20'>
           <div className='flex items-center justify-between'>
-            <h3 className='text-base font-bold'>Upload New Avatar</h3>
+            <h3 className='text-base font-bold text-foreground'>Upload New Avatar</h3>
             <button
               onClick={() => setShowAvatarUpload(false)}
-              className='text-white/40 hover:text-white'
+              className='text-muted-foreground hover:text-foreground transition-colors'
             >
-              <X className='w-4 h-4' />
+              <X className='w-5 h-5' />
             </button>
           </div>
           <ImageUploader
@@ -148,22 +148,24 @@ export default function ProfilePage() {
       )}
 
       {/* Personal Info */}
-      <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-5'>
-        <h3 className='text-base font-bold'>Personal Information</h3>
-        <div className='grid md:grid-cols-2 gap-4'>
+      <div className='bg-card border border-border rounded-2xl p-6 space-y-6 shadow-sm'>
+        <h3 className='text-base font-bold text-foreground'>Personal Information</h3>
+        <div className='grid md:grid-cols-2 gap-6'>
           {[
             { label: 'Full Name', key: 'name', icon: User },
             { label: 'Email', key: 'email', icon: Mail, type: 'email' },
-            { label: 'Phone', key: 'phone', icon: Phone }, // Added Phone input field
+            { label: 'Phone', key: 'phone', icon: Phone },
           ].map((f) => {
             const Icon = f.icon;
             return (
               <div key={f.key} className='space-y-2'>
-                <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+                <label className='text-[10px] text-muted-foreground uppercase tracking-widest font-bold'>
                   {f.label}
                 </label>
                 <div className='relative'>
-                  <Icon className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
+                   <div className='absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-muted flex items-center justify-center overflow-hidden'>
+                    <Icon className='w-4 h-4 text-blue-500/60' />
+                   </div>
                   <Input
                     value={
                       (profile[f.key as keyof typeof profile] as string) || ''
@@ -172,18 +174,17 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setProfile({ ...profile, [f.key]: e.target.value })
                     }
-                    className='bg-white/5 border-white/10 rounded-xl pl-10 py-5 text-white focus-visible:ring-blue-500/30'
+                    className='bg-muted/30 border-border rounded-xl pl-12 h-12 text-foreground focus-visible:ring-blue-500/30'
                   />
                 </div>
               </div>
             );
           })}
         </div>
-        {/* Removed Bio textarea */}
         <Button
           onClick={handleSave}
           disabled={updateMutation.isPending}
-          className='bg-white/10 hover:bg-white/15 text-white rounded-xl px-8 text-sm'
+          className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-10 h-12 text-sm font-bold shadow-lg shadow-primary/20 transition-all'
         >
           {updateMutation.isPending && (
             <Loader2 className='w-4 h-4 mr-2 animate-spin' />
@@ -193,14 +194,15 @@ export default function ProfilePage() {
       </div>
 
       {/* Danger Zone */}
-      <div className='bg-red-500/5 border border-red-500/10 rounded-2xl p-6 space-y-4'>
-        <h3 className='text-base font-bold text-red-500'>Danger Zone</h3>
-        <p className='text-xs text-white/40'>
-          Once you delete your account, there is no going back. Please be
-          certain.
-        </p>
+      <div className='bg-red-500/5 border border-red-500/10 rounded-2xl p-8 space-y-6 shadow-sm'>
+        <div className="space-y-1">
+          <h3 className='text-base font-bold text-red-500 uppercase tracking-widest'>Danger Zone</h3>
+          <p className='text-xs text-muted-foreground font-medium'>
+            Once you delete your account, there is no going back. All your investment history será permanently erased.
+          </p>
+        </div>
         <Button
-          variant='destructive'
+          variant='outline'
           onClick={async () => {
             if (
               window.confirm(
@@ -216,9 +218,9 @@ export default function ProfilePage() {
               }
             }
           }}
-          className='bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border-red-500/20 rounded-xl px-8 text-sm transition-all duration-300'
+          className='border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white rounded-xl px-8 h-12 text-xs font-bold uppercase tracking-widest transition-all'
         >
-          Delete Account
+          Permanently Delete Account
         </Button>
       </div>
     </div>

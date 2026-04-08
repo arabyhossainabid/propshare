@@ -97,7 +97,7 @@ export default function FeaturedPreview() {
             <h2 className='text-4xl md:text-5xl font-bold font-heading'>
               Explore <span className='gradient-text'>Properties</span>
             </h2>
-            <p className='text-white/40 text-lg max-w-xl'>
+            <p className='text-muted-foreground text-lg max-w-xl'>
               Browse top approved opportunities and start investing in premium
               real estate shares.
             </p>
@@ -105,7 +105,7 @@ export default function FeaturedPreview() {
           <Link href='/properties'>
             <Button
               variant='outline'
-              className='border-white/10 text-white hover:bg-white/5 rounded-2xl px-6 py-5 self-start md:self-auto group'
+              className='border-border text-foreground hover:bg-accent rounded-2xl px-6 py-5 self-start md:self-auto group'
             >
               View All Properties
               <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
@@ -119,23 +119,25 @@ export default function FeaturedPreview() {
             Array.from({ length: 4 }).map((_, idx) => (
               <div
                 key={`home-prop-skeleton-${idx}`}
-                className='rounded-3xl border border-white/5 bg-[#151c2e] overflow-hidden animate-pulse'
+                className='rounded-3xl border border-border bg-card overflow-hidden animate-pulse'
               >
-                <div className='aspect-[16/10] bg-white/[0.05]' />
+                <div className='relative aspect-16/10 rounded-2xl overflow-hidden'>
+                  <div className='w-full h-full bg-muted' />
+                </div>
                 <div className='p-6 space-y-4'>
                   <div className='space-y-2'>
-                    <div className='h-4 w-3/4 rounded bg-white/[0.06]' />
-                    <div className='h-3 w-1/2 rounded bg-white/[0.05]' />
+                    <div className='h-4 w-3/4 rounded bg-muted' />
+                    <div className='h-3 w-1/2 rounded bg-muted' />
                   </div>
                   <div className='grid grid-cols-2 gap-3'>
-                    <div className='h-14 rounded-xl bg-white/[0.05]' />
-                    <div className='h-14 rounded-xl bg-white/[0.05]' />
+                    <div className='h-14 rounded-xl bg-muted' />
+                    <div className='h-14 rounded-xl bg-muted' />
                   </div>
                   <div className='space-y-2'>
-                    <div className='h-2 rounded bg-white/[0.05]' />
-                    <div className='h-2 rounded bg-white/[0.05]' />
+                    <div className='h-2 rounded bg-muted' />
+                    <div className='h-2 rounded bg-muted' />
                   </div>
-                  <div className='h-11 rounded-xl bg-white/[0.06]' />
+                  <div className='h-11 rounded-xl bg-muted' />
                 </div>
               </div>
             ))}
@@ -145,13 +147,13 @@ export default function FeaturedPreview() {
           ))}
 
           {!isLoading && isError && (
-            <div className='md:col-span-2 lg:col-span-4 text-center py-16 text-sm text-white/40'>
+            <div className='md:col-span-2 lg:col-span-4 text-center py-16 text-sm text-muted-foreground'>
               Failed to load properties.
             </div>
           )}
 
           {!isLoading && !isError && properties.length === 0 && (
-            <div className='md:col-span-2 lg:col-span-4 text-center py-16 text-sm text-white/40'>
+            <div className='md:col-span-2 lg:col-span-4 text-center py-16 text-sm text-muted-foreground'>
               No properties found.
             </div>
           )}
