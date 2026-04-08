@@ -1,40 +1,69 @@
-## Live Links
+<div align="center">
+  <img src="assets/hero-banner.png" alt="PropShare Header" width="840">
 
-- **Frontend:** [https://propsphere.vercel.app](https://propsphere.vercel.app)
-- **Backend API:** [https://prop-share.onrender.com](https://prop-share.onrender.com)
+  <br />
 
-## Features
+  # PropShare
+  **Institutional-Grade Fractional Real Estate Platform**
 
-- Secure Authentication & User Dashboard
-- Interactive Property Listings
-- Smooth UI Animations (GSAP, Framer Motion)
-- Fully Responsive Design
+  <br />
 
-## Technologies
+  **[Live Demo](https://propsphere.vercel.app)** &nbsp; • &nbsp; **[API Reference](https://prop-share.onrender.com)**
 
-- **Frontend:** Next.js, React, Tailwind CSS, Radix UI
-- **Data & State:** TanStack React-Query, Axios
-- **Form Validation:** React Hook Form, Zod
+  <br />
+</div>
 
-## Setup Instructions
+---
 
-1. **Clone & Install:**
+### Description
 
-   ```bash
-   git clone https://github.com/arabyhossainabid/propshare.git
-   cd propshare
-   pnpm install
-   ```
+PropShare is a high-performance investment ecosystem built to democratize access to premium real estate. By leveraging fractional ownership models, it allows users to invest in high-value commercial and residential assets with minimal capital, providing a transparent, liquid, and secure digital investment experience.
 
-2. **Environment Settings (`.env`):**
+### Technologies
 
-   ```env
-   NEXT_PUBLIC_API_BASE_URL=https://prop-share.onrender.com/api/v1
-   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=dswiaaos6
-   NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=propshare_unsigned
-   ```
+Developed with a modern, industry-standard stack for scalability and performance:
 
-3. **Run Application:**
-   ```bash
-   pnpm run dev
-   ```
+- **Frontend** — Next.js 15, React 19, TypeScript
+- **Styling** — Tailwind CSS, CSS Variables
+- **Animations** — GSAP, Framer Motion
+- **Backend Infrastructure** — Node.js, Express, Prisma ORM
+- **Database** — PostgreSQL
+- **Media Management** — Cloudinary
+
+### Project Architecture
+
+The codebase follows a modular, scalable structure optimized for Next.js 15:
+
+```text
+src/
+├── app/             # Application routes and server components
+├── components/      # Reusable UI modules & layouts
+├── contexts/        # Global state and authentication logic
+├── hooks/           # Custom React hooks for business logic
+├── lib/             # API clients and utility functions
+├── types/           # Global TypeScript definitions
+└── assets/          # Static media and graphic resources
+```
+
+### Installation
+
+```bash
+# Clone & Setup
+git clone https://github.com/arabyhossainabid/propshare.git
+cd propshare
+pnpm install
+
+# Environment Configuration
+# Edit .env.local with your service keys
+
+# Development Mode
+pnpm run dev
+```
+
+---
+
+<div align="center">
+  <img src="assets/dashboard-preview.png" alt="Portfolio Dashboard" width="840">
+  <br />
+  <sub>Designed and Developed by <b>Araby Hossain Abid</b></sub>
+</div>
