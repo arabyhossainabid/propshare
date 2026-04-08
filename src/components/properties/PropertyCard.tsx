@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { api, normalizeList, renderText } from '@/lib/api';
 import { Property } from '@/lib/api-types';
 import {
   ArrowUpRight,
@@ -33,8 +34,8 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
         href={`/properties/${property.id}`}
         className='prop-card group cursor-pointer'
       >
-        <div className='bg-[#151c2e] rounded-2xl border border-white/5 overflow-hidden hover:border-white/10 transition-all duration-500 flex flex-col md:flex-row'>
-          <div className='relative w-full md:w-72 aspect-[16/10] md:aspect-auto overflow-hidden shrink-0'>
+        <div className='bg-card rounded-2xl border border-white/5 overflow-hidden hover:border-white/10 transition-all duration-500 flex flex-col md:flex-row'>
+          <div className='relative w-full md:w-72 aspect-16/10 md:aspect-auto overflow-hidden shrink-0'>
             <Image
               src={property.images?.[0] || fallbackImage}
               alt={property.title}
@@ -43,18 +44,18 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
             />
             <div className='absolute top-3 left-3'>
               <Badge className='bg-black/50 backdrop-blur-xl text-white border-white/10 text-xs'>
-                {property.category?.name || 'Property'}
+                {renderText(property.category?.name) || 'Property'}
               </Badge>
             </div>
           </div>
           <div className='flex-1 p-6 flex flex-col justify-between gap-4'>
             <div>
               <h3 className='text-lg font-bold text-white group-hover:text-blue-400 transition-colors'>
-                {property.title}
+                {renderText(property.title)}
               </h3>
               <p className='text-sm text-white/40 flex items-center gap-1.5 mt-1'>
                 <MapPin className='w-3.5 h-3.5' />
-                {property.location}
+                {renderText(property.location)}
               </p>
             </div>
             <div className='flex flex-wrap items-center gap-6'>
@@ -105,20 +106,20 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
       href={`/properties/${property.id}`}
       className='prop-card property-card group cursor-pointer'
     >
-      <div className='bg-[#151c2e] rounded-3xl border border-white/5 overflow-hidden hover:border-white/10 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-700 h-full'>
-        <div className='relative aspect-[16/10] overflow-hidden'>
+      <div className='bg-card rounded-3xl border border-white/5 overflow-hidden hover:border-white/10 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-700 h-full'>
+        <div className='relative aspect-16/10 overflow-hidden'>
           <Image
             src={property.images?.[0] || fallbackImage}
             alt={property.title}
             fill
             className='object-cover group-hover:scale-105 transition-transform duration-700'
           />
-          <div className='absolute inset-0 bg-gradient-to-t from-[#151c2e] via-transparent to-transparent' />
+          <div className='absolute inset-0 bg-linear-to-t from-card via-transparent to-transparent' />
           
           <div className='absolute top-4 left-4 right-4 flex items-center justify-between'>
             <div className='flex gap-2'>
               <Badge className='bg-black/50 backdrop-blur-xl text-white border-white/10 text-xs'>
-                {property.category?.name || 'Property'}
+                {renderText(property.category?.name) || 'Property'}
               </Badge>
               {property.isFeatured && (
                 <Badge className='bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs'>
@@ -143,15 +144,15 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
         <div className='p-6 space-y-4'>
           <div>
             <h3 className='text-lg font-bold text-white group-hover:text-blue-400 transition-colors duration-300'>
-              {property.title}
+              {renderText(property.title)}
             </h3>
             <p className='text-sm text-white/40 flex items-center gap-1.5 mt-1.5'>
               <MapPin className='w-3.5 h-3.5' />
-              {property.location}
+              {renderText(property.location)}
             </p>
           </div>
           <div className='grid grid-cols-2 gap-3'>
-            <div className='bg-white/[0.03] rounded-xl p-3'>
+            <div className='bg-white/3 rounded-xl p-3'>
               <p className='text-[10px] text-white/30 uppercase tracking-wider'>
                 Property Value
               </p>
@@ -164,7 +165,7 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
                 L
               </p>
             </div>
-            <div className='bg-white/[0.03] rounded-xl p-3'>
+            <div className='bg-white/3 rounded-xl p-3'>
               <p className='text-[10px] text-white/30 uppercase tracking-wider'>
                 Min. Investment
               </p>
@@ -182,7 +183,7 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
             </div>
             <div className='w-full bg-white/5 rounded-full h-1.5'>
               <div
-                className='bg-gradient-to-r from-blue-500 to-emerald-400 h-1.5 rounded-full transition-all duration-1000'
+                className='bg-linear-to-r from-blue-500 to-emerald-400 h-1.5 rounded-full transition-all duration-1000'
                 style={{ width: `${fundedPercentage(property)}%` }}
               />
             </div>

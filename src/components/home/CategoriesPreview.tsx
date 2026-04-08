@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { api, normalizeList } from '@/lib/api';
+import { api, normalizeList, renderText } from '@/lib/api';
 import { Category } from '@/lib/api-types';
 import { useQuery } from '@tanstack/react-query';
 import gsap from 'gsap';
@@ -143,11 +143,11 @@ export default function CategoriesPreview() {
                 key={category.id}
                 className='cat-card group cursor-pointer'
               >
-                <div className='relative bg-white/[0.02] backdrop-blur-sm border border-white/5 rounded-2xl p-6 text-center space-y-4 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-500 h-full'>
+                <div className='relative bg-white/2 backdrop-blur-sm border border-white/5 rounded-2xl p-6 text-center space-y-4 hover:bg-white/5 hover:border-white/10 transition-all duration-500 h-full'>
                   <div
-                    className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradients[index % gradients.length]} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+                    className={`absolute inset-0 rounded-2xl bg-linear-to-br ${gradients[index % gradients.length]} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
                   />
-                  <div className='relative mx-auto w-14 h-14 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:border-white/20 transition-all duration-300'>
+                  <div className='relative mx-auto w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:border-white/20 transition-all duration-300'>
                     <Icon className='w-6 h-6 text-blue-400 group-hover:text-blue-300 transition-colors' />
                   </div>
                   <div className='relative'>

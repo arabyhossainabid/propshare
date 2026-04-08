@@ -95,3 +95,13 @@ export const getApiErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message;
   return 'Something went wrong. Please try again.';
 };
+
+export const renderText = (text: any): string => {
+  if (typeof text === 'string') return text;
+  if (typeof text === 'number') return String(text);
+  if (text && typeof text === 'object') {
+    if (text.text) return String(text.text);
+    return JSON.stringify(text);
+  }
+  return '';
+};

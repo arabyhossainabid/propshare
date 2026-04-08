@@ -2,9 +2,14 @@
 
 import CategoriesPreview from '@/components/home/CategoriesPreview';
 import CTA from '@/components/home/CTA';
+import FAQs from '@/components/home/FAQs';
 import FeaturedPreview from '@/components/home/FeaturedPreview';
+import Features from '@/components/home/Features';
 import Hero from '@/components/home/Hero';
+import HowItWorks from '@/components/home/HowItWorks';
+import Newsletter from '@/components/home/Newsletter';
 import StatsBar from '@/components/home/StatsBar';
+import Testimonials from '@/components/home/Testimonials';
 import { api } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
@@ -50,11 +55,16 @@ export default function HomePage() {
   ];
 
   return (
-    <div className='flex flex-col gap-0 overflow-x-hidden bg-[#0a0f1d]'>
+    <div className='flex flex-col gap-0 overflow-x-hidden bg-background'>
       <Hero heroStats={isLoading ? [] : heroStats} />
       <StatsBar />
+      <Features />
+      <HowItWorks />
       <FeaturedPreview />
       <CategoriesPreview />
+      <Testimonials />
+      <FAQs />
+      <Newsletter />
       <CTA />
     </div>
   );

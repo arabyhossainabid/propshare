@@ -8,6 +8,7 @@ import {
   getApiErrorMessage,
   normalizeItem,
   normalizeList,
+  renderText,
 } from '@/lib/api';
 import { Comment, Property, VoteSummary } from '@/lib/api-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -30,8 +31,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { PropertyGallery } from '@/components/properties/PropertyGallery';
 import { PropertySidebar } from '@/components/properties/PropertySidebar';
+import { PropertyCard } from '@/components/properties/PropertyCard';
+import { PropertyGallery } from '@/components/properties/PropertyGallery';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -158,6 +160,21 @@ export default function PropertyDetailPage() {
       }>(`/votes/${propertyId}`);
       return normalizeItem<VoteSummary>(res.data.data);
     },
+  });
+
+  const { data: relatedProperties = [] } = useQuery({
+    queryKey: ['related-properties', propertyData?.categoryId],
+    queryFn: async () => {
+      const res = await api.get<{
+        success: true;
+        message: string;
+        data: Property[] | { data?: Property[] };
+      }>('/properties?limit=3', {
+        params: { categoryId: propertyData?.categoryId }
+      });
+      return normalizeList<Property>(res.data.data).filter(p => String(p.id) !== propertyId).slice(0, 3);
+    },
+    enabled: Boolean(propertyData?.categoryId),
   });
 
   const { data: myVote } = useQuery({
@@ -310,9 +327,9 @@ export default function PropertyDetailPage() {
 
   if (isLegacyNumericPropertyId) {
     return (
-      <div className='min-h-screen bg-[#0a0f1d] pt-24 pb-20'>
+      <div className='min-h-screen bg-background pt-24 pb-20'>
         <div className='container-custom'>
-          <div className='max-w-xl mx-auto bg-white/[0.02] border border-white/10 rounded-2xl p-6 text-center space-y-4'>
+          <div className='max-w-xl mx-auto bg-white/2 border border-white/10 rounded-2xl p-6 text-center space-y-4'>
             <h1 className='text-2xl font-bold font-heading'>
               Invalid Property Link
             </h1>
@@ -333,13 +350,13 @@ export default function PropertyDetailPage() {
 
   if (isLoadingProperty) {
     return (
-      <div className='min-h-screen bg-[#0a0f1d] pt-24 pb-20'>
+      <div className='min-h-screen bg-background pt-24 pb-20'>
         <div className='container-custom'>
           <div className='space-y-4 animate-pulse'>
             <div className='h-8 w-1/3 rounded bg-white/[0.07]' />
-            <div className='h-64 w-full rounded-2xl bg-white/[0.05]' />
-            <div className='h-6 w-2/3 rounded bg-white/[0.06]' />
-            <div className='h-24 w-full rounded-xl bg-white/[0.05]' />
+            <div className='h-64 w-full rounded-2xl bg-white/5' />
+            <div className='h-6 w-2/3 rounded bg-white/6' />
+            <div className='h-24 w-full rounded-xl bg-white/5' />
           </div>
         </div>
       </div>
@@ -348,9 +365,9 @@ export default function PropertyDetailPage() {
 
   if (isErrorProperty && !propertyData) {
     return (
-      <div className='min-h-screen bg-[#0a0f1d] pt-24 pb-20'>
+      <div className='min-h-screen bg-background pt-24 pb-20'>
         <div className='container-custom'>
-          <div className='max-w-xl mx-auto bg-white/[0.02] border border-white/10 rounded-2xl p-6 text-center space-y-4'>
+          <div className='max-w-xl mx-auto bg-white/2 border border-white/10 rounded-2xl p-6 text-center space-y-4'>
             <h1 className='text-2xl font-bold font-heading'>
               Property Unavailable
             </h1>
@@ -370,7 +387,7 @@ export default function PropertyDetailPage() {
   }
 
   return (
-    <div ref={pageRef} className='min-h-screen bg-[#0a0f1d] pt-24 pb-20'>
+    <div ref={pageRef} className='min-h-screen bg-background pt-24 pb-20'>
       <div className='container-custom'>
         {/* Back + Breadcrumb */}
         <div className='detail-header flex items-center gap-2 text-sm text-white/40 mb-8'>
@@ -381,7 +398,7 @@ export default function PropertyDetailPage() {
             <ArrowLeft className='w-4 h-4' /> Properties
           </Link>
           <ChevronRight className='w-3 h-3' />
-          <span className='text-white/60'>{property.title}</span>
+          <span className='text-white/60'>{renderText(property.title)}</span>
         </div>
 
         <div className='grid lg:grid-cols-3 gap-8'>
@@ -401,12 +418,12 @@ export default function PropertyDetailPage() {
               {/* Title + Meta */}
               <div className='detail-section space-y-4'>
                 <h1 className='text-3xl md:text-4xl font-bold font-heading'>
-                  {property.title}
+                  {renderText(property.title)}
                 </h1>
                 <div className='flex flex-wrap items-center gap-4 text-sm text-white/40'>
                   <span className='flex items-center gap-1'>
                     <MapPin className='w-4 h-4' />
-                    {property.location}
+                    {renderText(property.location)}
                   </span>
                   <span className='flex items-center gap-1'>
                     <Calendar className='w-4 h-4' />
@@ -418,7 +435,7 @@ export default function PropertyDetailPage() {
                   </span>
                 </div>
                 <p className='text-white/50 leading-relaxed'>
-                  {property.description}
+                  {renderText(property.description)}
                 </p>
               </div>
 
@@ -461,7 +478,7 @@ export default function PropertyDetailPage() {
                   return (
                     <div
                       key={m.label}
-                      className='bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-2'
+                      className='bg-white/2 border border-white/5 rounded-2xl p-4 space-y-2'
                     >
                       <div className='flex items-center gap-2'>
                         <div
@@ -482,7 +499,7 @@ export default function PropertyDetailPage() {
               </div>
 
               {/* Vote + Comments */}
-              <div className='detail-section bg-white/[0.02] border border-white/5 rounded-3xl p-8'>
+              <div className='detail-section bg-white/2 border border-white/5 rounded-3xl p-8'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-lg font-bold'>
                     Community ({property.comments.length})
@@ -540,13 +557,15 @@ export default function PropertyDetailPage() {
                       <div className='flex-1 space-y-1'>
                         <div className='flex items-center gap-2'>
                           <span className='text-sm font-semibold text-white'>
-                            {c.user}
+                            {renderText(c.user)}
                           </span>
                           <span className='text-xs text-white/30'>
                             {c.date}
                           </span>
                         </div>
-                        <p className='text-sm text-white/50'>{c.text}</p>
+                        <p className='text-sm text-white/50'>
+                         {renderText(c.text)}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -568,6 +587,30 @@ export default function PropertyDetailPage() {
             )}
           />
         </div>
+
+        {/* Related Properties */}
+        {relatedProperties.length > 0 && (
+          <div className='detail-section mt-24 border-t border-white/5 pt-16'>
+            <div className='flex items-center justify-between mb-8'>
+              <div>
+                <h2 className='text-3xl font-bold font-heading'>
+                  Similar <span className='gradient-text'>Opportunities</span>
+                </h2>
+                <p className='text-white/40 mt-2'>Explore other investments in the {renderText(property.category)} category.</p>
+              </div>
+              <Link href={`/properties?categoryId=${propertyData?.categoryId || ''}`}>
+                <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 rounded-xl">
+                  View All
+                </Button>
+              </Link>
+            </div>
+            <div className='grid md:grid-cols-3 gap-6'>
+              {relatedProperties.map(p => (
+                <PropertyCard key={p.id} property={p} viewMode="grid" />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

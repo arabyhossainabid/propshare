@@ -1,10 +1,10 @@
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
 import QueryProvider from '@/components/QueryProvider';
 import { AuthProvider } from '@/contexts/AuthContext';
 import type { Metadata, Viewport } from 'next';
 import { Inter, Outfit } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
+import AIChatbot from '@/components/AIChatbot';
+import { LayoutContent } from '@/components/LayoutContent';
 import './globals.css';
 
 const inter = Inter({
@@ -50,13 +50,11 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${inter.className} font-sans bg-[#0a0f1d] text-white selection:bg-white/5 selection:text-white antialiased`}
+        className={`${inter.className} font-sans bg-background text-white selection:bg-white/5 selection:text-white antialiased`}
       >
         <QueryProvider>
           <AuthProvider>
-            <Navbar />
-            <main className='min-h-screen'>{children}</main>
-            <Footer />
+            <LayoutContent>{children}</LayoutContent>
             <Toaster
               position='bottom-right'
               toastOptions={{
@@ -81,6 +79,7 @@ export default function RootLayout({
                 },
               }}
             />
+            <AIChatbot />
           </AuthProvider>
         </QueryProvider>
       </body>

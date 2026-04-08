@@ -2,7 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { api, normalizeList } from '@/lib/api';
+import { api, normalizeList, renderText } from '@/lib/api';
 import { Property } from '@/lib/api-types';
 import { useQuery } from '@tanstack/react-query';
 import gsap from 'gsap';
@@ -144,7 +144,7 @@ export default function Hero({ heroStats }: HeroProps) {
         <div className='orb-3 absolute top-[50%] left-[50%] w-[300px] h-[300px] rounded-full bg-purple-600/5 blur-[80px]' />
 
         {/* Gradient overlay */}
-        <div className='absolute inset-0 bg-gradient-to-b from-[#0a0f1d] via-transparent to-[#0a0f1d]' />
+        <div className='absolute inset-0 bg-linear-to-b from-background via-transparent to-background' />
       </div>
 
       <div className='container-custom relative z-10 py-12 lg:py-20'>
@@ -169,6 +169,9 @@ export default function Hero({ heroStats }: HeroProps) {
                 <span className='hero-title-line block'>
                   Estate <span className='text-white/20'>Shares</span>
                 </span>
+                {featuredProperty && (
+                   <p className="text-sm text-blue-400 mt-4 opacity-50">Featuring: {renderText(featuredProperty.title)}</p>
+                )}
               </h1>
             </div>
 
@@ -194,9 +197,9 @@ export default function Hero({ heroStats }: HeroProps) {
               <div ref={statsRef} className='flex flex-wrap gap-8 pt-4'>
                 {displayStats.map((stat) => (
                   <div key={stat.label} className='hero-stat'>
-                    <div className='text-2xl font-bold font-heading text-white'>
-                      {stat.value}
-                    </div>
+                    <h3 className='text-sm font-semibold text-white'>
+                      {renderText(stat.value)}
+                    </h3>
                     <div className='text-xs text-white/40 uppercase tracking-wider mt-1'>
                       {stat.label}
                     </div>
@@ -210,20 +213,20 @@ export default function Hero({ heroStats }: HeroProps) {
           <div ref={imageRef} className='relative hidden lg:block'>
             {/* Main Image */}
             <div className='relative rounded-3xl overflow-hidden shadow-3xl gradient-border'>
-              <div className='aspect-[4/5] relative'>
+              <div className='aspect-4/5 relative'>
                 <Image
                   src={featuredImage}
-                  alt={featuredProperty?.title || 'Premium Property'}
+                  alt={renderText(featuredProperty?.title) || 'Premium Property'}
                   fill
                   className='object-cover'
                   priority
                 />
-                <div className='absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-transparent to-transparent' />
+                <div className='absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent' />
               </div>
 
               <div className='absolute bottom-6 left-6'>
                 <Badge className='bg-blue-600/30 text-blue-200 border-blue-500/30'>
-                  {featuredProperty?.title || 'Verified Opportunity'}
+                  {renderText(featuredProperty?.title) || 'Verified Opportunity'}
                 </Badge>
               </div>
             </div>
