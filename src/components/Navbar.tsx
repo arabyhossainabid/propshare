@@ -192,7 +192,7 @@ export default function Navbar() {
                         onClick={() => setIsOpen(false)}
                       >
                         <Button className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl h-12 shadow-lg shadow-black/20'>
-                          <Sparkles className='w-4 h-4 mr-2' />
+                          <Sparkles className='w-4 h-4 mr-4' />
                           Get Started
                         </Button>
                       </Link>

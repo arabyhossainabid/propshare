@@ -191,7 +191,7 @@ export default function RegisterPage() {
   return (
     <div
       ref={pageRef}
-      className='min-h-screen bg-[#0a0f1d] flex items-center justify-center p-6 relative overflow-hidden'
+      className='min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden'
     >
       {/* Background */}
       <div className='absolute top-[15%] right-[5%] w-[600px] h-[600px] rounded-full bg-purple-600/5 blur-[150px]' />
@@ -212,10 +212,10 @@ export default function RegisterPage() {
 
         {/* Right Side - Register Card */}
         <div className='auth-card'>
-          <div className='bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-3xl p-8 md:p-10 shadow-3xl'>
+          <div className='bg-white/2 backdrop-blur-xl border border-white/5 rounded-3xl p-8 md:p-10 shadow-3xl'>
             {/* Mobile Logo */}
             <div className='flex lg:hidden items-center gap-3 mb-6'>
-              <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center'>
+              <div className='w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center'>
                 <Building2 className='w-5 h-5 text-white' />
               </div>
               <span className='text-lg font-bold font-heading'>

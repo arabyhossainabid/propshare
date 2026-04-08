@@ -49,11 +49,12 @@ export default function AIChatbot() {
     try {
       const res = await api.post<any>('/ai/chat', { message: userMsg });
       // Safely extract reply from either { reply: "..." } or direct string response
-      const aiReply = res.data?.reply || res.data || 'I am sorry, I received an empty response.';
+      const aiReply = res.data?.reply || res.data?.message || res.data || 'I am sorry, I received an empty response.';
       setChats((prev) => [...prev, { role: 'ai', text: aiReply }]);
-    } catch (err) {
-      const errorMsg = getApiErrorMessage(err);
-      setChats((prev) => [...prev, { role: 'ai', text: `Error: ${errorMsg}` }]);
+    } catch (err: any) {
+      // Check for rate limit (429) or other errors
+      const errorMsg = err.response?.data?.message || getApiErrorMessage(err);
+      setChats((prev) => [...prev, { role: 'ai', text: `${errorMsg}` }]);
     } finally {
       setIsLoading(false);
     }
