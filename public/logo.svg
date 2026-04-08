@@ -1,0 +1,34 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cubeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Zoomed in 'P' shape to make it look larger as a favicon -->
+  <!-- Cube 1 (Top Left) -->
+  <path d="M80 120 L160 70 L240 120 L160 170 Z" fill="#60A5FA" /> 
+  <path d="M80 120 L160 170 L160 270 L80 220 Z" fill="#2563EB" /> 
+  <path d="M160 170 L240 120 L240 220 L160 270 Z" fill="#1D4ED8" /> 
+
+  <!-- Cube 2 (Middle Left) -->
+  <path d="M80 240 L160 190 L240 240 L160 290 Z" fill="#60A5FA" />
+  <path d="M80 240 L160 290 L160 390 L80 340 Z" fill="#2563EB" />
+  <path d="M160 290 L240 240 L240 340 L160 390 Z" fill="#1D4ED8" />
+
+  <!-- Cube 3 (Bottom Left) -->
+  <path d="M80 360 L160 310 L240 360 L160 410 Z" fill="#60A5FA" />
+  <path d="M80 360 L160 410 L160 510 L80 460 Z" fill="#2563EB" />
+  <path d="M160 410 L240 360 L240 460 L160 510 Z" fill="#1D4ED8" />
+
+  <!-- Cube 4 (Top Right) -->
+  <path d="M250 120 L330 70 L410 120 L330 170 Z" fill="#93C5FD" />
+  <path d="M250 120 L330 170 L330 270 L250 220 Z" fill="#3B82F6" />
+  <path d="M330 170 L410 120 L410 220 L330 270 Z" fill="#2563EB" />
+
+  <!-- Cube 5 (Middle Right) -->
+  <path d="M250 240 L330 190 L410 240 L330 290 Z" fill="#93C5FD" />
+  <path d="M250 240 L330 290 L330 390 L250 340 Z" fill="#3B82F6" />
+  <path d="M330 290 L410 240 L410 340 L330 390 Z" fill="#2563EB" />
+</svg>

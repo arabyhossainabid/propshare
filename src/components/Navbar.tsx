@@ -1,15 +1,16 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowRight, Building2, Menu, Sparkles, User } from 'lucide-react';
+import { ArrowRight, Menu, Sparkles, User } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { UserNav } from '@/components/UserNav';
 
 const publicLinks = [
+  { name: 'Home', href: '/' },
   { name: 'Properties', href: '/properties' },
   { name: 'Categories', href: '/categories' },
   { name: 'Blog', href: '/blog' },
@@ -18,6 +19,7 @@ const publicLinks = [
 ];
 
 const authLinks = [
+  { name: 'Home', href: '/' },
   { name: 'Properties', href: '/properties' },
   { name: 'Categories', href: '/categories' },
   { name: 'About', href: '/about' },
@@ -51,21 +53,14 @@ export default function Navbar() {
       <div className='max-w-7xl mx-auto px-6 md:px-8 lg:px-12'>
         <div className='flex items-center justify-between h-20'>
           {/* Logo */}
-          <Link href='/' className='flex items-center gap-3 group'>
+          <Link href='/' className='flex items-center gap-4 group'>
             <div className='relative'>
-              <div className='w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-all duration-300'>
-                <Building2 className='w-5 h-5 text-white' />
-              </div>
-              <div className='absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-background animate-pulse' />
+              <div className='absolute inset-0 bg-blue-500/20 blur-2xl rounded-full group-hover:bg-blue-500/30 transition-all duration-500' />
+              <img src='/logo.svg' alt='PropShare' className='w-8 h-8 relative z-10 transition-transform duration-500 group-hover:scale-110' />
             </div>
-            <div className='flex flex-col'>
-              <span className='text-lg font-bold tracking-tight font-heading'>
-                Prop<span className='text-blue-500'>Share</span>
-              </span>
-              <span className='text-[9px] uppercase tracking-[0.3em] text-muted -mt-1'>
-                Protocol
-              </span>
-            </div>
+            <span className='text-2xl font-bold tracking-tight font-heading leading-none'>
+              Prop<span className='text-blue-500'>Share</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -125,14 +120,13 @@ export default function Navbar() {
               side='right'
               className='bg-background border-l border-white/5 w-80 p-0'
             >
+              <SheetTitle className="sr-only">Main Menu</SheetTitle>
               <div className='flex flex-col h-full'>
                 {/* Mobile Header */}
                 <div className='flex items-center justify-between p-6 border-b border-white/5'>
-                  <Link href='/' className='flex items-center gap-3'>
-                    <div className='w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-all duration-300'>
-                      <Building2 className='w-5 h-5 text-white' />
-                    </div>
-                    <span className='text-lg font-bold font-heading text-white'>
+                  <Link href='/' className='flex items-center gap-3' onClick={() => setIsOpen(false)}>
+                    <img src='/logo.svg' alt='PropShare' className='w-11 h-11 transition-transform' />
+                    <span className='text-xl font-bold font-heading text-white'>
                       Prop<span className='text-blue-500'>Share</span>
                     </span>
                   </Link>

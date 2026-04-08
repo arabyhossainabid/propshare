@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { User, LayoutDashboard, LogOut, Shield, Building2, Wallet, MessageSquare, PlusCircle } from 'lucide-react';
+import { User, LayoutDashboard, LogOut, Shield, Building2, Wallet, MessageSquare, PlusCircle, FolderTree, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -49,49 +49,90 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-white/5" />
         <DropdownMenuGroup className="p-1">
-          <Link href="/dashboard">
-            <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
-              <LayoutDashboard className="w-4 h-4 text-blue-400" />
-              <span>Dashboard</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="/dashboard/properties">
-            <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
-              <Building2 className="w-4 h-4 text-emerald-400" />
-              <span>My Properties</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="/dashboard/properties/create">
-            <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
-              <PlusCircle className="w-4 h-4 text-blue-400" />
-              <span>Create Property</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="/dashboard/investments">
-            <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
-              <Wallet className="w-4 h-4 text-purple-400" />
-              <span>My Investments</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="/dashboard/messages">
-            <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
-              <MessageSquare className="w-4 h-4 text-amber-400" />
-              <span>Messages</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="/dashboard/profile">
-            <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
-              <User className="w-4 h-4 text-blue-400" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-          </Link>
-          {user.role === 'ADMIN' && (
-            <Link href="/admin">
-              <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3 text-red-400">
-                <Shield className="w-4 h-4" />
-                <span>Admin Panel</span>
-              </DropdownMenuItem>
-            </Link>
+          {user.role === 'ADMIN' ? (
+            <>
+              <Link href="/admin">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <LayoutDashboard className="w-4 h-4 text-blue-400" />
+                  <span>Admin Dashboard</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/admin/users">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <User className="w-4 h-4 text-amber-400" />
+                  <span>All Users</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/admin/properties">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <Building2 className="w-4 h-4 text-emerald-400" />
+                  <span>Properties</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/admin/categories">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <FolderTree className="w-4 h-4 text-orange-400" />
+                  <span>Categories</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/admin/investments">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <Wallet className="w-4 h-4 text-purple-400" />
+                  <span>Investments</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/admin/messages">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <MessageSquare className="w-4 h-4 text-indigo-400" />
+                  <span>Messages</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/admin/featured">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <Star className="w-4 h-4 text-yellow-400" />
+                  <span>Featured</span>
+                </DropdownMenuItem>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/dashboard">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <LayoutDashboard className="w-4 h-4 text-blue-400" />
+                  <span>Dashboard</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/dashboard/properties">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <Building2 className="w-4 h-4 text-emerald-400" />
+                  <span>My Properties</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/dashboard/properties/create">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <PlusCircle className="w-4 h-4 text-blue-400" />
+                  <span>Create Property</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/dashboard/investments">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <Wallet className="w-4 h-4 text-purple-400" />
+                  <span>My Investments</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/dashboard/messages">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <MessageSquare className="w-4 h-4 text-amber-400" />
+                  <span>Messages</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/dashboard/profile">
+                <DropdownMenuItem className="rounded-xl px-3 py-2.5 focus:bg-white/5 cursor-pointer gap-3">
+                  <User className="w-4 h-4 text-blue-400" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+              </Link>
+            </>
           )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-white/5" />

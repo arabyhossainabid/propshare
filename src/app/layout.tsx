@@ -46,7 +46,7 @@ export default function RootLayout({
       data-scroll-behavior='smooth'
     >
       <head>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='/logo.svg' />
       </head>
       <body
         suppressHydrationWarning

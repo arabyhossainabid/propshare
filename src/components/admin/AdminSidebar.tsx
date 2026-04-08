@@ -28,7 +28,12 @@ const adminLinks = [
   { name: 'Featured', href: '/admin/featured', icon: Star },
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  className?: string;
+  onLinkClick?: () => void;
+}
+
+export default function AdminSidebar({ className = 'w-64 shrink-0 hidden lg:block', onLinkClick }: AdminSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { logout } = useAuth();
@@ -37,19 +42,24 @@ export default function AdminSidebar() {
     try {
       await logout();
       toast.success('Signed out successfully');
+      if (onLinkClick) onLinkClick();
       router.push('/');
     } catch (error) {
       toast.error(getApiErrorMessage(error));
     }
   };
 
+  const handleLinkClick = () => {
+    if (onLinkClick) onLinkClick();
+  };
+
   return (
-    <aside className='w-64 shrink-0 hidden lg:block'>
+    <aside className={className}>
       <div className='sticky top-28 space-y-2'>
         {/* Admin Badge */}
-        <div className='bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-4 mb-4'>
+        <div className='bg-linear-to-br from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-4 mb-4'>
           <div className='flex items-center gap-3'>
-            <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-500 flex items-center justify-center'>
+            <div className='w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-purple-500 flex items-center justify-center'>
               <ShieldCheck className='w-5 h-5 text-white' />
             </div>
             <div>
@@ -69,6 +79,7 @@ export default function AdminSidebar() {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={handleLinkClick}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive ? 'bg-white/5 text-white border border-white/10' : 'text-white/50 hover:text-white hover:bg-white/5'}`}
               >
                 <Icon

@@ -23,7 +23,7 @@ const blogPosts = [
     date: 'March 28, 2026',
     readTime: '8 min read',
     category: 'Market Trends',
-    image: 'https://images.unsplash.com/photo-1542362567-b05e50029d2f?q=80&w=800',
+    image: '/images/blog/dhaka_real_estate_trends_1775656000469.png',
   },
   {
     id: 3,

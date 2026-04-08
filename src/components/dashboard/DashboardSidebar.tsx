@@ -37,7 +37,13 @@ const adminLinks = [
   { name: 'Platform Settings', href: '/admin/settings', icon: PlusCircle },
 ];
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({ 
+  className = 'w-64 shrink-0 hidden lg:block',
+  onLinkClick
+}: {
+  className?: string;
+  onLinkClick?: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuth();
@@ -48,6 +54,7 @@ export default function DashboardSidebar() {
     try {
       await logout();
       toast.success('Signed out successfully');
+      if (onLinkClick) onLinkClick();
       router.push('/');
     } catch (error) {
       toast.error(getApiErrorMessage(error));
@@ -55,12 +62,11 @@ export default function DashboardSidebar() {
   };
 
   const isLinkActive = (href: string) => {
-    if (href === '/dashboard') {
+    if (href === '/dashboard' || href === '/admin') {
       return pathname === href;
     }
 
     if (href === '/dashboard/properties') {
-      // Keep list route active for properties pages, but not for create flow.
       return (
         pathname === href ||
         (pathname.startsWith('/dashboard/properties/') &&
@@ -76,8 +82,8 @@ export default function DashboardSidebar() {
   };
 
   return (
-    <aside className='w-64 shrink-0 hidden lg:block'>
-      <div className='sticky top-8 space-y-2 h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar'>
+    <aside className={className}>
+      <div className='sticky top-8 space-y-2 lg:h-[calc(100vh-7rem)] lg:overflow-y-auto no-scrollbar pb-6'>
         {/* User Card */}
         <div className='bg-white/2 border border-white/5 rounded-2xl p-4 mb-4'>
           <div className='flex items-center gap-3'>
@@ -104,9 +110,10 @@ export default function DashboardSidebar() {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={onLinkClick}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
-                    ? 'bg-white/5 text-white border border-white/10'
-                    : 'text-white/50 hover:text-white hover:bg-white/5 shadow-none'
+                  ? 'bg-white/5 text-white border border-white/10'
+                  : 'text-white/50 hover:text-white hover:bg-white/5 shadow-none'
                   }`}
               >
                 <Icon
