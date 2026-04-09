@@ -304,26 +304,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const socialLogin = async (socialPayload: { email: string; name: string; avatar: string; provider: string }): Promise<User> => {
-    const response = await api.post('/auth/social-login', socialPayload);
+    try {
+      const response = await api.post('/auth/social-login', socialPayload);
+      const token = extractAccessToken(response.data);
+      const nextUser = extractUser(response.data);
 
-    const token = extractAccessToken(response.data);
-    const nextUser = extractUser(response.data);
+      if (!token || !nextUser) {
+        throw new Error('Social login response missing token or user data');
+      }
 
-    if (!token || !nextUser) {
-      throw new Error('Social login response missing token or user data');
+      setSessionAccessToken(token);
+      setAccessToken(token);
+      setUser(nextUser);
+      setIsLoading(false);
+
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('accessToken', token);
+      }
+
+      void fetchCurrentUser();
+      return nextUser;
+    } catch (error: any) {
+      console.error('API Error in socialLogin:', {
+        url: api.defaults.baseURL + '/auth/social-login',
+        message: error.message,
+        isAxiosError: error.isAxiosError
+      });
+      throw error;
     }
-
-    setSessionAccessToken(token);
-    setAccessToken(token);
-    setUser(nextUser);
-    setIsLoading(false);
-
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('accessToken', token);
-    }
-
-    void fetchCurrentUser();
-    return nextUser;
   };
 
   const register = async (payload: {
