@@ -255,10 +255,10 @@ export default function PropertiesPage() {
                 Investment Opportunities
               </span>
             </div>
-            <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold font-heading mt-4'>
+            <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading mt-3 md:mt-4'>
               All <span className='gradient-text'>Properties</span>
             </h1>
-            <p className='text-muted-foreground text-lg max-w-2xl mt-4'>
+            <p className='text-sm md:text-base text-muted-foreground max-w-2xl mt-3 md:mt-4'>
               Browse our complete collection of verified, high-yield investment
               properties. Filter by category, search by name or location.
             </p>
@@ -368,17 +368,17 @@ export default function PropertiesPage() {
               </span>
             </p>
             <div className='relative group z-10'>
-              <button className='flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-2'>
+              <button className='flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-2 bg-muted/50 border border-border rounded-xl px-4 h-9'>
                 <SlidersHorizontal className='w-3.5 h-3.5' />
                 Sort by: {sortOption.replace('-', ' ')}
                 <ChevronDown className='w-3 h-3' />
               </button>
-              <div className='absolute right-0 top-full mt-2 w-52 bg-card border border-border rounded-xl shadow-2xl hidden group-hover:block overflow-hidden'>
+              <div className='absolute right-0 top-full mt-2 w-52 bg-card border border-border rounded-xl shadow-2xl hidden group-hover:block overflow-hidden z-50'>
                 <div className='p-1.5 flex flex-col space-y-1'>
-                  <button onClick={() => setSortOption('popularity')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Popularity</button>
-                  <button onClick={() => setSortOption('price-asc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Price: Low to High</button>
-                  <button onClick={() => setSortOption('price-desc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Price: High to Low</button>
-                  <button onClick={() => setSortOption('yield-desc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent rounded-lg transition-colors'>Highest Yield</button>
+                  <button onClick={() => setSortOption('popularity')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent text-foreground rounded-lg transition-colors'>Popularity</button>
+                  <button onClick={() => setSortOption('price-asc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent text-foreground rounded-lg transition-colors'>Price: Low to High</button>
+                  <button onClick={() => setSortOption('price-desc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent text-foreground rounded-lg transition-colors'>Price: High to Low</button>
+                  <button onClick={() => setSortOption('yield-desc')} className='text-xs font-bold uppercase tracking-widest text-left px-4 py-3 hover:bg-accent text-foreground rounded-lg transition-colors'>Highest Yield</button>
                 </div>
               </div>
             </div>
@@ -453,15 +453,15 @@ export default function PropertiesPage() {
 
         {/* Empty State */}
         {!isLoading && filteredProperties.length === 0 && (
-          <div className='text-center py-24 space-y-6'>
-            <div className='w-24 h-24 rounded-3xl bg-muted flex items-center justify-center mx-auto border-2 border-dashed border-border'>
-              <Filter className='w-10 h-10 text-muted-foreground/30' />
+          <div className='text-center py-24 space-y-6 col-span-full'>
+            <div className='w-24 h-24 rounded-3xl bg-muted border-2 border-dashed border-border flex items-center justify-center mx-auto'>
+              <Filter className='w-10 h-10 text-muted-foreground/50' />
             </div>
-            <div className='space-y-2'>
+            <div className='space-y-3'>
               <h3 className='text-2xl font-bold text-foreground'>
                 No matching opportunities found
               </h3>
-              <p className='text-muted-foreground'>
+              <p className='text-muted-foreground max-w-sm mx-auto'>
                 Try adjusting your filters or expanding your search criteria.
               </p>
             </div>
@@ -472,8 +472,7 @@ export default function PropertiesPage() {
                 setPriceFilter(null);
                 setSortOption('popularity');
               }}
-              variant='outline'
-              className='border-border text-foreground hover:bg-accent rounded-xl px-8 h-12 font-bold uppercase tracking-widest'
+              className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-8 h-12 font-bold uppercase tracking-widest shadow-lg shadow-primary/20'
             >
               Reset All Filters
             </Button>

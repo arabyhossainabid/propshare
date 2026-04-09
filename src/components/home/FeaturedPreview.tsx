@@ -106,7 +106,7 @@ export default function FeaturedPreview() {
 
       <div className='container-custom relative z-10'>
         {/* Header */}
-        <div className='fp-header flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16'>
+        <div className='fp-header flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-6 mb-10 md:mb-16'>
           <div className='space-y-4'>
             <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20'>
               <Sparkles className='w-3 h-3 text-emerald-400' />
@@ -114,10 +114,10 @@ export default function FeaturedPreview() {
                 Properties
               </span>
             </div>
-            <h2 className='text-4xl md:text-5xl font-bold font-heading'>
+            <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading'>
               Explore <span className='gradient-text'>Properties</span>
             </h2>
-            <p className='text-muted-foreground text-lg max-w-xl'>
+            <p className='text-sm md:text-base text-muted-foreground max-w-xl'>
               Browse top approved opportunities and start investing in premium
               real estate shares.
             </p>
@@ -150,7 +150,7 @@ export default function FeaturedPreview() {
         </div>
 
         {/* Properties Grid */}
-        <div className='properties-grid grid md:grid-cols-2 lg:grid-cols-4 gap-6'>
+        <div className='properties-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6'>
           {isLoading &&
             Array.from({ length: 4 }).map((_, idx) => (
               <div

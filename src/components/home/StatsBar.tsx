@@ -147,7 +147,7 @@ export default function StatsBar() {
       <div className='container-custom'>
         <div
           ref={containerRef}
-          className='glass rounded-3xl p-8 md:p-10 gradient-border'
+          className='glass rounded-2xl lg:rounded-3xl p-5 md:p-8 lg:p-10 gradient-border'
         >
           <div className='grid grid-cols-2 md:grid-cols-4 gap-8'>
             {displayStats.map((stat) => {
@@ -156,18 +156,18 @@ export default function StatsBar() {
               return (
                 <div
                   key={stat.label}
-                  className='stat-item flex flex-col items-center text-center space-y-3 group cursor-default'
+                  className='stat-item flex flex-col items-center text-center space-y-2 lg:space-y-3 group cursor-default'
                 >
                   <div
-                    className={`w-14 h-14 rounded-2xl ${colors.bg} flex items-center justify-center ring-1 ${colors.ring} group-hover:scale-110 transition-transform duration-300`}
+                    className={`w-10 h-10 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl ${colors.bg} flex items-center justify-center ring-1 ${colors.ring} group-hover:scale-110 transition-transform duration-300`}
                   >
-                    <Icon className={`w-6 h-6 ${colors.text}`} />
+                    <Icon className={`w-5 h-5 lg:w-6 lg:h-6 ${colors.text}`} />
                   </div>
                   <div>
-                    <p className='stat-value text-3xl md:text-4xl font-bold font-heading text-foreground'>
+                    <p className='stat-value text-xl sm:text-2xl md:text-3xl font-bold font-heading text-foreground'>
                       0
                     </p>
-                    <p className='text-xs text-muted-foreground uppercase tracking-wider mt-1'>
+                    <p className='text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider mt-1'>
                       {stat.label}
                     </p>
                   </div>

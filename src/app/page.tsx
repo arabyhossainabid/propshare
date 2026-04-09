@@ -1,12 +1,15 @@
 'use client';
 
+// Force refresh for LogoCloud module resolution
+
 import CategoriesPreview from '@/components/home/CategoriesPreview';
 import CTA from '@/components/home/CTA';
-import FAQs from '@/components/home/FAQs';
+import FAQSection from '@/components/home/FAQSection';
 import FeaturedPreview from '@/components/home/FeaturedPreview';
 import Features from '@/components/home/Features';
 import Hero from '@/components/home/Hero';
 import HowItWorks from '@/components/home/HowItWorks';
+import LogoCloud from '@/components/home/LogoCloud';
 import Newsletter from '@/components/home/Newsletter';
 import StatsBar from '@/components/home/StatsBar';
 import Testimonials from '@/components/home/Testimonials';
@@ -58,14 +61,27 @@ export default function HomePage() {
     <div className='flex flex-col gap-0 overflow-x-hidden bg-background'>
       <Hero heroStats={isLoading ? [] : heroStats} />
       <StatsBar />
+      <LogoCloud />
       <Features />
       <HowItWorks />
       <FeaturedPreview />
       <CategoriesPreview />
+      <WhyInvestSection />
       <Testimonials />
-      <FAQs />
+      <FAQSection />
       <Newsletter />
       <CTA />
     </div>
+  );
+}
+
+function WhyInvestSection() {
+  return (
+    <section className="py-12 md:py-24 bg-muted/30">
+      <div className="container-custom text-center">
+        <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Why PropShare?</h2>
+        <p className="text-sm md:text-base text-muted-foreground">Institutional-grade real estate for everyone.</p>
+      </div>
+    </section>
   );
 }

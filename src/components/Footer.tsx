@@ -43,10 +43,10 @@ const footerLinks = {
   support: {
     title: 'Support',
     links: [
-      { name: 'Help Center', href: '/contact' },
+      { name: 'Help Center', href: '/help' },
       { name: 'Contact Us', href: '/contact' },
-      { name: 'FAQs', href: '/about' },
-      { name: 'Community', href: '/contact' },
+      { name: 'FAQs', href: '/' },
+      { name: 'Community', href: '/' },
     ],
   },
 };
@@ -65,20 +65,21 @@ export default function Footer() {
 
       <div className='container-custom relative z-10'>
         {/* Main Footer */}
-        <div className='py-16 md:py-20'>
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12'>
+        <div className='py-10 md:py-16 lg:py-20'>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 lg:gap-12'>
             {/* Brand Column */}
-            <div className='col-span-2'>
-              <Link href='/' className='flex items-center gap-3 mb-6'>
-                <div className='w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/20'>
-                  <Building2 className='w-5 h-5 text-white' />
+            <div className='col-span-2 lg:col-span-2'>
+              <Link href='/' className='flex items-center gap-4 mb-8 group'>
+                <div className='relative'>
+                  <div className='absolute inset-0 bg-blue-500/20 blur-2xl rounded-full group-hover:bg-blue-500/30 transition-all duration-500' />
+                  <img src='/logo.svg' alt='PropShare' className='w-8 h-8 relative z-10 transition-transform duration-500 group-hover:scale-110' />
                 </div>
                 <div className='flex flex-col'>
-                  <span className='text-lg font-bold tracking-tight font-heading text-foreground'>
-                    Prop<span className='text-blue-500'>Share</span>
+                  <span className='text-lg font-bold tracking-tight font-heading text-foreground group-hover:text-blue-500 transition-colors'>
+                    Prop<span className='text-blue-500 group-hover:text-foreground transition-colors delay-75'>Share</span>
                   </span>
-                  <span className='text-[9px] uppercase tracking-[0.3em] text-muted-foreground -mt-1'>
-                    Protocol
+                  <span className='text-[8px] uppercase tracking-[0.4em] text-muted-foreground/60 -mt-1 font-black group-hover:text-blue-500/60 transition-colors duration-500'>
+                    PROTOCOL
                   </span>
                 </div>
               </Link>

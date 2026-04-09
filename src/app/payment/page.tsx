@@ -186,39 +186,39 @@ function PaymentPageContent() {
     return (
       <div
         ref={pageRef}
-        className='min-h-screen bg-[#0a0f1d] flex items-center justify-center p-6 relative overflow-hidden'
+        className='min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden'
       >
-        <div className='absolute inset-0 grid-pattern opacity-20' />
+        <div className='absolute inset-0 grid-pattern opacity-10' />
         <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-emerald-600/10 blur-[200px]' />
 
         <div className='success-content relative z-10 text-center max-w-lg space-y-8'>
-          <div className='w-24 h-24 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto'>
-            <CheckCircle className='w-12 h-12 text-emerald-400' />
+          <div className='w-24 h-24 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto shadow-xl shadow-emerald-500/10'>
+            <CheckCircle className='w-12 h-12 text-emerald-500' />
           </div>
 
           <div className='space-y-3'>
-            <h1 className='text-3xl md:text-4xl font-bold font-heading'>
-              Investment <span className='text-emerald-400'>Successful!</span>
+            <h1 className='text-3xl md:text-4xl font-bold font-heading text-foreground'>
+              Investment <span className='text-emerald-500'>Successful!</span>
             </h1>
-            <p className='text-white/40 leading-relaxed'>
+            <p className='text-muted-foreground leading-relaxed'>
               Congratulations! You have successfully invested in{' '}
-              <span className='text-white font-medium'>{property.title}</span>.
+              <span className='text-foreground font-medium'>{property.title}</span>.
               Your {shares} shares have been credited to your portfolio.
             </p>
           </div>
 
-          <div className='bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-4 text-left'>
+          <div className='bg-card border border-border rounded-2xl p-6 space-y-4 text-left shadow-sm'>
             <div className='flex justify-between text-sm'>
-              <span className='text-white/40'>Transaction ID</span>
-              <span className='text-white font-mono'>{transactionId}</span>
+              <span className='text-muted-foreground'>Transaction ID</span>
+              <span className='text-foreground font-mono'>{transactionId}</span>
             </div>
             <div className='flex justify-between text-sm'>
-              <span className='text-white/40'>Shares Purchased</span>
-              <span className='text-white font-medium'>{shares} Shares</span>
+              <span className='text-muted-foreground'>Shares Purchased</span>
+              <span className='text-foreground font-medium'>{shares} Shares</span>
             </div>
             <div className='flex justify-between text-sm'>
-              <span className='text-white/40'>Total Amount</span>
-              <span className='text-emerald-400 font-bold'>
+              <span className='text-muted-foreground'>Total Amount</span>
+              <span className='text-emerald-500 font-bold'>
                 ৳{grandTotal.toLocaleString()}
               </span>
             </div>
@@ -228,13 +228,13 @@ function PaymentPageContent() {
             <Link href='/properties' className='flex-1'>
               <Button
                 variant='outline'
-                className='w-full border-white/10 text-white hover:bg-white/5 rounded-xl py-5'
+                className='w-full border-border text-foreground hover:bg-accent rounded-xl py-5 h-auto'
               >
                 Browse More
               </Button>
             </Link>
-            <Link href='/' className='flex-1'>
-              <Button className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-5 group'>
+            <Link href='/dashboard' className='flex-1'>
+              <Button className='w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-5 h-auto group'>
                 Go to Dashboard
                 <ArrowRight className='w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform' />
               </Button>
@@ -246,8 +246,8 @@ function PaymentPageContent() {
   }
 
   return (
-    <div ref={pageRef} className='min-h-screen bg-[#0a0f1d] pt-28 pb-20'>
-      <div className='absolute inset-0 grid-pattern opacity-20' />
+    <div ref={pageRef} className='min-h-screen bg-background pt-28 pb-20'>
+      <div className='absolute inset-0 grid-pattern opacity-10' />
       <div className='absolute top-[20%] right-[10%] w-[500px] h-[500px] rounded-full bg-blue-600/5 blur-[150px]' />
 
       <div className='container-custom relative z-10'>
@@ -255,19 +255,19 @@ function PaymentPageContent() {
         <div className='payment-header mb-12'>
           <Link
             href='/properties'
-            className='inline-flex items-center gap-2 text-sm text-white/40 hover:text-white/60 transition-colors mb-6'
+            className='inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6'
           >
             <ArrowLeft className='w-4 h-4' />
             Back to Properties
           </Link>
-          <h1 className='text-3xl md:text-4xl font-bold font-heading'>
+          <h1 className='text-3xl md:text-4xl font-bold font-heading text-foreground'>
             Complete Your <span className='gradient-text'>Investment</span>
           </h1>
-          <p className='text-white/40 mt-2'>
+          <p className='text-muted-foreground mt-2'>
             Review your investment details and choose a payment method.
           </p>
           {isLoadingProperty && (
-            <p className='text-xs text-blue-300/80 mt-2'>
+            <p className='text-xs text-blue-500/80 mt-2'>
               Loading property details...
             </p>
           )}
@@ -277,22 +277,22 @@ function PaymentPageContent() {
           {/* Left - Payment Form */}
           <div className='payment-left lg:col-span-3 space-y-6'>
             {/* Share Selection */}
-            <div className='bg-white/[0.02] border border-white/5 rounded-3xl p-8'>
-              <h3 className='text-lg font-bold mb-6 flex items-center gap-2'>
+            <div className='bg-card border border-border rounded-3xl p-8 shadow-sm'>
+              <h3 className='text-lg font-bold mb-6 flex items-center gap-2 text-foreground'>
                 <div className='w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center'>
-                  <span className='text-sm font-bold text-blue-400'>1</span>
+                  <span className='text-sm font-bold text-blue-500'>1</span>
                 </div>
                 Select Shares
               </h3>
 
               <div className='space-y-4'>
                 <div className='flex items-center justify-between'>
-                  <span className='text-sm text-white/40'>
+                  <span className='text-sm text-muted-foreground'>
                     Number of Shares
                   </span>
-                  <span className='text-sm text-white/40'>
+                  <span className='text-sm text-muted-foreground'>
                     Available:{' '}
-                    <span className='text-white font-medium'>
+                    <span className='text-foreground font-medium'>
                       {property.availableShares}
                     </span>
                   </span>
@@ -301,7 +301,7 @@ function PaymentPageContent() {
                 <div className='flex items-center gap-4'>
                   <button
                     onClick={() => setShares(Math.max(1, shares - 1))}
-                    className='w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors text-xl font-bold'
+                    className='w-12 h-12 rounded-xl bg-muted border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors text-xl font-bold'
                   >
                     -
                   </button>
@@ -319,14 +319,14 @@ function PaymentPageContent() {
                           )
                         )
                       }
-                      className='bg-white/5 border-white/10 rounded-xl py-5 text-center text-2xl font-bold text-white focus-visible:ring-blue-500/30'
+                      className='bg-muted border-border rounded-xl py-5 text-center text-2xl font-bold text-foreground focus-visible:ring-blue-500/30'
                     />
                   </div>
                   <button
                     onClick={() =>
                       setShares(Math.min(property.availableShares, shares + 1))
                     }
-                    className='w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors text-xl font-bold'
+                    className='w-12 h-12 rounded-xl bg-muted border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors text-xl font-bold'
                   >
                     +
                   </button>
@@ -340,10 +340,10 @@ function PaymentPageContent() {
                       onClick={() =>
                         setShares(Math.min(property.availableShares, amount))
                       }
-                      className={`flex-1 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                      className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 border ${
                         shares === amount
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                          : 'bg-white/5 text-white/40 hover:bg-white/10 border border-white/5'
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20'
+                          : 'bg-muted text-muted-foreground hover:bg-accent hover:text-foreground border-border'
                       }`}
                     >
                       {amount}
@@ -354,10 +354,10 @@ function PaymentPageContent() {
             </div>
 
             {/* Payment Method */}
-            <div className='bg-white/[0.02] border border-white/5 rounded-3xl p-8'>
-              <h3 className='text-lg font-bold mb-6 flex items-center gap-2'>
+            <div className='bg-card border border-border rounded-3xl p-8 shadow-sm'>
+              <h3 className='text-lg font-bold mb-6 flex items-center gap-2 text-foreground'>
                 <div className='w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center'>
-                  <span className='text-sm font-bold text-white'>2</span>
+                  <span className='text-sm font-bold text-blue-500'>2</span>
                 </div>
                 Payment Method
               </h3>
@@ -383,22 +383,22 @@ function PaymentPageContent() {
                       onClick={() => setPaymentMethod(method.id)}
                       className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all duration-300 ${
                         paymentMethod === method.id
-                          ? 'bg-white/5 border-white/10 shadow-lg shadow-black/20'
-                          : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.04] hover:border-white/10'
+                          ? 'bg-blue-500/10 border-blue-500/30 shadow-lg shadow-blue-500/10'
+                          : 'bg-muted border-border hover:bg-accent hover:border-border/80'
                       }`}
                     >
                       <Icon
                         className={`w-6 h-6 ${
                           paymentMethod === method.id
-                            ? 'text-white'
-                            : 'text-white/40'
+                            ? 'text-blue-500'
+                            : 'text-muted-foreground'
                         }`}
                       />
                       <span
-                        className={`text-xs font-medium ${
+                        className={`text-xs font-bold uppercase tracking-widest ${
                           paymentMethod === method.id
-                            ? 'text-white'
-                            : 'text-white/40'
+                            ? 'text-blue-500'
+                            : 'text-muted-foreground'
                         }`}
                       >
                         {method.label}
@@ -413,11 +413,11 @@ function PaymentPageContent() {
                 {paymentMethod === 'card' && (
                   <>
                     <div className='space-y-2'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+                      <label className='text-xs text-muted-foreground uppercase tracking-wider font-bold'>
                         Card Number
                       </label>
                       <div className='relative'>
-                        <CreditCard className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
+                        <CreditCard className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50' />
                         <Input
                           required
                           placeholder='4242 4242 4242 4242'
@@ -429,12 +429,12 @@ function PaymentPageContent() {
                             })
                           }
                           maxLength={19}
-                          className='bg-white/5 border-white/10 rounded-xl pl-11 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 font-mono tracking-wider'
+                          className='bg-muted border-border rounded-xl pl-11 py-5 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30 font-mono tracking-wider'
                         />
                       </div>
                     </div>
                     <div className='space-y-2'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+                      <label className='text-xs text-muted-foreground uppercase tracking-wider font-bold'>
                         Cardholder Name
                       </label>
                       <Input
@@ -444,12 +444,12 @@ function PaymentPageContent() {
                         onChange={(e) =>
                           setCardData({ ...cardData, name: e.target.value })
                         }
-                        className='bg-white/5 border-white/10 rounded-xl py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+                        className='bg-muted border-border rounded-xl py-5 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30'
                       />
                     </div>
                     <div className='grid grid-cols-2 gap-3'>
                       <div className='space-y-2'>
-                        <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+                        <label className='text-xs text-muted-foreground uppercase tracking-wider font-bold'>
                           Expiry Date
                         </label>
                         <Input
@@ -463,11 +463,11 @@ function PaymentPageContent() {
                             })
                           }
                           maxLength={5}
-                          className='bg-white/5 border-white/10 rounded-xl py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 font-mono'
+                          className='bg-muted border-border rounded-xl py-5 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30 font-mono'
                         />
                       </div>
                       <div className='space-y-2'>
-                        <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+                        <label className='text-xs text-muted-foreground uppercase tracking-wider font-bold'>
                           CVV
                         </label>
                         <Input
@@ -482,7 +482,7 @@ function PaymentPageContent() {
                             })
                           }
                           maxLength={4}
-                          className='bg-white/5 border-white/10 rounded-xl py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30 font-mono'
+                          className='bg-muted border-border rounded-xl py-5 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30 font-mono'
                         />
                       </div>
                     </div>
@@ -491,27 +491,27 @@ function PaymentPageContent() {
 
                 {paymentMethod === 'bkash' && (
                   <div className='space-y-4'>
-                    <div className='bg-rose-500/5 border border-rose-500/10 rounded-2xl p-5 text-center space-y-3'>
+                    <div className='bg-rose-500/5 border border-rose-500/20 rounded-2xl p-5 text-center space-y-3'>
                       <div className='w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center mx-auto'>
-                        <Smartphone className='w-8 h-8 text-rose-400' />
+                        <Smartphone className='w-8 h-8 text-rose-500' />
                       </div>
-                      <h4 className='text-base font-bold text-white'>
+                      <h4 className='text-base font-bold text-foreground'>
                         Pay with bKash
                       </h4>
-                      <p className='text-xs text-white/40'>
+                      <p className='text-xs text-muted-foreground'>
                         Enter your bKash number to receive a payment prompt
                       </p>
                     </div>
                     <div className='space-y-2'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+                      <label className='text-xs text-muted-foreground uppercase tracking-wider font-bold'>
                         bKash Number
                       </label>
                       <div className='relative'>
-                        <Smartphone className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
+                        <Smartphone className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50' />
                         <Input
                           required
                           placeholder='01XXXXXXXXX'
-                          className='bg-white/5 border-white/10 rounded-xl pl-11 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+                          className='bg-muted border-border rounded-xl pl-11 py-5 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30'
                         />
                       </div>
                     </div>
@@ -520,27 +520,27 @@ function PaymentPageContent() {
 
                 {paymentMethod === 'nagad' && (
                   <div className='space-y-4'>
-                    <div className='bg-amber-500/5 border border-amber-500/10 rounded-2xl p-5 text-center space-y-3'>
+                    <div className='bg-amber-500/5 border border-amber-500/20 rounded-2xl p-5 text-center space-y-3'>
                       <div className='w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto'>
-                        <Wallet className='w-8 h-8 text-amber-400' />
+                        <Wallet className='w-8 h-8 text-amber-500' />
                       </div>
-                      <h4 className='text-base font-bold text-white'>
+                      <h4 className='text-base font-bold text-foreground'>
                         Pay with Nagad
                       </h4>
-                      <p className='text-xs text-white/40'>
+                      <p className='text-xs text-muted-foreground'>
                         Enter your Nagad number to receive a payment prompt
                       </p>
                     </div>
                     <div className='space-y-2'>
-                      <label className='text-xs text-white/40 uppercase tracking-wider font-medium'>
+                      <label className='text-xs text-muted-foreground uppercase tracking-wider font-bold'>
                         Nagad Number
                       </label>
                       <div className='relative'>
-                        <Wallet className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20' />
+                        <Wallet className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50' />
                         <Input
                           required
                           placeholder='01XXXXXXXXX'
-                          className='bg-white/5 border-white/10 rounded-xl pl-11 py-5 text-white placeholder:text-white/20 focus-visible:ring-blue-500/30'
+                          className='bg-muted border-border rounded-xl pl-11 py-5 text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-blue-500/30'
                         />
                       </div>
                     </div>
@@ -549,42 +549,42 @@ function PaymentPageContent() {
 
                 {paymentMethod === 'bank' && (
                   <div className='space-y-4'>
-                    <div className='bg-blue-500/5 border border-white/10 rounded-2xl p-5 space-y-3'>
+                    <div className='bg-card border border-border rounded-2xl p-5 space-y-3'>
                       <div className='flex items-center gap-3 mb-2'>
                         <div className='w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center'>
-                          <Landmark className='w-5 h-5 text-white' />
+                          <Landmark className='w-5 h-5 text-blue-500' />
                         </div>
                         <div>
-                          <h4 className='text-sm font-bold text-white'>
+                          <h4 className='text-sm font-bold text-foreground'>
                             Bank Transfer
                           </h4>
-                          <p className='text-xs text-white/40'>
+                          <p className='text-xs text-muted-foreground'>
                             Transfer to our bank account
                           </p>
                         </div>
                       </div>
-                      <div className='space-y-2 text-sm'>
+                      <div className='space-y-2.5 text-sm border-t border-border pt-3'>
                         <div className='flex justify-between'>
-                          <span className='text-white/40'>Bank Name</span>
-                          <span className='text-white font-mono'>
+                          <span className='text-muted-foreground'>Bank Name</span>
+                          <span className='text-foreground font-mono font-bold'>
                             Dutch-Bangla Bank
                           </span>
                         </div>
                         <div className='flex justify-between'>
-                          <span className='text-white/40'>Account No</span>
-                          <span className='text-white font-mono'>
+                          <span className='text-muted-foreground'>Account No</span>
+                          <span className='text-foreground font-mono font-bold'>
                             1234 5678 9012
                           </span>
                         </div>
                         <div className='flex justify-between'>
-                          <span className='text-white/40'>Branch</span>
-                          <span className='text-white font-mono'>
+                          <span className='text-muted-foreground'>Branch</span>
+                          <span className='text-foreground font-mono font-bold'>
                             Gulshan, Dhaka
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className='flex items-start gap-2 text-xs text-amber-400/80'>
+                    <div className='flex items-start gap-2 text-xs text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl p-3'>
                       <AlertCircle className='w-4 h-4 shrink-0 mt-0.5' />
                       <span>
                         Bank transfers may take 1-2 business days to process.
@@ -594,9 +594,9 @@ function PaymentPageContent() {
                 )}
 
                 {/* Security Notice */}
-                <div className='flex items-center gap-3 pt-4'>
-                  <Lock className='w-4 h-4 text-emerald-400 shrink-0' />
-                  <span className='text-xs text-white/30'>
+                <div className='flex items-center gap-3 pt-4 px-1'>
+                  <Lock className='w-4 h-4 text-emerald-500 shrink-0' />
+                  <span className='text-xs text-muted-foreground'>
                     Your payment is secured with 256-bit SSL encryption
                   </span>
                 </div>
@@ -605,11 +605,11 @@ function PaymentPageContent() {
                 <Button
                   type='submit'
                   disabled={isProcessing}
-                  className='w-full bg-white/10 hover:bg-white/15 text-white rounded-xl py-6 text-sm font-semibold shadow-2xl shadow-black/20 hover:shadow-black/20 transition-all duration-300 group disabled:opacity-70'
+                  className='w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl py-7 h-auto text-sm font-bold uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all duration-300 group disabled:opacity-70'
                 >
                   {isProcessing ? (
                     <div className='flex items-center gap-3'>
-                      <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin' />
+                      <div className='w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin' />
                       <span>Processing Payment...</span>
                     </div>
                   ) : (
@@ -626,8 +626,8 @@ function PaymentPageContent() {
 
           {/* Right - Order Summary */}
           <div className='payment-right lg:col-span-2'>
-            <div className='bg-white/[0.02] border border-white/5 rounded-3xl p-8 sticky top-28 space-y-6'>
-              <h3 className='text-lg font-bold'>Order Summary</h3>
+            <div className='bg-card border border-border rounded-3xl p-8 sticky top-28 space-y-6 shadow-sm'>
+              <h3 className='text-lg font-bold text-foreground'>Order Summary</h3>
 
               {/* Property Card */}
               <div className='flex gap-4'>
@@ -640,13 +640,13 @@ function PaymentPageContent() {
                   />
                 </div>
                 <div className='flex-1 min-w-0'>
-                  <Badge className='bg-blue-500/10 text-white border-white/10 text-[10px] mb-1'>
+                  <Badge className='bg-blue-500/10 text-blue-500 border-blue-500/20 text-[10px] mb-1'>
                     {property.category}
                   </Badge>
-                  <h4 className='text-sm font-bold text-white truncate'>
+                  <h4 className='text-sm font-bold text-foreground truncate'>
                     {property.title}
                   </h4>
-                  <p className='text-xs text-white/40 flex items-center gap-1 mt-0.5'>
+                  <p className='text-xs text-muted-foreground flex items-center gap-1 mt-0.5'>
                     <MapPin className='w-3 h-3' />
                     {property.location}
                   </p>
@@ -654,41 +654,41 @@ function PaymentPageContent() {
               </div>
 
               {/* Divider */}
-              <div className='border-t border-white/5' />
+              <div className='border-t border-border' />
 
               {/* Breakdown */}
               <div className='space-y-3'>
                 <div className='flex justify-between text-sm'>
-                  <span className='text-white/40'>Price per Share</span>
-                  <span className='text-white font-medium'>
+                  <span className='text-muted-foreground'>Price per Share</span>
+                  <span className='text-foreground font-medium'>
                     ৳{property.pricePerShare.toLocaleString()}
                   </span>
                 </div>
                 <div className='flex justify-between text-sm'>
-                  <span className='text-white/40'>Number of Shares</span>
-                  <span className='text-white font-medium'>× {shares}</span>
+                  <span className='text-muted-foreground'>Number of Shares</span>
+                  <span className='text-foreground font-medium'>× {shares}</span>
                 </div>
                 <div className='flex justify-between text-sm'>
-                  <span className='text-white/40'>Subtotal</span>
-                  <span className='text-white font-medium'>
+                  <span className='text-muted-foreground'>Subtotal</span>
+                  <span className='text-foreground font-medium'>
                     ৳{totalAmount.toLocaleString()}
                   </span>
                 </div>
                 <div className='flex justify-between text-sm'>
-                  <span className='text-white/40 flex items-center gap-1'>
+                  <span className='text-muted-foreground flex items-center gap-1'>
                     Platform Fee (2%)
                     <Info className='w-3 h-3' />
                   </span>
-                  <span className='text-white/60'>
+                  <span className='text-muted-foreground'>
                     ৳{platformFee.toLocaleString()}
                   </span>
                 </div>
               </div>
 
               {/* Total */}
-              <div className='border-t border-white/5 pt-4'>
+              <div className='border-t border-border pt-4'>
                 <div className='flex justify-between items-center'>
-                  <span className='text-base font-bold'>Total</span>
+                  <span className='text-base font-bold text-foreground'>Total</span>
                   <span className='text-2xl font-bold gradient-text'>
                     ৳{grandTotal.toLocaleString()}
                   </span>
@@ -696,20 +696,20 @@ function PaymentPageContent() {
               </div>
 
               {/* Expected Returns */}
-              <div className='bg-emerald-500/5 border border-emerald-500/10 rounded-2xl p-4 space-y-2'>
+              <div className='bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-4 space-y-2'>
                 <div className='flex items-center gap-2'>
-                  <TrendingUp className='w-4 h-4 text-emerald-400' />
-                  <span className='text-xs font-medium text-emerald-400 uppercase tracking-wider'>
+                  <TrendingUp className='w-4 h-4 text-emerald-500' />
+                  <span className='text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider'>
                     Expected Returns
                   </span>
                 </div>
-                <p className='text-2xl font-bold text-emerald-400'>
+                <p className='text-2xl font-bold text-emerald-600 dark:text-emerald-400'>
                   {property.expectedReturn}{' '}
-                  <span className='text-sm font-normal text-white/30'>
+                  <span className='text-sm font-normal text-muted-foreground'>
                     per annum
                   </span>
                 </p>
-                <p className='text-xs text-white/30'>
+                <p className='text-xs text-muted-foreground'>
                   Est. monthly income: ৳
                   {Math.round(
                     (totalAmount * parseFloat(property.expectedReturn)) /
@@ -720,9 +720,9 @@ function PaymentPageContent() {
               </div>
 
               {/* Trust */}
-              <div className='flex items-center gap-3 text-xs text-white/30 justify-center'>
-                <Shield className='w-4 h-4 text-emerald-400' />
-                <span>Secure & Verified Investment</span>
+              <div className='flex items-center gap-3 text-xs text-muted-foreground justify-center pt-2'>
+                <Shield className='w-4 h-4 text-emerald-500' />
+                <span>Secure &amp; Verified Investment</span>
               </div>
             </div>
           </div>
@@ -734,7 +734,7 @@ function PaymentPageContent() {
 
 export default function PaymentPage() {
   return (
-    <Suspense fallback={<div className='min-h-screen bg-[#0a0f1d]' />}>
+    <Suspense fallback={<div className='min-h-screen bg-background' />}>
       <PaymentPageContent />
     </Suspense>
   );

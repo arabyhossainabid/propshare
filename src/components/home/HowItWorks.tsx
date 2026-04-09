@@ -75,35 +75,35 @@ export default function HowItWorks() {
   return (
     <section ref={sectionRef} className="section-padding relative overflow-hidden">
       <div className="container-custom">
-        <div className="hw-header text-center max-w-3xl mx-auto mb-20 space-y-4">
+        <div className="hw-header text-center max-w-3xl mx-auto mb-10 md:mb-20 space-y-3 md:space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-500/10 border border-rose-500/20">
             <span className="text-xs font-medium text-rose-400 uppercase tracking-wider">
               Simple Process
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading">
             How PropShare <span className="gradient-text">Works</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-sm md:text-base text-muted-foreground">
             Four simple steps to start building your professional real estate portfolio today.
           </p>
         </div>
 
-        <div className="hw-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+        <div className="hw-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8 relative">
           <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent -translate-y-1/2 z-0" />
           
           {steps.map((step, index) => (
-            <div key={index} className="hw-step relative z-10 text-center space-y-6">
-              <div className="w-20 h-20 mx-auto rounded-3xl bg-card border border-border flex items-center justify-center shadow-2xl relative group">
+            <div key={index} className="hw-step relative z-10 text-center space-y-4 md:space-y-6">
+              <div className="w-14 h-14 md:w-20 md:h-20 mx-auto rounded-2xl md:rounded-3xl bg-card border border-border flex items-center justify-center shadow-xl md:shadow-2xl relative group">
                 <div className="absolute inset-0 bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm border-4 border-background">
+                <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 w-6 h-6 md:w-8 md:h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xs md:text-sm border-2 md:border-4 border-background">
                   {index + 1}
                 </div>
-                <step.icon className="w-8 h-8 text-blue-400 relative z-10" />
+                <step.icon className="w-6 h-6 md:w-8 md:h-8 text-blue-400 relative z-10" />
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-3 text-foreground">{step.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
+                <h3 className="text-sm md:text-xl font-bold mb-1 md:mb-3 text-foreground">{step.title}</h3>
+                <p className="text-muted-foreground text-[11px] md:text-sm leading-relaxed max-w-xs mx-auto">
                   {step.description}
                 </p>
               </div>

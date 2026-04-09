@@ -109,7 +109,7 @@ export default function Hero({ heroStats }: HeroProps) {
   return (
     <section
       ref={heroRef}
-      className='relative min-h-screen flex items-center justify-center overflow-hidden pt-20'
+      className='relative min-h-[55vh] lg:min-h-[65vh] flex items-center justify-center overflow-hidden pt-16 lg:pt-20'
     >
       {/* Background Elements */}
       <div className='absolute inset-0'>
@@ -128,7 +128,7 @@ export default function Hero({ heroStats }: HeroProps) {
       <div className='container-custom relative z-10 py-12 lg:py-20'>
         <div className='grid lg:grid-cols-2 gap-12 lg:gap-20 items-center'>
           {/* Left Content */}
-          <div ref={textRef} className='space-y-8'>
+          <div ref={textRef} className='space-y-5 lg:space-y-8'>
             {/* Badge */}
             <div className='hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm'>
               <div className='w-2 h-2 rounded-full bg-emerald-400 animate-pulse' />
@@ -139,7 +139,7 @@ export default function Hero({ heroStats }: HeroProps) {
 
             {/* Title */}
             <div className='space-y-2'>
-              <h1 className='text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-foreground'>
+              <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight text-foreground'>
                 <span className='hero-title-line block'>Invest in</span>
                 <span className='hero-title-line block gradient-text'>
                   Premium Real
@@ -148,13 +148,13 @@ export default function Hero({ heroStats }: HeroProps) {
                   Estate <span className='text-foreground/40'>Shares</span>
                 </span>
                 {featuredProperty && (
-                   <p className="text-sm text-blue-500 mt-4 opacity-50">Featuring: {renderText(featuredProperty.title)}</p>
+                  <p className="text-sm text-blue-500 mt-4 opacity-50">Featuring: {renderText(featuredProperty.title)}</p>
                 )}
               </h1>
             </div>
 
             {/* Subtitle */}
-            <p className='hero-subtitle text-lg text-muted-foreground max-w-lg leading-relaxed'>
+            <p className='hero-subtitle text-sm sm:text-base text-muted-foreground max-w-lg leading-relaxed'>
               Own fractional shares in institutional-grade properties. Start
               investing with as little as ৳5,000 and earn monthly rental income
               from premium real estate across Bangladesh.

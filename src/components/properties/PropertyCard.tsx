@@ -3,12 +3,15 @@ import { Button } from '@/components/ui/button';
 import { api, normalizeList, renderText } from '@/lib/api';
 import { Property } from '@/lib/api-types';
 import {
+  ArrowRight,
   ArrowUpRight,
+  Calendar,
   Eye,
   MapPin,
   Share2,
   Sparkles,
   TrendingUp,
+  Users,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -142,70 +145,86 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
           </div>
         </div>
         <div className='p-6 space-y-4'>
-          <div>
-            <h3 className='text-lg font-bold text-foreground group-hover:text-blue-500 transition-colors duration-300'>
+          <div className="min-h-[140px]">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500">
+                {property.category?.name || 'Asset'}
+              </span>
+              <span className="text-[10px] font-bold text-muted-foreground flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
+                {new Date(property.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+              </span>
+            </div>
+            <h3 className='text-lg font-bold text-foreground group-hover:text-blue-500 transition-colors duration-300 line-clamp-1'>
               {renderText(property.title)}
             </h3>
             <p className='text-sm text-muted-foreground flex items-center gap-1.5 mt-1.5'>
-              <MapPin className='w-3.5 h-3.5' />
+              <MapPin className='w-3.5 h-3.5 text-blue-500/50' />
               {renderText(property.location)}
             </p>
+            <p className="text-xs text-muted-foreground mt-3 line-clamp-2 leading-relaxed">
+              {renderText(property.description) || 'A premium institutional-grade investment opportunity in a prime location with high growth potential.'}
+            </p>
           </div>
+
           <div className='grid grid-cols-2 gap-3'>
-            <div className='bg-muted/50 rounded-xl p-3'>
-              <p className='text-[10px] text-muted-foreground/60 uppercase tracking-wider'>
-                Property Value
+            <div className='bg-muted/30 rounded-2xl p-4 border border-border/50'>
+              <p className='text-[9px] text-muted-foreground uppercase tracking-widest font-black'>
+                Value
               </p>
-              <p className='text-sm font-bold text-foreground mt-1'>
+              <p className='text-sm font-black text-foreground mt-1'>
                 ৳
                 {(
                   (property.pricePerShare * property.totalShares) /
-                  100000
-                ).toFixed(0)}
-                L
+                  10000000
+                ).toFixed(1)}
+                Cr
               </p>
             </div>
-            <div className='bg-muted/50 rounded-xl p-3'>
-              <p className='text-[10px] text-muted-foreground/60 uppercase tracking-wider'>
-                Min. Investment
+            <div className='bg-muted/30 rounded-2xl p-4 border border-border/50'>
+              <p className='text-[9px] text-muted-foreground uppercase tracking-widest font-black'>
+                Min. Invest
               </p>
-              <p className='text-sm font-bold text-blue-500 mt-1'>
+              <p className='text-sm font-black text-blue-500 mt-1'>
                 ৳{property.pricePerShare.toLocaleString()}
               </p>
             </div>
           </div>
-          <div className='space-y-2'>
-            <div className='flex items-center justify-between text-xs'>
-              <span className='text-muted-foreground'>Funding Progress</span>
-              <span className='text-foreground font-medium'>
-                {fundedPercentage(property)}%
+
+          <div className='space-y-2.5'>
+            <div className='flex items-center justify-between text-[11px] font-bold uppercase tracking-tight'>
+              <span className='text-muted-foreground'>Funding Status</span>
+              <span className='text-emerald-500'>
+                {fundedPercentage(property)}% Complete
               </span>
             </div>
-            <div className='w-full bg-muted rounded-full h-1.5'>
+            <div className='w-full bg-muted rounded-full h-1.5 overflow-hidden'>
               <div
-                className='bg-linear-to-r from-blue-500 to-emerald-400 h-1.5 rounded-full transition-all duration-1000'
+                className='bg-linear-to-r from-blue-600 to-emerald-400 h-1.5 rounded-full transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(59,130,246,0.5)]'
                 style={{ width: `${fundedPercentage(property)}%` }}
               />
             </div>
-            <div className='flex items-center justify-between text-[10px] text-muted-foreground/60'>
-              <span>
-                {property.totalShares -
-                  (property.availableShares ?? property.totalShares)}
-                /{property.totalShares} shares
+            <div className='flex items-center justify-between text-[10px] text-muted-foreground/60 font-bold uppercase tracking-widest pt-1'>
+              <span className="flex items-center gap-1.5">
+                <Users className="w-3 h-3" />
+                {property.totalShares - (property.availableShares ?? property.totalShares)} Backers
               </span>
-              <span className='flex items-center gap-1'>
-                <Eye className='w-3 h-3' />
-                {property.viewCount || 0}
-              </span>
-              <span className='flex items-center gap-1'>
-                <ArrowUpRight className='w-3 h-3 text-emerald-500' />
-                {(property as any)._count?.votes ?? 0}
+              <span className='flex items-center gap-3'>
+                <span className="flex items-center gap-1">
+                  <Eye className='w-3 h-3' />
+                  {property.viewCount || 0}
+                </span>
+                <span className="flex items-center gap-1">
+                  <ArrowUpRight className='w-3 h-3 text-emerald-500' />
+                  {(property as any)._count?.votes ?? 0}
+                </span>
               </span>
             </div>
           </div>
-          <Button className='w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl py-5 transition-all duration-300 group/btn shadow-lg'>
-            Invest Now
-            <ArrowUpRight className='w-4 h-4 ml-2 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform' />
+          
+          <Button className='w-full bg-blue-600 hover:bg-blue-500 text-white rounded-2xl py-6 transition-all duration-300 group/btn shadow-xl shadow-blue-500/20 border-0 text-xs font-black uppercase tracking-widest'>
+            View Details
+            <ArrowRight className='w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform' />
           </Button>
         </div>
       </div>

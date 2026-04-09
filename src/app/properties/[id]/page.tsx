@@ -446,32 +446,29 @@ export default function PropertyDetailPage() {
                   {renderText(property.description)}
                 </p>
 
-                {(property.problemStatement || property.proposedSolution) && (
-                  <div className='pt-6 border-t border-border/50 space-y-6'>
-                    {property.problemStatement && (
-                      <div className='space-y-2'>
-                        <h4 className='text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2'>
-                          <Info className='w-4 h-4 text-blue-500' />
-                          Investment Thesis
-                        </h4>
-                        <p className='text-muted-foreground italic leading-relaxed'>
-                          &quot;{renderText(property.problemStatement)}&quot;
-                        </p>
-                      </div>
-                    )}
-                    {property.proposedSolution && (
-                      <div className='space-y-2'>
-                        <h4 className='text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2'>
-                          <Zap className='w-4 h-4 text-emerald-500' />
-                          Proposed Solution
-                        </h4>
-                        <p className='text-muted-foreground leading-relaxed'>
-                          {renderText(property.proposedSolution)}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
+              </div>
+
+              {/* Technical Specifications */}
+              <div className='detail-section space-y-6'>
+                <h3 className='text-xl font-bold text-foreground font-heading flex items-center gap-2'>
+                  <Building2 className='w-5 h-5 text-blue-500' />
+                  Property Specifications
+                </h3>
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+                  {[
+                    { label: 'Asset Type', value: property.category || 'Luxury Residential' },
+                    { label: 'Total Area', value: '1,450 sq. ft.' },
+                    { label: 'Status', value: 'Ready to Occupy' },
+                    { label: 'Ownership', value: 'SPV Shared' },
+                    { label: 'Location Grade', value: 'Institutional A' },
+                    { label: 'Floor Level', value: '15th Floor' },
+                  ].map((spec) => (
+                    <div key={spec.label} className='p-4 rounded-xl bg-muted/30 border border-border flex flex-col gap-1'>
+                      <span className='text-[10px] font-black uppercase tracking-widest text-muted-foreground'>{spec.label}</span>
+                      <span className='text-sm font-bold text-foreground'>{spec.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Key Metrics */}

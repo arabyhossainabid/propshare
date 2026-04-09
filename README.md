@@ -45,20 +45,41 @@ src/
 └── assets/          # Static media and graphic resources
 ```
 
-### Installation
+### Installation & Setups
+
+Ensure you have **Node.js 18+** and **pnpm** installed.
 
 ```bash
-# Clone & Setup
+# 1. Clone & Dependencies
 git clone https://github.com/arabyhossainabid/propshare.git
 cd propshare
 pnpm install
 
-# Environment Configuration
-# Edit .env.local with your service keys
+# 2. Environment Configuration
+# Copy .env.example to .env.local and configure your keys:
+# NEXT_PUBLIC_API_URL=http://localhost:8080/api
 
-# Development Mode
+# 3. Running the Platform
 pnpm run dev
 ```
+
+### Demo Credentials
+
+For testing purposes, you can use the following accounts:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@propshare.com` | `admin123` |
+| **User** | `user@propshare.com` | `user123` |
+
+### Key Features Checklist
+
+- [x] **Premium UI/UX**: Over 10+ homepage sections with GSAP & Framer Motion.
+- [x] **Fractional Ownership**: Invest in shares of verified real estate.
+- [x] **AI-Powered**: Smart property recommendations and search suggestions.
+- [x] **Real-time Analytics**: Live portfolio tracking and platform metrics.
+- [x] **Secure Auth**: Social logins (Google, Facebook) and JWT protection.
+- [x] **Support System**: Integrated AIChatbot, Help Center, and Contact system.
 
 ---
 

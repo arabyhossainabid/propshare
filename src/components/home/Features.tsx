@@ -85,28 +85,28 @@ export default function Features() {
   return (
     <section ref={sectionRef} className="section-padding relative bg-background">
       <div className="container-custom relative z-10">
-        <div className="features-header text-center max-w-3xl mx-auto mb-20 space-y-4">
+        <div className="features-header text-center max-w-3xl mx-auto mb-10 md:mb-20 space-y-3 md:space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
             <span className="text-xs font-medium text-emerald-400 uppercase tracking-wider">
               Why Choose PropShare
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading">
             Platform <span className="gradient-text">Features</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-sm md:text-base text-muted-foreground">
             Experience the next generation of real estate investment with our cutting-edge features.
           </p>
         </div>
 
         <div className="features-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <div key={index} className="feature-card card p-8 group">
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-300">
-                <feature.icon className="w-6 h-6 text-blue-400" />
+            <div key={index} className="feature-card card p-5 md:p-8 group">
+              <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-300">
+                <feature.icon className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-foreground">{feature.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <h3 className="text-base md:text-xl font-bold mb-2 md:mb-3 text-foreground">{feature.title}</h3>
+              <p className="text-muted-foreground text-xs md:text-sm leading-relaxed">
                 {feature.description}
               </p>
             </div>

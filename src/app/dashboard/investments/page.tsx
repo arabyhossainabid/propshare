@@ -13,6 +13,7 @@ import {
   Filter,
   TrendingUp,
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -78,8 +79,8 @@ export default function InvestmentsPage() {
   return (
     <div className='space-y-6'>
       <div>
-        <h1 className='text-2xl font-bold font-heading text-foreground'>My Investments</h1>
-        <p className='text-sm text-muted-foreground mt-1'>
+        <h1 className='text-xl md:text-2xl font-bold font-heading text-foreground'>My Investments</h1>
+        <p className='text-xs md:text-sm text-muted-foreground mt-1'>
           Track and manage all your property investments.
         </p>
       </div>
@@ -114,7 +115,7 @@ export default function InvestmentsPage() {
             >
               <div className='flex items-center gap-2 mb-3'>
                 <div className='w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center'>
-                   <Icon
+                  <Icon
                     className={`w-4 h-4 ${s.color === 'emerald' ? 'text-emerald-500' : s.color === 'red' ? 'text-red-500' : 'text-blue-500'}`}
                   />
                 </div>
@@ -129,8 +130,9 @@ export default function InvestmentsPage() {
       </div>
 
       {/* Filters */}
-      <div className='flex items-center gap-2'>
-        <Filter className='w-4 h-4 text-muted-foreground' />
+      <div className='flex items-center gap-2 flex-wrap'>
+        <Filter className='w-4 h-4 text-muted-foreground shrink-0' />
+        <div className='flex gap-2 flex-wrap'>
         {['all', 'pending', 'completed', 'active'].map((f) => (
           <button
             key={f}
@@ -140,96 +142,91 @@ export default function InvestmentsPage() {
             {f}
           </button>
         ))}
+        </div>
       </div>
 
-      {/* Investment List */}
-      <div className='space-y-3'>
-        {isLoading &&
-          Array.from({ length: 5 }).map((_, idx) => (
-            <div
-              key={`skeleton-${idx}`}
-              className='bg-card border border-border rounded-2xl p-5 animate-pulse'
-            >
-              <div className='flex items-center justify-between gap-4'>
-                <div className='flex items-center gap-4 flex-1'>
-                  <div className='w-12 h-12 rounded-xl bg-muted' />
-                  <div className='space-y-2 flex-1'>
-                    <div className='h-4 w-1/3 rounded bg-muted' />
-                    <div className='h-3 w-1/2 rounded bg-muted/60' />
-                  </div>
-                </div>
-                <div className='h-9 w-28 rounded-xl bg-muted' />
+      {/* Investment Data Table — horizontally scrollable on mobile */}
+      <div className='dash-section bg-card border border-border rounded-[32px] overflow-hidden shadow-2xl relative'>
+        <div className="w-full overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-border bg-muted/30">
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Property Asset</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Category</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-center">Shares</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-right">Investment</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-center">Status</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-right">Acquisition Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border/50">
+              {isLoading && Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i} className="animate-pulse">
+                  <td className="px-6 py-6"><div className="h-4 w-40 bg-muted rounded" /></td>
+                  <td className="px-6 py-6"><div className="h-4 w-20 bg-muted rounded" /></td>
+                  <td className="px-6 py-6"><div className="h-4 w-10 bg-muted rounded mx-auto" /></td>
+                  <td className="px-6 py-6"><div className="h-4 w-20 bg-muted rounded ml-auto" /></td>
+                  <td className="px-6 py-6"><div className="h-6 w-20 bg-muted rounded-full mx-auto" /></td>
+                  <td className="px-6 py-6"><div className="h-4 w-24 bg-muted rounded ml-auto" /></td>
+                </tr>
+              ))}
+
+              {!isLoading && filtered.map((inv) => (
+                <tr key={inv.id} className="group hover:bg-accent/30 transition-colors cursor-pointer" onClick={() => window.location.href = `/properties/${inv.propertyId}`}>
+                  <td className="px-6 py-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <Building2 className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <span className="text-sm font-bold text-foreground group-hover:text-blue-500 transition-colors">{inv.property}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{inv.category}</span>
+                  </td>
+                  <td className="px-6 py-6 text-center">
+                    <span className="text-sm font-bold text-foreground">{inv.shares}</span>
+                  </td>
+                  <td className="px-6 py-6 text-right">
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-black text-foreground">৳{inv.currentValue.toLocaleString()}</p>
+                      <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">{inv.returnPct} Gain</p>
+                    </div>
+                  </td>
+                  <td className="px-6 py-6 text-center">
+                    <Badge variant="outline" className={`text-[9px] uppercase tracking-widest h-6 px-3 rounded-full font-bold ${inv.statusColor}`}>
+                      {inv.statusLabel}
+                    </Badge>
+                  </td>
+                  <td className="px-6 py-6 text-right">
+                    <span className="text-xs font-medium text-muted-foreground">{inv.date}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {!isLoading && filtered.length === 0 && (
+            <div className='text-center py-20 bg-muted/10'>
+              <div className='w-16 h-16 rounded-3xl bg-muted/50 flex items-center justify-center mx-auto mb-4 border-2 border-dashed border-border'>
+                <Filter className='w-6 h-6 text-muted-foreground/30' />
               </div>
+              <p className='text-sm text-muted-foreground font-bold uppercase tracking-widest'>No records match your criteria</p>
             </div>
-          ))}
+          )}
+        </div>
 
-        {isError && (
-          <div className='text-center py-20 bg-muted/30 border border-dashed border-border rounded-3xl'>
-            <p className='text-muted-foreground text-sm font-medium'>
-              Could not load investments. Please try again.
-            </p>
+        {/* Pagination Placeholder */}
+        <div className="px-6 py-5 border-t border-border flex items-center justify-between bg-muted/10">
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+            Showing <span className="text-foreground">{filtered.length}</span> of {investments.length} investments
+          </p>
+          <div className="flex gap-2">
+            <Button variant="outline" className="h-8 rounded-lg px-3 text-[10px] font-bold uppercase tracking-widest" disabled>Prev</Button>
+            <Button variant="outline" className="h-8 rounded-lg px-3 text-[10px] font-bold uppercase tracking-widest bg-primary text-white border-primary" disabled>1</Button>
+            <Button variant="outline" className="h-8 rounded-lg px-3 text-[10px] font-bold uppercase tracking-widest" disabled>Next</Button>
           </div>
-        )}
-
-        {!isLoading && !isError && filtered.length === 0 && (
-          <div className='text-center py-20 bg-muted/30 border border-dashed border-border rounded-3xl'>
-            <p className='text-muted-foreground text-sm font-medium'>No investments found in this category.</p>
-          </div>
-        )}
-
-        {!isLoading &&
-          !isError &&
-          filtered.map((inv) => (
-            <Link
-              href={`/properties/${inv.propertyId}`}
-              key={inv.id}
-              className='block'
-            >
-              <div className='bg-card border border-border rounded-2xl p-5 hover:border-blue-500/30 hover:shadow-xl transition-all group'>
-                <div className='flex items-center justify-between gap-4'>
-                  <div className='flex items-center gap-4 min-w-0'>
-                    <div className='w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform'>
-                      <Building2 className='w-5 h-5 text-blue-500' />
-                    </div>
-                    <div className='min-w-0'>
-                      <div className='flex items-center gap-2'>
-                        <p className='text-sm font-bold text-foreground group-hover:text-blue-500 transition-colors'>
-                          {inv.property}
-                        </p>
-                        <Badge
-                          variant="outline"
-                          className={`text-[9px] uppercase tracking-widest h-5 px-2 ${inv.statusColor}`}
-                        >
-                          {inv.statusLabel}
-                        </Badge>
-                      </div>
-                      <div className='flex items-center gap-3 mt-1 text-[10px] uppercase tracking-widest font-bold text-muted-foreground'>
-                        <span>{inv.category}</span>
-                        <span>{inv.shares} shares</span>
-                        <span className='flex items-center gap-1'>
-                          <Calendar className='w-3 h-3' />
-                          {inv.date}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='text-right shrink-0'>
-                    <p className='text-sm font-bold text-foreground'>
-                      ৳{inv.currentValue.toLocaleString()}
-                    </p>
-                    <p
-                      className={`text-[10px] font-bold uppercase tracking-widest ${inv.returnPct.startsWith('+') ? 'text-emerald-500' : 'text-red-500'}`}
-                    >
-                      {inv.returnPct} Total
-                    </p>
-                    <p className='text-[9px] text-muted-foreground font-bold mt-0.5'>
-                      Payout: {inv.nextPayout}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+        </div>
       </div>
     </div>
   );
