@@ -58,6 +58,7 @@ export default function LoginPage() {
         router.replace(loggedInUser.role === 'ADMIN' ? '/admin' : '/dashboard');
       } catch (error) {
         console.error('Google Auth Error:', error);
+        console.error('Configured API URL:', process.env.NEXT_PUBLIC_API_BASE_URL);
         const msg = getApiErrorMessage(error) || 'Google Sign-In failed';
         toast.error(msg);
       } finally {
