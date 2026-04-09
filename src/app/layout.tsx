@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import AIChatbot from '@/components/AIChatbot';
 import { LayoutContent } from '@/components/LayoutContent';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import './globals.css';
 
 const inter = Inter({
@@ -53,6 +54,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.className} font-sans bg-background text-white selection:bg-white/5 selection:text-white antialiased`}
       >
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
         <QueryProvider>
           <AuthProvider>
             <ThemeProvider
@@ -90,6 +92,7 @@ export default function RootLayout({
             <AIChatbot />
           </AuthProvider>
         </QueryProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

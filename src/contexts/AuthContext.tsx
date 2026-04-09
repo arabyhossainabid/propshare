@@ -24,6 +24,8 @@ interface AuthContextType {
   accessToken: string | null;
   refreshUser: () => Promise<void>;
   login: (email: string, password: string) => Promise<User>;
+  googleLogin: (credential: string) => Promise<User>;
+  socialLogin: (payload: { email: string; name: string; avatar: string; provider: string }) => Promise<User>;
   register: (payload: {
     name: string;
     email: string;
@@ -41,6 +43,12 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   refreshUser: async () => { },
   login: async () => {
+    throw new Error('AuthContext not initialized');
+  },
+  googleLogin: async () => {
+    throw new Error('AuthContext not initialized');
+  },
+  socialLogin: async () => {
     throw new Error('AuthContext not initialized');
   },
   register: async () => {
@@ -272,6 +280,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     throw lastError instanceof Error ? lastError : new Error('Login failed');
   };
 
+  const googleLogin = async (credential: string): Promise<User> => {
+    const response = await api.post('/auth/google/callback', { credential });
+
+    const token = extractAccessToken(response.data);
+    const nextUser = extractUser(response.data);
+
+    if (!token || !nextUser) {
+      throw new Error('Google login response missing token or user data');
+    }
+
+    setSessionAccessToken(token);
+    setAccessToken(token);
+    setUser(nextUser);
+    setIsLoading(false);
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('accessToken', token);
+    }
+
+    void fetchCurrentUser();
+    return nextUser;
+  };
+
+  const socialLogin = async (socialPayload: { email: string; name: string; avatar: string; provider: string }): Promise<User> => {
+    const response = await api.post('/auth/social-login', socialPayload);
+
+    const token = extractAccessToken(response.data);
+    const nextUser = extractUser(response.data);
+
+    if (!token || !nextUser) {
+      throw new Error('Social login response missing token or user data');
+    }
+
+    setSessionAccessToken(token);
+    setAccessToken(token);
+    setUser(nextUser);
+    setIsLoading(false);
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('accessToken', token);
+    }
+
+    void fetchCurrentUser();
+    return nextUser;
+  };
+
   const register = async (payload: {
     name: string;
     email: string;
@@ -316,6 +370,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         refreshUser,
         login,
+        googleLogin,
+        socialLogin,
         register,
         refreshAuth,
         logout,
