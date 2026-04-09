@@ -7,7 +7,10 @@ import { ChevronDown } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const faqs = [
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
+
+const demoFaqs = [
   {
     q: 'What is fractional real estate investing?',
     a: 'Fractional investing allows multiple investors to pool their capital to buy a property. You own a fractional share, entitling you to a proportional share of the rental income and capital appreciation.',
@@ -33,6 +36,20 @@ const faqs = [
 export default function FAQs() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const { data: apiFaqs = [] } = useQuery({
+    queryKey: ['faqs'],
+    queryFn: async () => {
+      try {
+        const res = await api.get<{ success: true; data: { q: string; a: string }[] }>('/faqs');
+        return res.data.data;
+      } catch (e) {
+        return [];
+      }
+    },
+  });
+
+  const displayFaqs = apiFaqs.length > 0 ? apiFaqs : demoFaqs;
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -76,7 +93,7 @@ export default function FAQs() {
           </div>
 
           <div className="space-y-4">
-            {faqs.map((faq, index) => (
+            {displayFaqs.map((faq, index) => (
               <div 
                 key={index} 
                 className="border border-border rounded-2xl bg-card overflow-hidden transition-all duration-300 hover:border-border/60"

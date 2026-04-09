@@ -1,17 +1,33 @@
 'use client';
-
+import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, MessageSquare, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { api, getApiErrorMessage } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 export default function ContactPage() {
   const [formState, setFormState] = useState<'idle' | 'loading' | 'success'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormState('loading');
-    setTimeout(() => setFormState('success'), 1500);
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      subject: formData.get('subject') as string,
+      message: formData.get('message') as string,
+    };
+
+    try {
+      await api.post('/contacts', data);
+      setFormState('success');
+    } catch (error) {
+      setFormState('idle');
+      toast.error(getApiErrorMessage(error));
+    }
   };
 
   return (
@@ -118,6 +134,7 @@ export default function ContactPage() {
                       <div className='space-y-2'>
                         <label className='text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1 block ml-1'>Full Name</label>
                         <Input 
+                          name='name'
                           placeholder='e.g. Arab Hossain' 
                           required 
                           className='bg-muted/50 border-border rounded-xl h-14 px-5 focus:border-blue-500/50 text-foreground placeholder:text-muted-foreground/50'
@@ -126,6 +143,7 @@ export default function ContactPage() {
                       <div className='space-y-2'>
                         <label className='text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1 block ml-1'>Email Address</label>
                         <Input 
+                          name='email'
                           type='email' 
                           placeholder='name@example.com' 
                           required 
@@ -136,6 +154,7 @@ export default function ContactPage() {
                     <div className='space-y-2'>
                       <label className='text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1 block ml-1'>Subject</label>
                       <Input 
+                        name='subject'
                         placeholder='How can we help?' 
                         required 
                         className='bg-muted/50 border-border rounded-xl h-14 px-5 focus:border-blue-500/50 text-foreground placeholder:text-muted-foreground/50'
@@ -144,6 +163,7 @@ export default function ContactPage() {
                     <div className='space-y-2'>
                       <label className='text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1 block ml-1'>Your Message</label>
                       <textarea 
+                        name='message'
                         required 
                         rows={5}
                         placeholder='Detail your inquiry here...'

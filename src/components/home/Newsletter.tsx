@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Mail } from 'lucide-react';
+import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -36,9 +37,17 @@ export default function Newsletter() {
     return () => ctx.revert();
   }, []);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Successfully subscribed to Newsletter!');
+    const email = (e.currentTarget.querySelector('input[type="email"]') as HTMLInputElement).value;
+    
+    try {
+      await api.post('/newsletters/subscribe', { email });
+      toast.success('Successfully subscribed to Newsletter!');
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      toast.error('Failed to subscribe. Please try again.');
+    }
   };
 
   return (

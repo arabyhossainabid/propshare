@@ -51,37 +51,6 @@ export default function PropertiesPage() {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // AI Suggestions feature
-  // AI Suggestions feature: Optimized for speed (150ms debounce)
-  const debouncedSearch = useDebounceValue(searchQuery.trim(), 150);
-  const { data: searchSuggestions = [] } = useQuery({
-    queryKey: ['ai-search-suggestions', debouncedSearch],
-    queryFn: async () => {
-      if (!debouncedSearch.trim()) return [];
-      try {
-        const res = await api.get<any>(`/ai/search-suggestions?q=${encodeURIComponent(debouncedSearch)}`);
-        // Handle both { data: [...] } and direct [...] responses
-        return res.data?.data || (Array.isArray(res.data) ? res.data : []);
-      } catch (e) {
-        return [];
-      }
-    },
-    enabled: debouncedSearch.length >= 1,
-  });
-
-  const { data: properties = [], isLoading } = useQuery({
-    queryKey: ['properties'],
-    queryFn: async () => {
-      const res = await api.get<{
-        success: true;
-        message: string;
-        data: Property[] | { data?: Property[] };
-      }>('/properties', {
-        params: { limit: 100 },
-      });
-      return normalizeList<Property>(res.data.data);
-    },
-  });
-
   const { data: categories = [] } = useQuery({
     queryKey: ['categories-filters'],
     queryFn: async () => {
@@ -94,39 +63,124 @@ export default function PropertiesPage() {
     },
   });
 
-  const filterCategories = ['All', ...categories.map((c) => c.name)];
-
   const categoryIdFromUrl = searchParams.get('categoryId');
   const urlFilterName = categoryIdFromUrl
     ? categories.find((c) => c.id === categoryIdFromUrl)?.name
     : undefined;
   const effectiveFilter =
     !isFilterManuallySet && urlFilterName ? urlFilterName : activeFilter;
+  const { data: properties = [], isLoading } = useQuery({
+    queryKey: ['properties'], // Fetch basic list once for local matching
+    queryFn: async () => {
+      const res = await api.get<{
+        success: true;
+        message: string;
+        data: Property[] | { data?: Property[] };
+      }>('/properties', { params: { limit: 1000 } });
+      return normalizeList<Property>(res.data.data);
+    },
+  });
 
-  // Filter logic
-  let filteredProperties = properties.filter((p) => {
-    // Category match
-    const matchesCategory = effectiveFilter === 'All' || p.category?.name === effectiveFilter;
+  const debouncedSearch = useDebounceValue(searchQuery.trim(), 100);
+  const { data: searchSuggestions = [], isLoading: isSuggestionsLoading } = useQuery({
+    queryKey: ['ai-search-suggestions', debouncedSearch, properties.length, searchQuery],
+    queryFn: async () => {
+      let results: string[] = [];
 
-    // Search match
-    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      // 1. Instant Local Matches (prioritize raw searchQuery for real-time feel)
+      if (searchQuery.trim().length > 0) {
+        results = properties
+          .filter(p => 
+            p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            p.location.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+          .map(p => p.title)
+          .slice(0, 4);
+      }
+
+      // 2. Fetch from AI API (debounced to avoid spamming)
+      if (debouncedSearch.trim().length > 0) {
+        try {
+          const res = await api.get<any>(`/ai/search-suggestions`, {
+            params: { q: debouncedSearch }
+          });
+          const aiData = res.data?.data || (Array.isArray(res.data) ? res.data : []);
+          const aiStrings = aiData.map((r: any) => typeof r === 'string' ? r : r.name || String(r));
+          results = [...new Set([...results, ...aiStrings])];
+        } catch (e) {
+          // ignore API errors
+        }
+      }
+
+      return results.slice(0, 8);
+    },
+    // Fast updates
+    staleTime: 0,
+  });
+
+  const { data: searchResults = [] } = useQuery({
+    queryKey: ['properties-search', searchQuery, effectiveFilter, priceFilter],
+    queryFn: async () => {
+      const isFilterActive = searchQuery || effectiveFilter !== 'All' || priceFilter;
+      if (!isFilterActive) return properties;
+
+      const endpoint = searchQuery ? '/properties/search' : '/properties';
+      const res = await api.get<{
+        success: true;
+        message: string;
+        data: Property[] | { data?: Property[] };
+      }>(endpoint, {
+        params: { 
+          q: searchQuery || undefined,
+          search: searchQuery || undefined,
+          category: effectiveFilter !== 'All' ? effectiveFilter : undefined,
+          minPrice: priceFilter?.min,
+          maxPrice: priceFilter?.max,
+          limit: 100
+        },
+      });
+      return normalizeList<Property>(res.data.data);
+    },
+    enabled: !!properties,
+  });
+
+  const filterCategories = ['All', ...categories.map((c) => c.name)];
+
+  // We keep the local filter for a snappy "instant" UI feel, while the API refetches in the background
+  const dataToFilter = searchResults.length > 0 ? searchResults : properties;
+  let filteredProperties = dataToFilter.filter((p) => {
+    // Category match - Case insensitive and fallback to name string
+    const pCatName = (typeof p.category === 'string' ? p.category : p.category?.name) || '';
+    const matchesCategory =
+      effectiveFilter === 'All' ||
+      pCatName.toLowerCase() === effectiveFilter.toLowerCase();
+
+    // Search match (local safety layer)
+    const matchesSearch =
+      !searchQuery ||
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.location.toLowerCase().includes(searchQuery.toLowerCase());
 
     // Price match
     let matchesPrice = true;
     if (priceFilter) {
-      if (p.pricePerShare < priceFilter.min || p.pricePerShare > priceFilter.max) matchesPrice = false;
+      if (
+        p.pricePerShare < priceFilter.min ||
+        p.pricePerShare > priceFilter.max
+      )
+        matchesPrice = false;
     }
 
     return matchesCategory && matchesSearch && matchesPrice;
   });
 
-  // Sort logic
-  filteredProperties = filteredProperties.sort((a, b) => {
+  // Sort logic (if not handled fully by backend or as an extra layer)
+  filteredProperties = [...filteredProperties].sort((a, b) => {
     if (sortOption === 'price-asc') return a.pricePerShare - b.pricePerShare;
     if (sortOption === 'price-desc') return b.pricePerShare - a.pricePerShare;
-    if (sortOption === 'yield-desc') return (b.expectedReturn || 0) - (a.expectedReturn || 0);
-    return 0; // default popularity/recency kept as is
+    if (sortOption === 'yield-desc')
+      return (b.expectedReturn || 0) - (a.expectedReturn || 0);
+    return 0;
   });
 
   const paginatedProperties = filteredProperties.slice(0, page * itemsPerPage);
@@ -167,17 +221,21 @@ export default function PropertiesPage() {
     // Reset page on filter change
     setPage(1);
 
-    gsap.fromTo(
-      '.prop-card',
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        stagger: 0.04,
-        ease: 'power2.out',
-      }
-    );
+    // Only animate if cards exist in the DOM
+    const cards = document.querySelectorAll('.prop-card');
+    if (cards.length > 0) {
+      gsap.fromTo(
+        '.prop-card',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.04,
+          ease: 'power2.out',
+        }
+      );
+    }
   }, [activeFilter, searchQuery, priceFilter, sortOption]);
 
   const handleSuggestionClick = (sug: string) => {
@@ -208,10 +266,10 @@ export default function PropertiesPage() {
         </div>
 
         {/* Filter Bar */}
-        <div className='filter-bar space-y-6 mb-12'>
+        <div className='filter-bar space-y-6 mb-12 relative z-40'>
           {/* Search & Controls */}
           <div className='flex flex-col md:flex-row gap-4'>
-            <div className='flex-1 relative group z-20'>
+            <div className='flex-1 relative group z-30'>
               <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60' />
               <Input
                 placeholder='Search properties...'

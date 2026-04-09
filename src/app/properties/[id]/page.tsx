@@ -21,11 +21,13 @@ import {
   Calendar,
   ChevronRight,
   Clock,
+  Info,
   MapPin,
   Send,
   ThumbsUp,
   TrendingUp,
   Users,
+  Zap,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -264,9 +266,15 @@ export default function PropertyDetailPage() {
     expectedReturn: propertyData?.expectedReturn
       ? `${propertyData.expectedReturn}%`
       : demoProperty.expectedReturn,
-    images: propertyData?.images?.length
-      ? propertyData.images
-      : demoProperty.images,
+    images:
+      propertyData?.images && propertyData.images.length > 0
+        ? propertyData.images
+        : [
+            'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop',
+          ],
+    problemStatement: propertyData?.problemStatement,
+    proposedSolution: propertyData?.proposedSolution,
+    viewCount: propertyData?.viewCount || 0,
     comments:
       comments.length > 0
         ? comments.map((c, index) => ({
@@ -437,6 +445,33 @@ export default function PropertyDetailPage() {
                 <p className='text-muted-foreground leading-relaxed text-lg'>
                   {renderText(property.description)}
                 </p>
+
+                {(property.problemStatement || property.proposedSolution) && (
+                  <div className='pt-6 border-t border-border/50 space-y-6'>
+                    {property.problemStatement && (
+                      <div className='space-y-2'>
+                        <h4 className='text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2'>
+                          <Info className='w-4 h-4 text-blue-500' />
+                          Investment Thesis
+                        </h4>
+                        <p className='text-muted-foreground italic leading-relaxed'>
+                          &quot;{renderText(property.problemStatement)}&quot;
+                        </p>
+                      </div>
+                    )}
+                    {property.proposedSolution && (
+                      <div className='space-y-2'>
+                        <h4 className='text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2'>
+                          <Zap className='w-4 h-4 text-emerald-500' />
+                          Proposed Solution
+                        </h4>
+                        <p className='text-muted-foreground leading-relaxed'>
+                          {renderText(property.proposedSolution)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Key Metrics */}

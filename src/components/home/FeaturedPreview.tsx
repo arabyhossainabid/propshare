@@ -8,7 +8,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PropertyCard } from '@/components/properties/PropertyCard';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -17,12 +17,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function FeaturedPreview() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<'latest' | 'trending'>('latest');
+
   const {
-    data: properties = [],
-    isLoading,
-    isError,
+    data: latestProperties = [],
+    isLoading: isLoadingLatest,
   } = useQuery({
-    queryKey: ['home-properties'],
+    queryKey: ['home-properties-latest'],
     queryFn: async () => {
       const res = await api.get<{
         success: true;
@@ -37,6 +38,24 @@ export default function FeaturedPreview() {
       return normalizeList<Property>(res.data.data);
     },
   });
+
+  const {
+    data: trendingProperties = [],
+    isLoading: isLoadingTrending,
+  } = useQuery({
+    queryKey: ['home-properties-trending'],
+    queryFn: async () => {
+      try {
+        const res = await api.get<{ success: true; data: Property[] | { data?: Property[] } }>('/ai/trending');
+        return normalizeList<Property>(res.data.data);
+      } catch (e) {
+        return [];
+      }
+    },
+  });
+
+  const properties = activeTab === 'latest' ? latestProperties : trendingProperties;
+  const isLoading = activeTab === 'latest' ? isLoadingLatest : isLoadingTrending;
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -56,27 +75,28 @@ export default function FeaturedPreview() {
           },
         }
       );
-
-      gsap.fromTo(
-        '.property-card',
-        { opacity: 0, y: 80, rotateY: 5 },
-        {
-          opacity: 1,
-          y: 0,
-          rotateY: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.properties-grid',
-            start: 'top 85%',
-          },
-        }
-      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
+
+  // Animate cards when data loads
+  useEffect(() => {
+    if (isLoading || properties.length === 0) return;
+    const cards = document.querySelectorAll('.property-card');
+    if (cards.length === 0) return;
+    gsap.fromTo(
+      '.property-card',
+      { opacity: 0, y: 60 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: 'power3.out',
+      }
+    );
+  }, [isLoading, properties]);
 
 
 
@@ -101,6 +121,22 @@ export default function FeaturedPreview() {
               Browse top approved opportunities and start investing in premium
               real estate shares.
             </p>
+            
+            {/* Toggle Tabs */}
+            <div className="flex items-center gap-2 p-1 bg-muted/50 border border-border rounded-xl w-fit mt-6">
+              <button 
+                onClick={() => setActiveTab('latest')}
+                className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'latest' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Latest Assets
+              </button>
+              <button 
+                onClick={() => setActiveTab('trending')}
+                className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'trending' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Trending
+              </button>
+            </div>
           </div>
           <Link href='/properties'>
             <Button
@@ -142,19 +178,13 @@ export default function FeaturedPreview() {
               </div>
             ))}
 
-          {(isLoading ? [] : properties.slice(0, 4)).map((property) => (
+          {!isLoading && properties.slice(0, 4).map((property) => (
             <PropertyCard key={property.id} property={property} viewMode="grid" />
           ))}
 
-          {!isLoading && isError && (
-            <div className='md:col-span-2 lg:col-span-4 text-center py-16 text-sm text-muted-foreground'>
-              Failed to load properties.
-            </div>
-          )}
-
-          {!isLoading && !isError && properties.length === 0 && (
-            <div className='md:col-span-2 lg:col-span-4 text-center py-16 text-sm text-muted-foreground'>
-              No properties found.
+          {!isLoading && properties.length === 0 && (
+            <div className='md:col-span-2 lg:col-span-4 text-center py-16 text-sm text-muted-foreground border-2 border-dashed border-border rounded-3xl'>
+              No {activeTab} properties found at the moment.
             </div>
           )}
         </div>

@@ -82,7 +82,7 @@ export default function DashboardMessagesPage() {
     isError: isErrorMessages,
   } = useQuery({
     queryKey: ['dashboard-contact-messages'],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     refetchInterval: 5000,
     queryFn: async () => {
       const res = await api.get('/contacts/my-messages');

@@ -141,26 +141,50 @@ export default function AIChatbot() {
             )}
           </div>
 
-          {/* Input */}
-          <form
+          {/* Input Area */}
+          <form 
             onSubmit={handleSend}
             className="p-4 bg-background border-t border-white/5 relative"
           >
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Ask anything..."
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-4 pr-12 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-blue-500/50"
-            />
+            {/* Quick Suggestions */}
+            <div className="flex flex-wrap gap-2 mb-3">
+              {[
+                { label: 'Top Yields', icon: '📈' },
+                { label: 'How to buy?', icon: '🏠' },
+                { label: 'Risks?', icon: '🛡️' },
+              ].map((s) => (
+                <button
+                  key={s.label}
+                  type="button"
+                  onClick={() => {
+                    setMessage(s.label);
+                    // Optional: auto-send if you want
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[10px] font-bold uppercase tracking-widest text-white/60 hover:bg-white/10 hover:text-white transition-all flex items-center gap-1.5"
+                >
+                  <span>{s.icon}</span>
+                  {s.label}
+                </button>
+              ))}
+            </div>
 
-            <button
-              type="submit"
-              disabled={!message.trim() || isLoading}
-              className="absolute right-6 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-300 disabled:opacity-50 transition-colors"
-            >
-              <Send className="w-5 h-5" />
-            </button>
+            <div className="relative">
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Ask anything..."
+                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-4 pr-12 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-blue-500/50"
+              />
+
+              <button
+                type="submit"
+                disabled={!message.trim() || isLoading}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-blue-400 hover:text-blue-300 disabled:opacity-50 transition-colors"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
           </form>
         </div>
       )}

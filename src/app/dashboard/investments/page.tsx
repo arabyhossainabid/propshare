@@ -25,7 +25,7 @@ export default function InvestmentsPage() {
     isError,
   } = useQuery({
     queryKey: ['my-investments'],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     queryFn: async () => {
       const res = await api.get<{
         success: true;

@@ -95,7 +95,7 @@ export default function CreatePropertyPage() {
 
   const { data: categories = [] } = useQuery({
     queryKey: ['create-property-categories'],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     queryFn: async () => {
       const res = await api.get('/categories');
       return normalizeList<Category>(res?.data?.data);

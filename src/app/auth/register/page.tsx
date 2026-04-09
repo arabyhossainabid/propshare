@@ -228,11 +228,10 @@ export default function RegisterPage() {
               {[1, 2].map((step) => (
                 <div key={step} className='flex items-center gap-3 flex-1'>
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all duration-300 ${
-                      currentStep >= step
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                        : 'bg-muted text-muted-foreground border border-border'
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all duration-300 ${currentStep >= step
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-muted text-muted-foreground border border-border'
+                      }`}
                   >
                     {currentStep > step ? (
                       <Check className='w-3.5 h-3.5' />
@@ -243,11 +242,10 @@ export default function RegisterPage() {
                   {step < 2 && (
                     <div className='flex-1 h-px rounded-full bg-border'>
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          currentStep > 1
-                            ? 'bg-blue-500 w-full'
-                            : 'bg-transparent w-0'
-                        }`}
+                        className={`h-full rounded-full transition-all duration-500 ${currentStep > 1
+                          ? 'bg-blue-500 w-full'
+                          : 'bg-transparent w-0'
+                          }`}
                       />
                     </div>
                   )}
@@ -271,6 +269,29 @@ export default function RegisterPage() {
               <div className='auth-field space-y-3 mb-8'>
                 <Button
                   type='button'
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(`http://localhost:8080/api/v1/auth/sign-in/social`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          provider: "google",
+                          callbackURL: "http://localhost:3000"
+                        }),
+                        credentials: "include"
+                      });
+
+                      const data = await res.json();
+                      if (data.url) {
+                        window.location.href = data.url;
+                      } else {
+                        toast.error(data.message || "Failed to initialize Google registration");
+                      }
+                    } catch (error) {
+                      console.error("Google Auth Error:", error);
+                      toast.error("Failed to connect to authentication server");
+                    }
+                  }}
                   className='w-full bg-background hover:bg-muted text-foreground border border-border rounded-xl py-6 flex items-center justify-center gap-3 transition-all h-12 group shadow-sm'
                 >
                   <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -379,11 +400,10 @@ export default function RegisterPage() {
                             {[1, 2, 3, 4].map((i) => (
                               <div
                                 key={i}
-                                className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                                  i <= passwordStrength().score
-                                    ? passwordStrength().color
-                                    : 'bg-muted'
-                                }`}
+                                className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= passwordStrength().score
+                                  ? passwordStrength().color
+                                  : 'bg-muted'
+                                  }`}
                               />
                             ))}
                           </div>
@@ -408,7 +428,7 @@ export default function RegisterPage() {
                         inputClassName='h-12'
                         rightElement={
                           formData.confirmPassword &&
-                          formData.password === formData.confirmPassword ? (
+                            formData.password === formData.confirmPassword ? (
                             <Check className='w-4 h-4 text-emerald-500' />
                           ) : undefined
                         }

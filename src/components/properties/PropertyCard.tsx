@@ -195,7 +195,11 @@ export function PropertyCard({ property, viewMode = 'grid' }: PropertyCardProps)
               </span>
               <span className='flex items-center gap-1'>
                 <Eye className='w-3 h-3' />
-                {property.votes?.total ?? 0}
+                {property.viewCount || 0}
+              </span>
+              <span className='flex items-center gap-1'>
+                <ArrowUpRight className='w-3 h-3 text-emerald-500' />
+                {(property as any)._count?.votes ?? 0}
               </span>
             </div>
           </div>

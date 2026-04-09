@@ -136,10 +136,17 @@ export default function ProfilePage() {
           <ImageUploader
             label='Profile Avatar'
             placeholder='Click or drag to upload your avatar'
-            onImageUpload={(url) => {
-              setProfile({ ...profile, avatar: url });
+            onImageUpload={async (url) => {
+              setProfile((prev) => ({ ...prev, avatar: url }));
               setShowAvatarUpload(false);
-              toast.success('Avatar selected. Click Save Changes to update.');
+              // Auto-save avatar to DB immediately after upload
+              try {
+                await api.patch('/auth/update-profile', { avatar: url });
+                toast.success('Profile picture updated successfully!');
+                refreshUser();
+              } catch {
+                toast.error('Failed to save avatar. Please try clicking Save Changes.');
+              }
             }}
             previewHeight={200}
             previewWidth={200}

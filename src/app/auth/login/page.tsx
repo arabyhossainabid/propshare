@@ -193,9 +193,32 @@ export default function LoginPage() {
             <div className='auth-field space-y-3 mb-8'>
               <Button
                 type='button'
+                onClick={async () => {
+                  try {
+                    const res = await fetch(`http://localhost:8080/api/v1/auth/sign-in/social`, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        provider: "google",
+                        callbackURL: "http://localhost:3000"
+                      }),
+                      credentials: "include"
+                    });
+
+                    const data = await res.json();
+                    if (data.url) {
+                      window.location.href = data.url;
+                    } else {
+                      toast.error(data.message || "Failed to initialize Google login");
+                    }
+                  } catch (error) {
+                    console.error("Google Auth Error:", error);
+                    toast.error("Failed to connect to authentication server");
+                  }
+                }}
                 className='w-full bg-background hover:bg-muted text-foreground border border-border rounded-xl py-6 flex items-center justify-center gap-3 transition-all h-12 group shadow-sm'
               >
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -260,8 +283,8 @@ export default function LoginPage() {
                 errorClassName="text-xs"
               />
 
-              {/* Remember me */}
-              <div className='auth-field flex items-center'>
+              {/* Remember + Forgot */}
+              <div className='auth-field flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
                   <input
                     type='checkbox'
@@ -272,6 +295,12 @@ export default function LoginPage() {
                     Remember me
                   </label>
                 </div>
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-xs text-blue-500 hover:text-blue-600 font-bold transition-colors"
+                >
+                  Forgot password?
+                </Link>
               </div>
 
               <Button

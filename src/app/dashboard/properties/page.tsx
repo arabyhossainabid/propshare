@@ -42,7 +42,7 @@ export default function MyPropertiesPage() {
     isError,
   } = useQuery({
     queryKey: ['my-properties', filter],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     queryFn: async () => {
       const res = await api.get<{
         success: true;
@@ -193,12 +193,12 @@ export default function MyPropertiesPage() {
                         : '-'}
                     </span>
                     <span className='flex items-center gap-1'>
-                      <Eye className='w-3 h-3 text-blue-500' />
-                      {0}
+                      <Eye className='w-3 h-3' />
+                      {p.viewCount || 0}
                     </span>
                     <span className='flex items-center gap-1'>
                       <BarChart3 className='w-3 h-3 text-emerald-500' />
-                      {p.votes?.total ?? 0} votes
+                      {(p as any)._count?.votes ?? 0}
                     </span>
                   </div>
                 </div>

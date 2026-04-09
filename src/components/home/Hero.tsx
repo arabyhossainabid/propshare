@@ -46,18 +46,17 @@ export default function Hero({ heroStats }: HeroProps) {
     featuredProperty?.imageUrl ||
     '/hero-property.png';
 
+  // Main hero entrance animation (runs once)
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 0.1 });
 
-      // Badge animation
       tl.fromTo(
         '.hero-badge',
         { opacity: 0, y: 20, scale: 0.95 },
         { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'back.out(1.2)' }
       );
 
-      // Title animation - word by word
       tl.fromTo(
         '.hero-title-line',
         { opacity: 0, y: 40, rotateX: -10 },
@@ -72,7 +71,6 @@ export default function Hero({ heroStats }: HeroProps) {
         '-=0.2'
       );
 
-      // Subtitle
       tl.fromTo(
         '.hero-subtitle',
         { opacity: 0, y: 15 },
@@ -80,7 +78,6 @@ export default function Hero({ heroStats }: HeroProps) {
         '-=0.3'
       );
 
-      // CTA buttons
       tl.fromTo(
         '.hero-cta',
         { opacity: 0, y: 10 },
@@ -88,45 +85,26 @@ export default function Hero({ heroStats }: HeroProps) {
         '-=0.2'
       );
 
-      // Stats
-      tl.fromTo(
-        '.hero-stat',
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.3, stagger: 0.05, ease: 'power2.out' },
-        '-=0.1'
-      );
-
-      // Background orbs animation
-      gsap.to('.orb-1', {
-        x: 100,
-        y: -50,
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      gsap.to('.orb-2', {
-        x: -80,
-        y: 60,
-        duration: 10,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      gsap.to('.orb-3', {
-        x: 60,
-        y: 80,
-        duration: 12,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
+      // Orbs
+      gsap.to('.orb-1', { x: 100, y: -50, duration: 8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+      gsap.to('.orb-2', { x: -80, y: 60, duration: 10, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+      gsap.to('.orb-3', { x: 60, y: 80, duration: 12, repeat: -1, yoyo: true, ease: 'sine.inOut' });
     }, heroRef);
 
     return () => ctx.revert();
   }, []);
+
+  // Stats animate in only when data arrives
+  useEffect(() => {
+    if (displayStats.length === 0) return;
+    const statEls = document.querySelectorAll('.hero-stat');
+    if (statEls.length === 0) return;
+    gsap.fromTo(
+      '.hero-stat',
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.4, stagger: 0.07, ease: 'power2.out' }
+    );
+  }, [displayStats]);
 
   return (
     <section

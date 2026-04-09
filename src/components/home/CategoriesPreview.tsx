@@ -75,27 +75,29 @@ export default function CategoriesPreview() {
           },
         }
       );
-
-      gsap.fromTo(
-        '.cat-card',
-        { opacity: 0, y: 40, scale: 0.95 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.4,
-          stagger: 0.05,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.cat-grid',
-            start: 'top 90%',
-          },
-        }
-      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
+
+  // Animate cards only after data loads
+  useEffect(() => {
+    if (isLoading || categories.length === 0) return;
+    const cards = document.querySelectorAll('.cat-card');
+    if (cards.length === 0) return;
+    gsap.fromTo(
+      '.cat-card',
+      { opacity: 0, y: 40, scale: 0.95 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: 'power2.out',
+      }
+    );
+  }, [isLoading, categories]);
 
   if ((!isLoading && categories.length === 0) || isError) {
     return null;

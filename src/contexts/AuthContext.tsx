@@ -13,6 +13,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -38,26 +39,28 @@ const AuthContext = createContext<AuthContextType>({
   accessToken: null,
   isAuthenticated: false,
   isLoading: true,
-  refreshUser: async () => {},
+  refreshUser: async () => { },
   login: async () => {
     throw new Error('AuthContext not initialized');
   },
   register: async () => {
     throw new Error('AuthContext not initialized');
   },
-  refreshAuth: async () => {},
-  logout: async () => {},
+  refreshAuth: async () => { },
+  logout: async () => { },
 });
 
 const LOGIN_ENDPOINTS = ['/auth/login'];
 const REGISTER_ENDPOINTS = ['/auth/register'];
-const ME_ENDPOINTS = ['/auth/me'];
-const LOGOUT_ENDPOINTS = ['/auth/logout'];
+const ME_ENDPOINTS = ['/auth/me', '/auth/get-session'];
+const LOGOUT_ENDPOINTS = ['/auth/logout', '/auth/sign-out'];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // Track whether initial session load has already run
+  const initializedRef = useRef(false);
 
   const clearAuthState = useCallback(() => {
     setSessionAccessToken(null);
@@ -68,138 +71,107 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const clearAuthStateIfTokenMatches = useCallback(
-    (expectedToken: string | null | undefined) => {
-      const currentToken = getSessionAccessToken();
-      if (expectedToken && currentToken && currentToken !== expectedToken) {
-        return;
-      }
-      clearAuthState();
-    },
-    [clearAuthState]
-  );
-
   const extractAccessToken = useCallback((payload: unknown): string | null => {
     if (!payload || typeof payload !== 'object') return null;
-
     const record = payload as {
       accessToken?: unknown;
       data?: { accessToken?: unknown };
     };
-
     if (typeof record.accessToken === 'string') return record.accessToken;
     if (typeof record.data?.accessToken === 'string')
       return record.data.accessToken;
     return null;
   }, []);
 
-  const tryRefreshAccessToken = useCallback(async (): Promise<
-    string | null
-  > => {
-    const candidates = ['/auth/refresh-token'];
-
-    for (const endpoint of candidates) {
-      try {
-        const res = await api.post(endpoint);
-        const token = extractAccessToken(res.data);
-        if (token) {
-          return token;
-        }
-      } catch {
-        // Try next known endpoint name.
-      }
-    }
-
-    return null;
-  }, [extractAccessToken]);
-
   const extractUser = useCallback((payload: unknown): User | null => {
     if (!payload || typeof payload !== 'object') return null;
-
-    const root = payload as {
-      user?: unknown;
-      data?: unknown;
-    };
-
-    if (root.user && typeof root.user === 'object') {
-      return root.user as User;
-    }
-
+    const root = payload as { user?: unknown; data?: unknown };
+    if (root.user && typeof root.user === 'object') return root.user as User;
     const fromData = normalizeItem<User>(root.data);
     if (fromData) return fromData;
-
     return normalizeItem<User>(payload);
+  }, []);
+
+  // Use refs to hold stable references to avoid useEffect re-runs
+  const extractAccessTokenRef = useRef(extractAccessToken);
+  const extractUserRef = useRef(extractUser);
+  const clearAuthStateRef = useRef(clearAuthState);
+  useEffect(() => { extractAccessTokenRef.current = extractAccessToken; }, [extractAccessToken]);
+  useEffect(() => { extractUserRef.current = extractUser; }, [extractUser]);
+  useEffect(() => { clearAuthStateRef.current = clearAuthState; }, [clearAuthState]);
+
+  const tryRefreshAccessToken = useCallback(async (): Promise<string | null> => {
+    try {
+      const res = await api.post('/auth/refresh-token');
+      return extractAccessTokenRef.current(res.data);
+    } catch {
+      return null;
+    }
   }, []);
 
   const fetchCurrentUser = useCallback(async () => {
     for (const endpoint of ME_ENDPOINTS) {
       try {
         const meRes = await api.get(endpoint);
-        const nextUser = extractUser(meRes.data);
+        const nextUser = extractUserRef.current(meRes.data);
         setUser(nextUser);
         return;
       } catch {
         // Try next user endpoint.
       }
     }
-
     throw new Error('Unable to fetch current user');
-  }, [extractUser]);
+  }, []);
 
   const refreshAuth = useCallback(async () => {
     const existingToken = getSessionAccessToken();
-
     if (!existingToken) {
-      // Try to refresh token from backend (uses cookies for refresh token)
       const refreshedToken = await tryRefreshAccessToken();
-
       if (!refreshedToken) {
-        clearAuthState();
+        clearAuthStateRef.current();
         return;
       }
-
       setSessionAccessToken(refreshedToken);
       setAccessToken(refreshedToken);
-
-      // Persist refreshed token
       if (typeof window !== 'undefined') {
         localStorage.setItem('accessToken', refreshedToken);
       }
     }
-
     try {
       await fetchCurrentUser();
     } catch (error) {
-      // Token might be invalid, clear everything
-      clearAuthState();
+      clearAuthStateRef.current();
       throw error;
     }
-  }, [clearAuthState, fetchCurrentUser, tryRefreshAccessToken]);
+  }, [tryRefreshAccessToken, fetchCurrentUser]);
 
   const refreshUser = useCallback(async () => {
     await fetchCurrentUser();
   }, [fetchCurrentUser]);
 
+  // Run ONCE on mount only — stable via empty dep array + ref guard
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     let isMounted = true;
 
     const loadSession = async () => {
       try {
-        // First, restore token from localStorage
         const storedToken =
           typeof window !== 'undefined'
             ? localStorage.getItem('accessToken')
             : null;
+
         if (storedToken) {
           if (!isMounted) return;
           setSessionAccessToken(storedToken);
           setAccessToken(storedToken);
-          // Token restored, try to fetch user
           try {
             await fetchCurrentUser();
-            return; // Successfully loaded user with stored token
+            return;
           } catch {
-            // If /auth/me fails once, try refresh token fallback before clearing.
+            // stored token invalid, try refresh
             const refreshedToken = await tryRefreshAccessToken();
             if (refreshedToken) {
               if (!isMounted) return;
@@ -208,27 +180,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               if (typeof window !== 'undefined') {
                 localStorage.setItem('accessToken', refreshedToken);
               }
-
               try {
                 await fetchCurrentUser();
                 return;
               } catch {
-                clearAuthStateIfTokenMatches(refreshedToken);
+                clearAuthStateRef.current();
               }
             } else {
-              clearAuthStateIfTokenMatches(storedToken);
+              clearAuthStateRef.current();
             }
           }
+          return;
         }
 
-        // No valid stored token, try to refresh from backend (using cookies)
+        // No stored token — try cookie-based refresh
         const refreshedToken = await tryRefreshAccessToken();
         if (!refreshedToken) {
-          // If login already happened in parallel, do not wipe fresh auth state.
-          if (!getSessionAccessToken()) {
-            setSessionAccessToken(null);
-            setAccessToken(null);
-            setUser(null);
+          // Last resort: maybe a session cookie exists
+          try {
+            await fetchCurrentUser();
+          } catch {
+            if (!getSessionAccessToken()) {
+              setSessionAccessToken(null);
+              setAccessToken(null);
+              setUser(null);
+            }
           }
           return;
         }
@@ -239,17 +215,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (typeof window !== 'undefined') {
           localStorage.setItem('accessToken', refreshedToken);
         }
-
-        // Try to fetch user with refreshed token
         try {
           await fetchCurrentUser();
         } catch {
-          clearAuthStateIfTokenMatches(refreshedToken);
+          clearAuthStateRef.current();
         }
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        if (isMounted) setIsLoading(false);
       }
     };
 
@@ -258,7 +230,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       isMounted = false;
     };
-  }, [clearAuthStateIfTokenMatches, tryRefreshAccessToken, fetchCurrentUser]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const login = async (email: string, password: string) => {
     let lastError: unknown = null;

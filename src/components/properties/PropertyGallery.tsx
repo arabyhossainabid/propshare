@@ -84,21 +84,23 @@ export function PropertyGallery({
         </div>
       </div>
       {/* Thumbnails */}
-      <div className='flex gap-3'>
-        {property.images.map((img, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveImage(i)}
-            className={`relative w-24 h-16 rounded-xl overflow-hidden transition-all ${
-              activeImage === i
-                ? 'ring-2 ring-blue-500 opacity-100'
-                : 'opacity-50 hover:opacity-75'
-            }`}
-          >
-            <Image src={img} alt={`View ${i + 1}`} fill className='object-cover' />
-          </button>
-        ))}
-      </div>
+      {property.images.length > 1 && (
+        <div className='flex gap-3'>
+          {property.images.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveImage(i)}
+              className={`relative w-24 h-16 rounded-xl overflow-hidden transition-all ${
+                activeImage === i
+                  ? 'ring-2 ring-blue-500 opacity-100'
+                  : 'opacity-50 hover:opacity-75'
+              }`}
+            >
+              <Image src={img} alt={`View ${i + 1}`} fill className='object-cover' />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

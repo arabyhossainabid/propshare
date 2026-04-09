@@ -55,7 +55,7 @@ export default function EditPropertyPage() {
 
   const { isLoading: isLoadingProperty, isError: isErrorProperty } = useQuery({
     queryKey: ['edit-property', propertyId],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     queryFn: async () => {
       const res = await api.get<{
         success: true;
@@ -85,7 +85,7 @@ export default function EditPropertyPage() {
 
   const { data: categories = [], isLoading: isLoadingCategories } = useQuery({
     queryKey: ['edit-property-categories'],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     queryFn: async () => {
       const res = await api.get<{
         success: true;

@@ -61,7 +61,7 @@ export default function DashboardPage() {
 
   const { data: myProperties = [] } = useQuery({
     queryKey: ['dashboard-my-properties'],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     refetchOnMount: 'always',
     queryFn: async () => {
       const res = await api.get<{
@@ -77,7 +77,7 @@ export default function DashboardPage() {
 
   const { data: recentInvestments = [] } = useQuery({
     queryKey: ['dashboard-recent-investments'],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     refetchOnMount: 'always',
     queryFn: async () => {
       const res = await api.get<{
@@ -91,7 +91,7 @@ export default function DashboardPage() {
 
   const { data: recommendations = [], isLoading: isLoadingRecs } = useQuery({
     queryKey: ['ai-recommendations'],
-    enabled: isAuthenticated && !isAuthLoading && !!accessToken,
+    enabled: isAuthenticated && !isAuthLoading,
     queryFn: async () => {
       try {
         const res = await api.get<{ success: true; data: Property[] | { data?: Property[] } }>('/ai/recommendations');
@@ -102,44 +102,74 @@ export default function DashboardPage() {
     },
   });
 
-  const totalInvested = recentInvestments.reduce(
-    (sum, inv) => sum + inv.amount,
-    0
-  );
-  const totalReturns = 0;
-  const portfolioValue = totalInvested + totalReturns;
+  const { data: dashboardStats } = useQuery({
+    queryKey: ['dashboard-stats'],
+    enabled: isAuthenticated && !isAuthLoading,
+    queryFn: async () => {
+      const res = await api.get<{
+        success: true;
+        data: {
+          totalInvested: number;
+          totalProperties: number;
+          propertiesCreated: number;
+          estimatedProfit: number;
+          activeInvestments: number;
+          investedPropertiesCount: number;
+        };
+      }>('/dashboard/user/stats');
+      return res.data.data;
+    },
+  });
+
+  const { data: chartData } = useQuery({
+    queryKey: ['dashboard-charts'],
+    enabled: isAuthenticated && !isAuthLoading,
+    queryFn: async () => {
+      const res = await api.get<{
+        success: true;
+        data: {
+          portfolioDistribution: { label: string; value: number }[];
+          investmentTrend: { label: string; value: number }[];
+        };
+      }>('/dashboard/user/charts');
+      return res.data.data;
+    },
+  });
 
   const stats = [
     {
-      label: 'Total Invested',
-      value: `৳${totalInvested.toLocaleString()}`,
-      change: 'Live',
+      label: 'Invested Capital',
+      value: `৳${(dashboardStats?.totalInvested || 0).toLocaleString()}`,
+      change: 'Portfolio',
       up: true,
       icon: Wallet,
       color: 'blue',
     },
     {
-      label: 'Total Returns',
-      value: `৳${totalReturns.toLocaleString()}`,
-      change: 'Live',
+      label: 'Estimated Returns',
+      value: `৳${Math.round(dashboardStats?.estimatedProfit || 0).toLocaleString()}`,
+      change:
+        dashboardStats?.totalInvested && dashboardStats.totalInvested > 0
+          ? `+${((dashboardStats.estimatedProfit / dashboardStats.totalInvested) * 100).toFixed(1)}%`
+          : '+0%',
       up: true,
       icon: TrendingUp,
       color: 'emerald',
     },
     {
-      label: 'My Properties',
-      value: String(myProperties.length),
-      change: 'Live',
+      label: 'Properties Added',
+      value: String(Math.max(dashboardStats?.propertiesCreated || 0, myProperties.length)),
+      change: 'Lifetime',
       up: true,
-      icon: Building2,
+      icon: PlusCircle,
       color: 'purple',
     },
     {
-      label: 'Portfolio Value',
-      value: `৳${portfolioValue.toLocaleString()}`,
-      change: 'Live',
+      label: 'Total Investments',
+      value: String(dashboardStats?.investedPropertiesCount || 0),
+      change: 'Active',
       up: true,
-      icon: DollarSign,
+      icon: Building2,
       color: 'amber',
     },
   ];
@@ -220,48 +250,62 @@ export default function DashboardPage() {
       </div>
 
       <div className='grid lg:grid-cols-5 gap-6'>
-        {/* Recent Investments */}
+        {/* Recent Investments / Portfolio Assets */}
         <div className='dash-section lg:col-span-3 bg-card border border-border rounded-2xl p-6 shadow-sm'>
           <div className='flex items-center justify-between mb-6'>
-            <h3 className='text-base font-bold text-foreground'>Recent Investments</h3>
+            <h3 className='text-base font-bold text-foreground'>Portfolio Assets</h3>
             <Link
               href='/dashboard/investments'
               className='text-xs text-blue-500 hover:text-blue-600 font-bold transition-colors'
             >
-              View All
+              View All Investments
             </Link>
           </div>
           <div className='space-y-3'>
-            {recentInvestments.slice(0, 3).map((inv) => (
-              <div
-                key={inv.id}
-                className='flex items-center justify-between p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all border border-transparent hover:border-border'
-              >
-                <div className='flex items-center gap-3 min-w-0'>
-                  <div className='w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0'>
-                    <Building2 className='w-4 h-4 text-blue-500' />
+            {recentInvestments.length > 0 ? (
+              // Grouping by property to show "Assets" instead of just "Transactions"
+              Object.values(
+                recentInvestments.reduce((acc: any, inv: any) => {
+                  const pid = inv.propertyId;
+                  if (!acc[pid]) {
+                    acc[pid] = { ...inv, totalShares: 0, totalAmount: 0 };
+                  }
+                  acc[pid].totalShares += inv.shares;
+                  acc[pid].totalAmount += inv.amount;
+                  return acc;
+                }, {})
+              ).slice(0, 4).map((asset: any) => (
+                <Link
+                  key={asset.id}
+                  href={`/properties/${asset.propertyId}`}
+                  className='flex items-center justify-between p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all border border-transparent hover:border-border'
+                >
+                  <div className='flex items-center gap-3 min-w-0'>
+                    <div className='w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0'>
+                      <Building2 className='w-4 h-4 text-blue-500' />
+                    </div>
+                    <div className='min-w-0'>
+                      <p className='text-sm font-bold text-foreground truncate'>
+                        {asset.property?.title || 'Property Asset'}
+                      </p>
+                      <p className='text-[10px] text-muted-foreground uppercase tracking-widest font-medium mt-0.5'>
+                        {asset.totalShares} Shares Owned · {asset.property?.location || 'Unknown Location'}
+                      </p>
+                    </div>
                   </div>
-                  <div className='min-w-0'>
-                    <p className='text-sm font-bold text-foreground truncate'>
-                      {inv.property?.title || 'Property'}
+                  <div className='text-right shrink-0 ml-4'>
+                    <p className='text-sm font-bold text-foreground'>
+                      ৳{asset.totalAmount.toLocaleString()}
                     </p>
-                    <p className='text-[10px] text-muted-foreground uppercase tracking-widest font-medium mt-0.5'>
-                      {inv.shares} shares ·{' '}
-                      {new Date(inv.createdAt).toLocaleDateString()}
-                    </p>
+                    <p className='text-[10px] text-emerald-500 font-bold uppercase tracking-widest'>Net Invesment</p>
                   </div>
-                </div>
-                <div className='text-right shrink-0 ml-4'>
-                  <p className='text-sm font-bold text-foreground'>
-                    ৳{inv.amount.toLocaleString()}
-                  </p>
-                  <p className='text-[10px] text-emerald-500 font-bold uppercase tracking-widest'>Live</p>
-                </div>
-              </div>
-            ))}
-            {recentInvestments.length === 0 && (
-              <div className='py-8 text-center'>
-                <p className='text-sm text-muted-foreground'>No recent investments found.</p>
+                </Link>
+              ))
+            ) : (
+              <div className='py-12 text-center border-2 border-dashed border-border rounded-2xl'>
+                <Wallet className="w-8 h-8 text-muted-foreground/30 mx-auto mb-3" />
+                <p className='text-sm text-muted-foreground font-medium'>No assets in your portfolio yet.</p>
+                <Link href="/properties" className="text-xs text-blue-500 font-bold mt-2 inline-block hover:underline">Start Investing</Link>
               </div>
             )}
           </div>
@@ -275,50 +319,53 @@ export default function DashboardPage() {
               <p className='text-[10px] text-muted-foreground uppercase tracking-widest font-medium'>Net Portfolio Growth</p>
             </div>
             <div className='flex items-center gap-1.5 px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-500 text-[10px] font-bold'>
-              <TrendingUp className='w-3 h-3' /> +12.5%
+              <TrendingUp className='w-3 h-3' /> +
+              {dashboardStats?.totalInvested && dashboardStats.totalInvested > 0
+                ? ((dashboardStats.estimatedProfit / dashboardStats.totalInvested) * 100).toFixed(1)
+                : '0'}
+              %
             </div>
           </div>
 
           <div className='flex-1 min-h-[150px] relative mt-4'>
-            <svg viewBox="0 0 400 150" className="w-full h-full overflow-visible">
-              <defs>
-                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              {/* Grid Lines */}
-              <line x1="0" y1="0" x2="400" y2="0" stroke="currentColor" className="text-border" strokeOpacity="0.2" strokeWidth="1" />
-              <line x1="0" y1="50" x2="400" y2="50" stroke="currentColor" className="text-border" strokeOpacity="0.2" strokeWidth="1" />
-              <line x1="0" y1="100" x2="400" y2="100" stroke="currentColor" className="text-border" strokeOpacity="0.2" strokeWidth="1" />
-              <line x1="0" y1="150" x2="400" y2="150" stroke="currentColor" className="text-border" strokeOpacity="0.2" strokeWidth="1" />
-
-              {/* Area */}
-              <path
-                d="M0,130 C40,120 80,140 120,100 C160,60 200,80 240,50 C280,20 320,40 360,10 L400,20 L400,150 L0,150 Z"
-                fill="url(#chartGradient)"
-              />
-
-              {/* Line */}
-              <path
-                d="M0,130 C40,120 80,140 120,100 C160,60 200,80 240,50 C280,20 320,40 360,10 L400,20"
-                fill="none"
-                stroke="#3b82f6"
-                strokeWidth="3"
-                strokeLinecap="round"
-                className="drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]"
-              />
-
-              {/* Points */}
-              <circle cx="120" cy="100" r="4" fill="#3b82f6" />
-              <circle cx="240" cy="50" r="4" fill="#3b82f6" />
-              <circle cx="360" cy="10" r="6" fill="#10b981" />
-            </svg>
+            {chartData?.investmentTrend && chartData.investmentTrend.length > 0 ? (
+              <svg viewBox="0 0 400 150" className="w-full h-full overflow-visible">
+                <defs>
+                  <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d={`M0,150 ${chartData.investmentTrend.map((d: any, i: number) => 
+                    `L${(i * 400) / Math.max(chartData.investmentTrend.length - 1, 1)},${150 - (d.value / Math.max(...chartData.investmentTrend.map((v: any) => v.value), 1)) * 130}`
+                  ).join(' ')} L400,150 Z`}
+                  fill="url(#chartGradient)"
+                />
+                <path
+                  d={`M0,${150 - (chartData.investmentTrend[0]?.value / Math.max(...chartData.investmentTrend.map((v: any) => v.value), 1)) * 130} ${chartData.investmentTrend.map((d: any, i: number) => 
+                    `L${(i * 400) / Math.max(chartData.investmentTrend.length - 1, 1)},${150 - (d.value / Math.max(...chartData.investmentTrend.map((v: any) => v.value), 1)) * 130}`
+                  ).join(' ')}`}
+                  fill="none"
+                  stroke="#3b82f6"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className="drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]"
+                />
+              </svg>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-center space-y-2">
+                <BarChart3 className="w-8 h-8 text-muted-foreground/20" />
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Waiting for investment data</p>
+              </div>
+            )}
           </div>
 
           <div className='flex justify-between mt-6 px-1'>
-            {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map(m => (
-              <span key={m} className='text-[10px] text-muted-foreground font-bold uppercase tracking-widest'>{m}</span>
+            {(chartData?.investmentTrend?.length ? chartData.investmentTrend : [{label: 'Jan'}, {label: 'Jun'}]).map((m: any) => (
+              <span key={typeof m === 'string' ? m : m.label} className='text-[10px] text-muted-foreground font-bold uppercase tracking-widest'>
+                {typeof m === 'string' ? m : m.label}
+              </span>
             ))}
           </div>
         </div>
@@ -326,24 +373,25 @@ export default function DashboardPage() {
 
       <div className='grid lg:grid-cols-5 gap-6 mt-8'>
         {/* My Properties Summary */}
-        <div className='dash-section lg:col-span-3 bg-card border border-border rounded-2xl p-6 shadow-sm'>
+        <div className='dash-section lg:col-span-5 bg-card border border-border rounded-2xl p-6 shadow-sm'>
           <div className='flex items-center justify-between mb-6'>
-            <h3 className='text-base font-bold text-foreground'>My Properties</h3>
+            <h3 className='text-base font-bold text-foreground'>My Listed Properties</h3>
             <Link
               href='/dashboard/properties'
               className='text-xs text-blue-500 hover:text-blue-600 font-bold transition-colors'
             >
-              View All
+              Manage Listings
             </Link>
           </div>
-          <div className='grid sm:grid-cols-2 gap-4'>
-            {myProperties.slice(0, 4).map((p) => (
-              <div
+          <div className='grid sm:grid-cols-2 lg:grid-cols-4 gap-4'>
+            {myProperties.length > 0 ? myProperties.slice(0, 4).map((p) => (
+              <Link
                 key={p.id}
-                className='p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all border border-transparent hover:border-border space-y-3'
+                href={`/dashboard/properties/${p.id}`}
+                className='p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all border border-transparent hover:border-border space-y-3 group'
               >
                 <div className='flex items-center justify-between'>
-                  <p className='text-sm font-bold text-foreground truncate'>{renderText(p.title)}</p>
+                  <p className='text-sm font-bold text-foreground truncate group-hover:text-blue-500 transition-colors'>{renderText(p.title)}</p>
                   <Badge
                     className={`text-[9px] px-2 py-0 h-4 uppercase tracking-widest ${statusStyles[(p.status || '').toLowerCase()] || statusStyles.draft}`}
                   >
@@ -355,46 +403,25 @@ export default function DashboardPage() {
                 <div className='flex items-center justify-between text-xs'>
                   <div className='flex items-center gap-3 text-muted-foreground'>
                     <span className='flex items-center gap-1'>
-                      <Eye className='w-3 h-3' />0
+                      <Eye className='w-3 h-3' />{p.viewCount || 0}
                     </span>
                     <span className='flex items-center gap-1'>
-                      <BarChart3 className='w-3 h-3' />
-                      {p.votes?.total ?? 0}
+                      <MessageSquare className='w-3 h-3' />
+                      {((p as any)._count?.comments) ?? 0}
                     </span>
                   </div>
                   <div className='text-blue-500 font-bold'>
                     ৳{p.pricePerShare.toLocaleString()}
                   </div>
                 </div>
-              </div>
-            ))}
-            {myProperties.length === 0 && (
-              <div className='col-span-2 py-8 text-center'>
-                <p className='text-sm text-muted-foreground'>No properties listed yet.</p>
+              </Link>
+            )) : (
+              <div className='col-span-4 py-12 text-center border-2 border-dashed border-border rounded-2xl'>
+                <Building2 className="w-8 h-8 text-muted-foreground/30 mx-auto mb-3" />
+                <p className='text-sm text-muted-foreground font-medium'>You haven&apos;t listed any properties yet.</p>
+                <Link href="/dashboard/properties/create" className="text-xs text-blue-500 font-bold mt-2 inline-block hover:underline">List a Property</Link>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Recent Activity Feed */}
-        <div className='dash-section lg:col-span-2 bg-card border border-border rounded-2xl p-6 shadow-sm'>
-          <h3 className='text-base font-bold text-foreground mb-6'>Recent Activity</h3>
-          <div className='space-y-6'>
-            {[
-              { text: 'Dividend paid for Bashundhara project', time: '2 hours ago', icon: DollarSign, color: 'emerald' },
-              { text: 'New comment on Banani Penthouse', time: '5 hours ago', icon: MessageSquare, color: 'blue' },
-              { text: 'Investment milestone reached: ৳10Cr', time: '1 day ago', icon: Sparkles, color: 'amber' },
-            ].map((act, i) => (
-              <div key={i} className='flex gap-4'>
-                <div className={`w-9 h-9 rounded-lg ${colorMap[act.color].bg} border ${colorMap[act.color].border} flex items-center justify-center shrink-0`}>
-                  <act.icon className={`w-4 h-4 ${colorMap[act.color].text}`} />
-                </div>
-                <div className='flex flex-col'>
-                  <p className='text-xs font-medium text-foreground leading-snug'>{act.text}</p>
-                  <p className='text-[10px] text-muted-foreground uppercase tracking-widest font-medium mt-1'>{act.time}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
