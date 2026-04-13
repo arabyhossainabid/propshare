@@ -109,7 +109,7 @@ export default function Hero({ heroStats }: HeroProps) {
   return (
     <section
       ref={heroRef}
-      className='relative min-h-[55vh] lg:min-h-[65vh] flex items-center justify-center overflow-hidden pt-16 lg:pt-20'
+      className='relative min-h-[55vh] lg:min-h-[65vh] flex items-center justify-center overflow-hidden pt-16 lg:pt-20 mb-16 lg:mb-20'
     >
       {/* Background Elements */}
       <div className='absolute inset-0'>
@@ -125,7 +125,7 @@ export default function Hero({ heroStats }: HeroProps) {
         <div className='absolute inset-0 bg-linear-to-b from-background via-transparent to-background' />
       </div>
 
-      <div className='container-custom relative z-10 py-12 lg:py-20'>
+      <div className='container-custom relative z-10 py-12 lg:py-10'>
         <div className='grid lg:grid-cols-2 gap-12 lg:gap-20 items-center'>
           {/* Left Content */}
           <div ref={textRef} className='space-y-5 lg:space-y-8'>
@@ -190,7 +190,7 @@ export default function Hero({ heroStats }: HeroProps) {
           {/* Right Content - Hero Image */}
           <div ref={imageRef} className='relative hidden lg:block'>
             {/* Main Image */}
-            <div className='relative rounded-3xl overflow-hidden shadow-3xl border border-border'>
+            <div className='relative rounded-3xl overflow-hidden border border-border'>
               <div className='aspect-4/5 relative'>
                 <Image
                   src={featuredImage}
@@ -199,7 +199,7 @@ export default function Hero({ heroStats }: HeroProps) {
                   className='object-cover'
                   priority
                 />
-                <div className='absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-80' />
+                <div className='absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent' />
               </div>
 
               <div className='absolute bottom-6 left-6'>
